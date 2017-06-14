@@ -15,6 +15,9 @@ public class AddCardPayload {
     @SerializedName("phoneNumber")
     @Expose
     private String phoneNumber;
+    @SerializedName("holderName")
+    @Expose
+    private String holderName;
 
     public AddCardPayload() {
     }
@@ -49,4 +52,11 @@ public class AddCardPayload {
         this.phoneNumber = phoneNumber;
     }
 
+    public String getHolderName() {
+        return holderName;
+    }
+
+    public void setHolderName(String holderName) {
+        this.holderName = holderName;
+    }
 }

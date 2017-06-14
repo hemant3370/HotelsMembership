@@ -1,8 +1,9 @@
 package hotelsmembership.com.Activities;
 
 import android.arch.persistence.room.Room;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,6 +18,8 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -25,15 +28,12 @@ import hotelsmembership.com.Applications.Initializer;
 import hotelsmembership.com.Fragments.AddMembership;
 import hotelsmembership.com.Fragments.HomeFragment;
 import hotelsmembership.com.Fragments.MembershipsFragment;
-import hotelsmembership.com.Fragments.RedeemFragment;
 import hotelsmembership.com.Fragments.VoucherDetails;
 import hotelsmembership.com.Fragments.VoucherListDialogFragment;
 import hotelsmembership.com.Model.AddCardPayload;
-import hotelsmembership.com.Model.BasicResponse;
 import hotelsmembership.com.Model.HotelsDatabase;
 import hotelsmembership.com.Model.HotelsResponse;
 import hotelsmembership.com.Model.Membership;
-import hotelsmembership.com.Model.RedeemPayload;
 import hotelsmembership.com.Model.Vouchers.Voucher;
 import hotelsmembership.com.Model.Vouchers.VouchersResponse;
 import hotelsmembership.com.R;
@@ -48,7 +48,7 @@ import retrofit2.Retrofit;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener ,
 AddMembership.OnFragmentInteractionListener, MembershipsFragment.OnListFragmentInteractionListener,
-VoucherListDialogFragment.Listener, VoucherDetails.OnFragmentInteractionListener, RedeemFragment.OnFragmentInteractionListener{
+VoucherListDialogFragment.Listener{
     android.support.v4.app.FragmentTransaction fragmentTransaction;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
@@ -60,7 +60,9 @@ VoucherListDialogFragment.Listener, VoucherDetails.OnFragmentInteractionListener
     ProgressBar progressDialog;
     @BindView(R.id.frame)
      FrameLayout frameLayout;
-
+    private static final String ARG_VOUCHERS = "vouchers";
+    private static final String ARG_CARD = "cardNumber";
+    private static final String ARG_MEMBERSHIP = "membership";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,9 +144,15 @@ VoucherListDialogFragment.Listener, VoucherDetails.OnFragmentInteractionListener
             public void onResponse(Call<VouchersResponse> call, final Response<VouchersResponse> response) {
                 if (response.code() == 200 ){
                     if (response.body().getContent().size() > 0) {
-                        VoucherListDialogFragment bottomSheetDialogFragment = VoucherListDialogFragment.newInstance(response.body().getContent(), payload.getCardNumber(), membership);
-                        bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+//                        VoucherListDialogFragment bottomSheetDialogFragment = VoucherListDialogFragment.newInstance(response.body().getContent(), payload.getCardNumber(), membership);
+//                        bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+
                         progressDialog.setVisibility(View.INVISIBLE);
+                        Intent vouchersIntent = new Intent(MainActivity.this,VouchersActivity.class);
+                        vouchersIntent.putExtra(ARG_CARD,payload.getCardNumber());
+                        vouchersIntent.putExtra(ARG_MEMBERSHIP, membership);
+                        vouchersIntent.putParcelableArrayListExtra(ARG_VOUCHERS, (ArrayList<? extends Parcelable>) response.body().getContent());
+                        startActivity(vouchersIntent);
                     }
                     else{
                         progressDialog.setVisibility(View.INVISIBLE);
@@ -257,45 +265,6 @@ VoucherListDialogFragment.Listener, VoucherDetails.OnFragmentInteractionListener
     @Override
     public void onListFragmentInteraction(Membership item) {
         getVouchers(new AddCardPayload(item.getCardNumber(),"31/05/2018", item.getPhoneNumber()),item);
-    }
-
-
-    @Override
-    public void onRedeemClick(Voucher voucher, String cardNumber, Membership membership) {
-        requestOTP(voucher,cardNumber, membership);
-    }
-    void requestOTP(final Voucher voucher, String cardNumber, final Membership membership){
-
-        if (mRetrofit == null){
-            mRetrofit = RestClient.getClient();
-        }
-        ApiInterface apiInterface = mRetrofit.create(ApiInterface.class);
-        Call<BasicResponse> call = apiInterface.sendOTP(new RedeemPayload(cardNumber, voucher.getVoucherNumber()),membership.getHotel().getHotelId());
-        RetrofitLoader.load(this, getLoaderManager(), voucher.hashCode() + cardNumber.hashCode(), call, new Callback<BasicResponse>() {
-            @Override
-            public void onResponse(Call<BasicResponse> call, final Response<BasicResponse> response) {
-                if (response.code() == 200 && response.body() != null && response.body().getContent() != null ){
-
-                    Toast.makeText(MainActivity.this,"OTP Sent",Toast.LENGTH_SHORT).show();
-                    RedeemFragment redeemFragment = RedeemFragment.newInstance(voucher.getVoucherNumber(), membership);
-                    redeemFragment.show(getSupportFragmentManager(),redeemFragment.getTag());
-
-                }
-                else {
-                    Toast.makeText(MainActivity.this,"Error " + response.body().getMessage(),Toast.LENGTH_SHORT).show();
-                }
-
-            }
-            @Override
-            public void onFailure(Call<BasicResponse> call, Throwable t) {
-
-            }
-        });
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 
     @Override

@@ -1,28 +1,37 @@
 package hotelsmembership.com.Activities;
 
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import hotelsmembership.com.Applications.Initializer;
+import hotelsmembership.com.Fragments.RedeemFragment;
 import hotelsmembership.com.Fragments.VoucherDetails;
+import hotelsmembership.com.Model.BasicResponse;
 import hotelsmembership.com.Model.Membership;
+import hotelsmembership.com.Model.RedeemPayload;
 import hotelsmembership.com.Model.Vouchers.Voucher;
 import hotelsmembership.com.R;
+import hotelsmembership.com.Retrofit.Client.RestClient;
+import hotelsmembership.com.Retrofit.Loader.RetrofitLoader;
+import hotelsmembership.com.Retrofit.Services.ApiInterface;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
-public class VouchersActivity extends AppCompatActivity {
+public class VouchersActivity extends AppCompatActivity implements VoucherDetails.OnFragmentInteractionListener,
+        RedeemFragment.OnFragmentInteractionListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -33,7 +42,8 @@ public class VouchersActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
+    @Inject
+    Retrofit mRetrofit;
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -50,91 +60,95 @@ public class VouchersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vouchers);
-
+        ((Initializer) getApplication()).getNetComponent().inject(this);
+        cardNumber = getIntent().getStringExtra(ARG_CARD);
+        membership = getIntent().getParcelableExtra(ARG_MEMBERSHIP);
+        vouchers = getIntent().getParcelableArrayListExtra(ARG_VOUCHERS);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),vouchers,cardNumber,membership);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        cardNumber = getIntent().getString(ARG_CARD);
-        membership = getIntent().getParcelable(ARG_MEMBERSHIP);
-        vouchers = getIntent().getParcelableArrayList(ARG_VOUCHERS);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+    }
+
+    @Override
+    public void onRedeemClick(Voucher voucher, String cardNumber, Membership membership) {
+        requestOTP(voucher,cardNumber, membership);
+    }
+
+    void requestOTP(final Voucher voucher, String cardNumber, final Membership membership){
+
+        if (mRetrofit == null){
+            mRetrofit = RestClient.getClient();
+        }
+        ApiInterface apiInterface = mRetrofit.create(ApiInterface.class);
+        Call<BasicResponse> call = apiInterface.sendOTP(new RedeemPayload(cardNumber, voucher.getVoucherNumber()),membership.getHotel().getHotelId());
+        RetrofitLoader.load(this, getLoaderManager(), voucher.hashCode() + cardNumber.hashCode(), call, new Callback<BasicResponse>() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onResponse(Call<BasicResponse> call, final Response<BasicResponse> response) {
+                if (response.code() == 200 && response.body() != null && response.body().getContent() != null ){
+
+                    Toast.makeText(VouchersActivity.this,"OTP Sent",Toast.LENGTH_SHORT).show();
+                    RedeemFragment redeemFragment = RedeemFragment.newInstance(voucher.getVoucherNumber(), membership);
+                    redeemFragment.show(getSupportFragmentManager(),redeemFragment.getTag());
+
+                }
+                else {
+                    Toast.makeText(VouchersActivity.this,"Error " + response.body().getMessage(),Toast.LENGTH_SHORT).show();
+                }
+
+            }
+            @Override
+            public void onFailure(Call<BasicResponse> call, Throwable t) {
+
             }
         });
-
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_vouchers, menu);
-        return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public void onFragmentInteraction(Uri uri) {
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
-
-}
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
+        List<Voucher> vouchers ;
+        String cardNumber;
+        Membership membership;
+        public SectionsPagerAdapter(FragmentManager fm, List<Voucher> vouchers,
+                String cardNumber,
+                Membership membership) {
             super(fm);
+            this.vouchers = vouchers;
+            this.cardNumber = cardNumber;
+            this.membership = membership;
         }
 
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return VoucherDetails.newInstance()
+            return VoucherDetails.newInstance(vouchers.get(position),cardNumber,membership);
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            return vouchers.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "SECTION 1";
-                case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
-            }
-            return null;
+            return "Redeem Vouchers";
         }
     }
 }

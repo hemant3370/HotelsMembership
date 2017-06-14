@@ -28,7 +28,21 @@
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
+                    <EditText
+                        android:id="@+id/holderName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/card_number"
+                        android:text="@={data.holderName}"
+                        android:inputType="textPersonName"
+                        android:imeOptions="actionNext"
+                        android:maxLines="1" />
+
+                </android.support.design.widget.TextInputLayout>
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">

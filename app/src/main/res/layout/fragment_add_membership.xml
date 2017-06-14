@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <data >
+        <variable name="data" type="hotelsmembership.com.Model.AddCardPayload"/>
+    </data>
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/hotel_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hotel_name"
+                        android:inputType="text"
+                        android:imeOptions="actionNext"
+                        android:maxLines="1" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/cardNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/card_number"
+                        android:text="@={data.cardNumber}"
+                        android:inputType="number"
+                        android:imeOptions="actionNext"
+                        android:maxLines="1" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/phoneNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/contact_number"
+                        android:text="@={data.phoneNumber}"
+                        android:inputType="phone"
+                        android:imeOptions="actionDone"
+                        android:maxLines="3" />
+
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/cardExpiryDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/valid_upto"
+                        android:text="@={data.cardExpiryDate}"
+                        android:inputType="date"
+                        android:imeOptions="actionNone"
+                        android:maxLines="1" />
+
+                </android.support.design.widget.TextInputLayout>
+                <Button
+                    android:id="@+id/submit_Btn"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/submit"
+                    android:textColor="@android:color/white"
+                    android:shadowColor="@android:color/holo_red_dark"
+                    android:background="@android:color/holo_red_light"
+                    android:layout_marginStart="64dp"
+                    android:layout_marginEnd="64dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</layout>

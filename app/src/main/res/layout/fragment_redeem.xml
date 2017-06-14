@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <data >
+        <variable name="data" type="hotelsmembership.com.Model.VerifyOTPPayload"/>
+    </data>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Voucher Number"/>
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:text="@={data.voucherNumber}"/>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp">
+
+                <EditText
+                    android:id="@+id/redeem_otp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/enter_otp"
+                    android:text="@={data.otp}"
+                    android:inputType="number"
+                    android:imeOptions="actionDone"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+            <Button
+                android:id="@+id/verify_Btn"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/submit"
+                android:textColor="@android:color/white"
+                android:shadowColor="@android:color/holo_red_dark"
+                android:background="@android:color/holo_red_light"
+                android:layout_marginStart="64dp"
+                android:layout_marginEnd="64dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+</layout>

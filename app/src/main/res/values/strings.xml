@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Hotels Membership</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="offers">Offers</string>
+    <string name="my_profle">My Profle</string>
+    <string name="add_membership">Add Membership</string>
+    <string name="my_memberships">My Memberships</string>
+    <string name="submit">Submit</string>
+    <string name="valid_upto">Valid Upto</string>
+    <string name="contact_number">Contact Number</string>
+    <string name="card_number">Card Number</string>
+    <string name="hotel_name">Hotel Name</string>
+    <string name="error_field_required">This is required</string>
+
+    <string name="next">NEXT</string>
+    <string name="previous">PREVIOUS</string>
+    <string name="done">DONE</string>
+    <string name="card_holder_name_sample">JOHN MATTHEW</string>
+    <string name="card_holder">CARD HOLDER</string>
+    <string name="expiry">EXPIRY</string>
+    <string name="mm_yy">MM/YY</string>
+    <string name="card_expiry">CARD EXPIRY</string>
+    <string name="card_mm_yy">MM/YY</string>
+    <string name="name_on_card">NAME ON CARD</string>
+    <string name="error_invalid_month">Invalid month</string>
+    <string name="error_card_expired">Card expired</string>
+    <string name="redeem">Redeem</string>
+    <string name="terms_amp_conditions"><![CDATA[Terms & Conditions]]></string>
+    <string name="voucher_image">Voucher Image</string>
+    <string name="cardnum_hint">XXXX XXXX XXXX XXXX</string>
+    <string name="enter_otp">Enter OTP</string>
+    <string name="title_activity_vouchers">Vouchers</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+</resources>

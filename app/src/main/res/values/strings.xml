@@ -38,4 +38,6 @@
     <string name="enter_otp">Enter OTP</string>
     <string name="title_activity_vouchers">Vouchers</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="name">Your Name</string>
+    <string name="card_placeholder">XXXX XXXX XXXX XXXX</string>
 </resources>

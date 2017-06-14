@@ -15,7 +15,7 @@
             android:id="@+id/voucher_IV"
             app:image_url="@{data.imageURL}"
             android:layout_width="fill_parent"
-            android:layout_height="320dp"
+            android:layout_height="300dp"
             android:scaleType="fitXY"
             android:adjustViewBounds="true"
             android:contentDescription="@string/voucher_image" />

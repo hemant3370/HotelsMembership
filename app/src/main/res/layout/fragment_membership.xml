@@ -26,14 +26,39 @@ app:cardCornerRadius="4dp">
         android:orientation="vertical"
         android:background="@color/cardview_dark_background"
         >
-
+        <TextView
+            android:id="@+id/front_card_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="25dp"
+            android:hint="@string/card_placeholder"
+            android:shadowColor="@color/text_shadow"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"
+            android:textColor="@android:color/white"
+            android:textColorHint="@color/semi_white"
+            android:textSize="@dimen/text_size_normal_plus"
+            android:text="@={data.hotel.hotelName}"
+            />
+        <ImageView
+            android:layout_width="110dp"
+            android:layout_height="60dp"
+            android:layout_margin="4dp"
+            app:image_url="@{data.hotel.hotelLogoURL}"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"/>
         <TextView
             android:id="@+id/front_card_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="50dp"
-            android:hint="XXXX XXXX XXXX XXXX"
+            android:layout_marginStart="50dp"
+            android:hint="@string/card_placeholder"
             android:shadowColor="@color/text_shadow"
             android:shadowDx="1"
             android:shadowDy="1"

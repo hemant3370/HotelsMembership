@@ -148,7 +148,7 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return "Redeem Vouchers";
+            return "Vouchers";
         }
     }
 }

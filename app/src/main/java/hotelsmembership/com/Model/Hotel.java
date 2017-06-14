@@ -50,7 +50,7 @@ public class Hotel implements Parcelable {
     }
 
     public String getHotelLogoURL() {
-        return hotelLogoURL;
+        return "http://hotelsmembership.com" + hotelLogoURL;
     }
 
     public void setHotelLogoURL(String hotelLogoURL) {

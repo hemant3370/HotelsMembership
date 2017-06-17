@@ -1,14 +1,18 @@
 package hotelsmembership.com.Activities;
 
 import android.arch.persistence.room.Room;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -26,7 +30,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import hotelsmembership.com.Applications.Initializer;
 import hotelsmembership.com.Fragments.AddMembership;
-import hotelsmembership.com.Fragments.HomeFragment;
 import hotelsmembership.com.Fragments.MembershipsFragment;
 import hotelsmembership.com.Fragments.VoucherDetails;
 import hotelsmembership.com.Fragments.VoucherListDialogFragment;
@@ -60,6 +63,8 @@ VoucherListDialogFragment.Listener{
     ProgressBar progressDialog;
     @BindView(R.id.frame)
      FrameLayout frameLayout;
+    @BindView(R.id.fabAdd)
+    FloatingActionButton fab;
     private static final String ARG_VOUCHERS = "vouchers";
     private static final String ARG_CARD = "cardNumber";
     private static final String ARG_MEMBERSHIP = "membership";
@@ -82,7 +87,7 @@ VoucherListDialogFragment.Listener{
         setTitle("Home");
 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frame, HomeFragment.newInstance("",""));
+        fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
                 android.R.anim.fade_in, android.R.anim.fade_out);
         fragmentTransaction.commit();
@@ -138,7 +143,7 @@ VoucherListDialogFragment.Listener{
             mRetrofit = RestClient.getClient();
         }
         ApiInterface apiInterface = mRetrofit.create(ApiInterface.class);
-        Call<VouchersResponse> call = apiInterface.getVouchers(payload,membership.getHotel().getHotelId());
+        Call<VouchersResponse> call = apiInterface.getVouchers(payload,membership.getHotel().getHotelId(), membership.getAuthToken());
         RetrofitLoader.load(MainActivity.this, this.getLoaderManager(), payload.hashCode(), call, new Callback<VouchersResponse>() {
             @Override
             public void onResponse(Call<VouchersResponse> call, final Response<VouchersResponse> response) {
@@ -162,6 +167,7 @@ VoucherListDialogFragment.Listener{
                 else {
                     Toast.makeText(MainActivity.this, response.body().getMessage(),Toast.LENGTH_SHORT).show();
                     progressDialog.setVisibility(View.INVISIBLE);
+
                 }
 
             }
@@ -200,22 +206,23 @@ VoucherListDialogFragment.Listener{
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        fab.setVisibility(View.VISIBLE);
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if (id == R.id.nav_home) {
             setTitle("Home");
-            fragmentTransaction.replace(R.id.frame, HomeFragment.newInstance("",""));
+            fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
         } else if (id == R.id.nav_mymembership) {
             setTitle("My Memberships");
             fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
         } else if (id == R.id.nav_offers) {
             setTitle("Offers");
-            fragmentTransaction.replace(R.id.frame, HomeFragment.newInstance("",""));
+            fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
         } else if (id == R.id.nav_profile) {
             setTitle("My Profile");
-            fragmentTransaction.replace(R.id.frame, HomeFragment.newInstance("",""));
+            fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
         } else if (id == R.id.nav_contactus) {
             setTitle("Contact Us");
-            fragmentTransaction.replace(R.id.frame, HomeFragment.newInstance("",""));
+            fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
         }
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
                 android.R.anim.fade_in, android.R.anim.fade_out);
@@ -229,10 +236,13 @@ VoucherListDialogFragment.Listener{
         switch (view.getId()){
             case R.id.mymemberships:
                 setTitle("My Memberships");
+                fab.setVisibility(View.VISIBLE);
                 fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1)).addToBackStack(null);
                 break;
             case R.id.addmembership:
+            case R.id.fabAdd:
                 setTitle("Add Membership");
+                fab.setVisibility(View.INVISIBLE);
                 fragmentTransaction.replace(R.id.frame, AddMembership.newInstance("","")).addToBackStack(null);
                 break;
             case R.id.myprofile:
@@ -254,9 +264,10 @@ VoucherListDialogFragment.Listener{
 
     @Override
     public void onMembershipAdded() {
-        setTitle("Home");
+        setTitle("My Memberships");
+        fab.setVisibility(View.VISIBLE);
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frame, HomeFragment.newInstance("",""));
+        fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
                 android.R.anim.fade_in, android.R.anim.fade_out);
         fragmentTransaction.commit();
@@ -265,6 +276,38 @@ VoucherListDialogFragment.Listener{
     @Override
     public void onListFragmentInteraction(Membership item) {
         getVouchers(new AddCardPayload(item.getCardNumber(),"31/05/2018", item.getPhoneNumber()),item);
+    }
+
+    @Override
+    public void callForTableBooking(Membership item) {
+        String[] tokens = item.getHotel().getPhoneNumbers().getTableResevation().replace("|",",").split(",");
+        if (tokens.length > 1) {
+            chooseNumberToCall(tokens);
+        }
+        else {
+            startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",item.getHotel().getPhoneNumbers().getTableResevation() , null)));
+        }
+    }
+    void chooseNumberToCall(final String[] numbers){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Call to Book");
+        builder.setItems(numbers, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                // Do something with the selection
+                startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",numbers[item] , null)));
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+    @Override
+    public void callForRoomBooking(Membership item) {
+        String[] tokens = item.getHotel().getPhoneNumbers().getRoomResevation().replace("|",",").split(",");
+        if (tokens.length > 1) {
+            chooseNumberToCall(tokens);
+        } else {
+            startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", item.getHotel().getPhoneNumbers().getRoomResevation(), null)));
+        }
     }
 
     @Override

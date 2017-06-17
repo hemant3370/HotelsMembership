@@ -15,9 +15,9 @@ public class AddCardPayload {
     @SerializedName("phoneNumber")
     @Expose
     private String phoneNumber;
-    @SerializedName("holderName")
+    @SerializedName("memberName")
     @Expose
-    private String holderName;
+    private String memberName;
 
     public AddCardPayload() {
     }
@@ -48,15 +48,17 @@ public class AddCardPayload {
         return phoneNumber;
     }
 
+    public String getMemberName() {
+        return memberName;
+    }
+
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
+    }
+
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getHolderName() {
-        return holderName;
-    }
 
-    public void setHolderName(String holderName) {
-        this.holderName = holderName;
-    }
 }

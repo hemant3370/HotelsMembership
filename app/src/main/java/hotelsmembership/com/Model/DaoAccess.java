@@ -10,6 +10,8 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
+import hotelsmembership.com.Model.Hotel.Hotel;
+
 @Dao
 public interface DaoAccess {
 

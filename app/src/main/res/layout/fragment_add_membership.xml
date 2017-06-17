@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data >
         <variable name="data" type="hotelsmembership.com.Model.AddCardPayload"/>
+        <variable
+            name="imageUrl"
+            type="String"/>
     </data>
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -13,7 +16,11 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:orientation="vertical">
-
+<ImageView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:image_url="@{imageUrl}"
+    />
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -37,7 +44,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/name"
-                        android:text="@={data.holderName}"
+                        android:text="@={data.memberName}"
                         android:inputType="textPersonName"
                         android:imeOptions="actionNext"
                         android:maxLines="1" />

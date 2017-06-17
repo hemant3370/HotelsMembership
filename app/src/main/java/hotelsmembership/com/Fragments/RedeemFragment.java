@@ -101,7 +101,7 @@ public class RedeemFragment extends BottomSheetDialogFragment {
             mRetrofit = RestClient.getClient();
         }
         ApiInterface apiInterface = mRetrofit.create(ApiInterface.class);
-        Call<BasicResponse> call = apiInterface.redeemVoucher(fragmentRedeemBinding.getData(),membership.getHotel().getHotelId());
+        Call<BasicResponse> call = apiInterface.redeemVoucher(fragmentRedeemBinding.getData(),membership.getHotel().getHotelId(), membership.getAuthToken());
         RetrofitLoader.load(getContext(), getActivity().getLoaderManager(), fragmentRedeemBinding.getData().hashCode(), call, new Callback<BasicResponse>() {
             @Override
             public void onResponse(Call<BasicResponse> call, final Response<BasicResponse> response) {

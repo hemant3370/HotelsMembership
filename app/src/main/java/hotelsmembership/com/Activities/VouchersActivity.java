@@ -8,12 +8,16 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import hotelsmembership.com.Applications.Initializer;
 import hotelsmembership.com.Fragments.RedeemFragment;
 import hotelsmembership.com.Fragments.VoucherDetails;
@@ -55,11 +59,14 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
     List<Voucher> vouchers ;
     String cardNumber;
     Membership membership;
+    @BindView(R.id.progressBar)
+    ProgressBar progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vouchers);
+        ButterKnife.bind(this);
         ((Initializer) getApplication()).getNetComponent().inject(this);
         cardNumber = getIntent().getStringExtra(ARG_CARD);
         membership = getIntent().getParcelableExtra(ARG_MEMBERSHIP);
@@ -84,12 +91,12 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
     }
 
     void requestOTP(final Voucher voucher, String cardNumber, final Membership membership){
-
+        progressDialog.setVisibility(View.VISIBLE);
         if (mRetrofit == null){
             mRetrofit = RestClient.getClient();
         }
         ApiInterface apiInterface = mRetrofit.create(ApiInterface.class);
-        Call<BasicResponse> call = apiInterface.sendOTP(new RedeemPayload(cardNumber, voucher.getVoucherNumber()),membership.getHotel().getHotelId());
+        Call<BasicResponse> call = apiInterface.sendOTP(new RedeemPayload(cardNumber, voucher.getVoucherNumber()),membership.getHotel().getHotelId(), membership.getAuthToken());
         RetrofitLoader.load(this, getLoaderManager(), voucher.hashCode() + cardNumber.hashCode(), call, new Callback<BasicResponse>() {
             @Override
             public void onResponse(Call<BasicResponse> call, final Response<BasicResponse> response) {
@@ -98,10 +105,11 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
                     Toast.makeText(VouchersActivity.this,"OTP Sent",Toast.LENGTH_SHORT).show();
                     RedeemFragment redeemFragment = RedeemFragment.newInstance(voucher.getVoucherNumber(), membership);
                     redeemFragment.show(getSupportFragmentManager(),redeemFragment.getTag());
-
+                    progressDialog.setVisibility(View.GONE);
                 }
                 else {
                     Toast.makeText(VouchersActivity.this,"Error " + response.body().getMessage(),Toast.LENGTH_SHORT).show();
+                    progressDialog.setVisibility(View.GONE);
                 }
 
             }

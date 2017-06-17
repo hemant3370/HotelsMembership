@@ -16,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.Toast;
@@ -32,7 +34,7 @@ import javax.inject.Inject;
 import hotelsmembership.com.Applications.Initializer;
 import hotelsmembership.com.Model.AddCardPayload;
 import hotelsmembership.com.Model.AddMembershipResponse;
-import hotelsmembership.com.Model.Hotel;
+import hotelsmembership.com.Model.Hotel.Hotel;
 import hotelsmembership.com.Model.HotelsDatabase;
 import hotelsmembership.com.Model.Membership;
 import hotelsmembership.com.R;
@@ -120,6 +122,25 @@ public class AddMembership extends LifecycleFragment {
                 fragmentAddCardBinding.hotelName.setAdapter(adapter);
             }
         });
+        fragmentAddCardBinding.hotelName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                new Thread(new Runnable() {
+                    public void run() {
+                        // a potentially  time consuming task
+                        selectedHotel = hotelsDatabase.daoAccess().getSingleRecord(fragmentAddCardBinding.hotelName.getText().toString());
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                fragmentAddCardBinding.setImageUrl(selectedHotel.getHotelLogoURL());
+                                fragmentAddCardBinding.executePendingBindings();
+                            }
+                        });
+                    }
+                }).start();
+
+            }
+        });
         fragmentAddCardBinding.cardExpiryDate.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -145,7 +166,8 @@ public class AddMembership extends LifecycleFragment {
             public void onClick(View view) {
                 boolean cancel = false;
                 View focusView = null;
-
+                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 // Check for a valid password, if the user entered one.
                 if (TextUtils.isEmpty(fragmentAddCardBinding.hotelName.getText())) {
                     fragmentAddCardBinding.hotelName.setError(getString(R.string.error_field_required));
@@ -174,13 +196,7 @@ public class AddMembership extends LifecycleFragment {
                     focusView.requestFocus();
                 } else if (fragmentAddCardBinding.getData() != null) {
                     // Show a progress spinner,
-                    new Thread(new Runnable() {
-                        public void run() {
-                            // a potentially  time consuming task
-                            selectedHotel = hotelsDatabase.daoAccess().getSingleRecord(fragmentAddCardBinding.hotelName.getText().toString());
 
-                        }
-                    }).start();
                     progressBar=new ProgressDialog(getContext());
                     progressBar.setMessage("Submitting...");
                     progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);

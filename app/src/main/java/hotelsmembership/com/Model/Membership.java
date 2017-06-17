@@ -9,6 +9,9 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import hotelsmembership.com.Model.Hotel.Hotel;
+
 @Entity (tableName = "memberships")
 public class Membership implements Parcelable {
 
@@ -27,6 +30,9 @@ public class Membership implements Parcelable {
     @SerializedName("phoneNumber")
     @Expose
     private String phoneNumber;
+    @SerializedName("email")
+    @Expose
+    private String email;
     @SerializedName("cardValidFromDate")
     @Expose
     private String cardValidFromDate;
@@ -39,6 +45,12 @@ public class Membership implements Parcelable {
     @SerializedName("cardType")
     @Expose
     private String cardType;
+    @SerializedName("authToken")
+    @Expose
+    private String authToken;
+    @SerializedName("tokenExpirydate")
+    @Expose
+    private String tokenExpirydate;
 
     public String getCardNumber() {
         return cardNumber;
@@ -70,6 +82,14 @@ public class Membership implements Parcelable {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getCardValidFromDate() {
@@ -104,6 +124,22 @@ public class Membership implements Parcelable {
         this.cardType = cardType;
     }
 
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
+    }
+
+    public String getTokenExpirydate() {
+        return tokenExpirydate;
+    }
+
+    public void setTokenExpirydate(String tokenExpirydate) {
+        this.tokenExpirydate = tokenExpirydate;
+    }
+
     public Hotel getHotel() {
         return hotel;
     }
@@ -124,10 +160,13 @@ public class Membership implements Parcelable {
         dest.writeString(this.memberName);
         dest.writeString(this.memberAddress);
         dest.writeString(this.phoneNumber);
+        dest.writeString(this.email);
         dest.writeString(this.cardValidFromDate);
         dest.writeString(this.cardExpiryDate);
         dest.writeString(this.status);
         dest.writeString(this.cardType);
+        dest.writeString(this.authToken);
+        dest.writeString(this.tokenExpirydate);
     }
 
     public Membership() {
@@ -139,13 +178,16 @@ public class Membership implements Parcelable {
         this.memberName = in.readString();
         this.memberAddress = in.readString();
         this.phoneNumber = in.readString();
+        this.email = in.readString();
         this.cardValidFromDate = in.readString();
         this.cardExpiryDate = in.readString();
         this.status = in.readString();
         this.cardType = in.readString();
+        this.authToken = in.readString();
+        this.tokenExpirydate = in.readString();
     }
 
-    public static final Parcelable.Creator<Membership> CREATOR = new Parcelable.Creator<Membership>() {
+    public static final Creator<Membership> CREATOR = new Creator<Membership>() {
         @Override
         public Membership createFromParcel(Parcel source) {
             return new Membership(source);

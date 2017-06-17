@@ -40,4 +40,7 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="name">Your Name</string>
     <string name="card_placeholder">XXXX XXXX XXXX XXXX</string>
+    <string name="book_table">Book Table</string>
+    <string name="book_room">Book Room</string>
+    <string name="vouchers">Vouchers</string>
 </resources>

@@ -11,6 +11,7 @@ import hotelsmembership.com.Model.Vouchers.VouchersResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -37,15 +38,15 @@ public interface ApiInterface {
 
     @Headers("Content-Type: application/json")
     @POST("vouchers/{hotelid}")
-    Call<VouchersResponse> getVouchers(@Body AddCardPayload payload, @Path("hotelid") String hotelid);
+    Call<VouchersResponse> getVouchers(@Body AddCardPayload payload, @Path("hotelid") String hotelid, @Header("auth_token") String authToken);
 
     @Headers("Content-Type: application/json")
     @POST("sendOTP/{hotelid}")
-    Call<BasicResponse> sendOTP(@Body RedeemPayload payload, @Path("hotelid") String hotelid);
+    Call<BasicResponse> sendOTP(@Body RedeemPayload payload, @Path("hotelid") String hotelid, @Header("auth_token") String authToken);
 
     @Headers("Content-Type: application/json")
     @POST("redeemVoucher/{hotelid}")
-    Call<BasicResponse> redeemVoucher(@Body VerifyOTPPayload payload, @Path("hotelid") String hotelid);
+    Call<BasicResponse> redeemVoucher(@Body VerifyOTPPayload payload, @Path("hotelid") String hotelid, @Header("auth_token") String authToken);
 
 
 }

@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import hotelsmembership.com.Model.Hotel.Hotel;
+
 public class HotelsResponse {
 
     @SerializedName("statusCode")

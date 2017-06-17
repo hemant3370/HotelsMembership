@@ -110,5 +110,8 @@ public class MembershipsFragment extends LifecycleFragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(Membership item);
+        void callForTableBooking(Membership item);
+        void callForRoomBooking(Membership item);
+
     }
 }

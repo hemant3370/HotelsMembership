@@ -5,9 +5,16 @@
     <data class="MembershipItemBinding">
         <variable name="data" type="hotelsmembership.com.Model.Membership"/>
         <variable
+            name="imageUrl"
+            type="String"/>
+        <variable
             name="mlistener"
             type="hotelsmembership.com.Fragments.MembershipsFragment.OnListFragmentInteractionListener"/>
     </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 <android.support.v7.widget.CardView
 android:layout_width="match_parent"
 android:layout_height="wrap_content"
@@ -18,14 +25,19 @@ android:clickable="true"
 android:focusable="true"
     android:onClick="@{() -> mlistener.onListFragmentInteraction(data)}"
 android:foreground="?android:selectableItemBackground"
-app:cardCornerRadius="4dp">
+app:cardCornerRadius="21dp">
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/front_card_container"
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:orientation="vertical"
-        android:background="@color/cardview_dark_background"
         >
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            app:image_url="@{imageUrl}"
+            />
         <TextView
             android:id="@+id/front_card_name"
             android:layout_width="wrap_content"
@@ -38,47 +50,18 @@ app:cardCornerRadius="4dp">
             android:shadowDx="1"
             android:shadowDy="1"
             android:shadowRadius="2"
-            android:textColor="@android:color/white"
-            android:textColorHint="@color/semi_white"
+            android:textColor="@android:color/black"
+            android:textColorHint="@color/blue_color"
             android:textSize="@dimen/text_size_normal_plus"
-            android:text="@={data.hotel.hotelName}"
-            />
-        <ImageView
-            android:layout_width="110dp"
-            android:layout_height="60dp"
-            android:layout_margin="4dp"
-            app:image_url="@{data.hotel.hotelLogoURL}"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"/>
-        <TextView
-            android:id="@+id/front_card_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="50dp"
-            android:layout_marginStart="50dp"
-            android:hint="@string/card_placeholder"
-            android:shadowColor="@color/text_shadow"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowRadius="2"
-            android:textColor="@android:color/white"
-            android:textColorHint="@color/semi_white"
-            android:textSize="@dimen/text_size_normal"
             android:text="@={data.cardNumber}"
             />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="120dp"
-            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="18dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="134dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -87,7 +70,7 @@ app:cardCornerRadius="4dp">
                     android:layout_height="wrap_content"
                     android:text="@string/card_holder"
                     android:textColor="@android:color/darker_gray"
-                    android:textColorHint="@color/semi_white"
+                    android:textColorHint="@color/blue_color"
                     android:textSize="9sp"
 
                     />
@@ -107,35 +90,22 @@ app:cardCornerRadius="4dp">
                     android:shadowDx="1"
                     android:shadowDy="1"
                     android:shadowRadius="2"
-                    android:textColor="@android:color/white"
-                    android:textColorHint="@color/semi_white" />
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@color/blue_color" />
 
 
             </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="18dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/card_expiry_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/expiry"
-                    android:textColor="@android:color/darker_gray"
-                    android:textColorHint="@color/semi_white"
-                    android:textSize="9sp"
-
-                    />
-
                 <TextView
                     android:id="@+id/front_card_expiry"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_marginTop="145dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textAlignment="textEnd"
+                    android:gravity="end"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:hint="@string/mm_yy"
                     android:text="@={data.cardExpiryDate}"
                     android:maxWidth="150dp"
@@ -146,14 +116,55 @@ app:cardCornerRadius="4dp">
                     android:shadowDx="1"
                     android:shadowDy="1"
                     android:shadowRadius="2"
-                    android:textColor="@android:color/white"
-                    android:textColorHint="@color/semi_white" />
-
-            </LinearLayout>
-        </LinearLayout>
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@color/blue_color" />
 
 
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="horizontal">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:textColor="@android:color/white"
+                android:shadowColor="@android:color/holo_red_dark"
+                android:background="@android:color/holo_red_light"
+                style="?android:textAppearanceSmall"
+                android:text="@string/book_table"
+                android:textStyle="bold"
+                android:onClick="@{() -> mlistener.callForTableBooking(data)}"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:textColor="@android:color/white"
+                android:shadowColor="@android:color/holo_red_dark"
+                android:background="@android:color/holo_red_light"
+                android:layout_weight="1"
+                style="?android:textAppearanceSmall"
+                android:text="@string/book_room"
+                android:textStyle="bold"
+                android:onClick="@{() -> mlistener.callForRoomBooking(data)}"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:textColor="@android:color/white"
+                android:shadowColor="@android:color/holo_red_dark"
+                android:background="@android:color/holo_red_light"
+                android:layout_weight="1"
+                style="?android:textAppearanceSmall"
+                android:text="@string/vouchers"
+                android:textStyle="bold"
+                android:onClick="@{() -> mlistener.onListFragmentInteraction(data)}"/>
+        </LinearLayout>
+    </LinearLayout>
+
     </layout>

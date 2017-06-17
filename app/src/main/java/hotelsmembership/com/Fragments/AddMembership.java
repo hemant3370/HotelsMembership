@@ -169,7 +169,7 @@ public class AddMembership extends LifecycleFragment {
                 boolean cancel = false;
                 View focusView = null;
                 InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
                 // Check for a valid password, if the user entered one.
                 if (TextUtils.isEmpty(fragmentAddCardBinding.hotelName.getText())) {
                     fragmentAddCardBinding.hotelName.setError(getString(R.string.error_field_required));

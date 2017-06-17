@@ -7,7 +7,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by rahulkumarlohra on 17/06/16.
+ * Created by Hemant Singh on 17/06/16.
  */
 public class RestClient {
     private static final String BASE_URL = Constants.MyUrl.BASE_URL;

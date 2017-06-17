@@ -41,11 +41,12 @@ import hotelsmembership.com.Model.Vouchers.Voucher;
 import hotelsmembership.com.Model.Vouchers.VouchersResponse;
 import hotelsmembership.com.R;
 import hotelsmembership.com.Retrofit.Client.RestClient;
-import hotelsmembership.com.Retrofit.Loader.RetrofitLoader;
 import hotelsmembership.com.Retrofit.Services.ApiInterface;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity
@@ -65,6 +66,8 @@ VoucherListDialogFragment.Listener{
      FrameLayout frameLayout;
     @BindView(R.id.fabAdd)
     FloatingActionButton fab;
+    private CompositeDisposable compositeDisposable =
+            new CompositeDisposable();
     private static final String ARG_VOUCHERS = "vouchers";
     private static final String ARG_CARD = "cardNumber";
     private static final String ARG_MEMBERSHIP = "membership";
@@ -111,31 +114,37 @@ VoucherListDialogFragment.Listener{
            mRetrofit = RestClient.getClient();
        }
        ApiInterface apiInterface = mRetrofit.create(ApiInterface.class);
-       Call<HotelsResponse> call = apiInterface.getHotels();
-       RetrofitLoader.load(MainActivity.this, this.getLoaderManager(), 1111, call, new Callback<HotelsResponse>() {
-           @Override
-           public void onResponse(Call<HotelsResponse> call, final Response<HotelsResponse> response) {
-               if (response.code() == 200 ){
-                   hotelsDatabase = Room.databaseBuilder(getApplicationContext(),
-                           HotelsDatabase.class, "hotel-db").build();
-                   new Thread(new Runnable() {
-                       public void run() {
-                           // a potentially  time consuming task
-                           hotelsDatabase.daoAccess().insertMultipleListRecord(response.body().getContent());
-                       }
-                   }).start();
-               }
-               else {
-                   Toast.makeText(MainActivity.this,"Error " + response.body().getMessage(),Toast.LENGTH_SHORT).show();
-               }
+       apiInterface.getHotels()
+                .subscribeOn(Schedulers.newThread())
+               .observeOn(AndroidSchedulers.mainThread())
+               .subscribe(new Observer<HotelsResponse>() {
+                   @Override
+                   public void onSubscribe(Disposable disposable) {
+                        compositeDisposable.add(disposable);
+                   }
 
-           }
+                   @Override
+                   public void onNext(final HotelsResponse hotelsResponse) {
+                       hotelsDatabase = Room.databaseBuilder(getApplicationContext(),
+                               HotelsDatabase.class, "hotel-db").build();
+                       new Thread(new Runnable() {
+                           public void run() {
+                               // a potentially  time consuming task
+                               hotelsDatabase.daoAccess().insertMultipleListRecord(hotelsResponse.getContent());
+                           }
+                       }).start();
+                   }
 
-           @Override
-           public void onFailure(Call<HotelsResponse> call, Throwable t) {
+                   @Override
+                   public void onError(Throwable throwable) {
+                       Toast.makeText(MainActivity.this, throwable.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+                   }
 
-           }
-       });
+                   @Override
+                   public void onComplete() {
+
+                   }
+               });
    }
    void getVouchers(final AddCardPayload payload, final Membership membership){
         progressDialog.setVisibility(View.VISIBLE);
@@ -143,40 +152,42 @@ VoucherListDialogFragment.Listener{
             mRetrofit = RestClient.getClient();
         }
         ApiInterface apiInterface = mRetrofit.create(ApiInterface.class);
-        Call<VouchersResponse> call = apiInterface.getVouchers(payload,membership.getHotel().getHotelId(), membership.getAuthToken());
-        RetrofitLoader.load(MainActivity.this, this.getLoaderManager(), payload.hashCode(), call, new Callback<VouchersResponse>() {
-            @Override
-            public void onResponse(Call<VouchersResponse> call, final Response<VouchersResponse> response) {
-                if (response.code() == 200 ){
-                    if (response.body().getContent().size() > 0) {
-//                        VoucherListDialogFragment bottomSheetDialogFragment = VoucherListDialogFragment.newInstance(response.body().getContent(), payload.getCardNumber(), membership);
-//                        bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
 
-                        progressDialog.setVisibility(View.INVISIBLE);
-                        Intent vouchersIntent = new Intent(MainActivity.this,VouchersActivity.class);
-                        vouchersIntent.putExtra(ARG_CARD,payload.getCardNumber());
-                        vouchersIntent.putExtra(ARG_MEMBERSHIP, membership);
-                        vouchersIntent.putParcelableArrayListExtra(ARG_VOUCHERS, (ArrayList<? extends Parcelable>) response.body().getContent());
-                        startActivity(vouchersIntent);
-                    }
-                    else{
-                        progressDialog.setVisibility(View.INVISIBLE);
-                        Toast.makeText(MainActivity.this, "No Voucher available to redeem",Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else {
-                    Toast.makeText(MainActivity.this, response.body().getMessage(),Toast.LENGTH_SHORT).show();
-                    progressDialog.setVisibility(View.INVISIBLE);
+         apiInterface.getVouchers(payload,membership.getHotel().getHotelId(), membership.getAuthToken())
+                 .subscribeOn(Schedulers.newThread())
+                 .observeOn(AndroidSchedulers.mainThread())
+                 .subscribe(new Observer<VouchersResponse>() {
+                     @Override
+                     public void onSubscribe(Disposable disposable) {
+                         compositeDisposable.add(disposable);
+                     }
 
-                }
+                     @Override
+                     public void onNext(VouchersResponse vouchersResponse) {
+                         if (vouchersResponse.getContent().size() > 0) {
+                             Intent vouchersIntent = new Intent(MainActivity.this, VouchersActivity.class);
+                             vouchersIntent.putExtra(ARG_CARD, payload.getCardNumber());
+                             vouchersIntent.putExtra(ARG_MEMBERSHIP, membership);
+                             vouchersIntent.putParcelableArrayListExtra(ARG_VOUCHERS, (ArrayList<? extends Parcelable>) vouchersResponse.getContent());
+                             startActivity(vouchersIntent);
+                         }
+                         else{
+                             progressDialog.setVisibility(View.INVISIBLE);
+                             Toast.makeText(MainActivity.this, "No Voucher available to redeem",Toast.LENGTH_SHORT).show();
+                         }
+                     }
 
-            }
+                     @Override
+                     public void onError(Throwable throwable) {
+                         Toast.makeText(MainActivity.this, throwable.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+                         progressDialog.setVisibility(View.INVISIBLE);
+                     }
 
-            @Override
-            public void onFailure(Call<VouchersResponse> call, Throwable t) {
-
-            }
-        });
+                     @Override
+                     public void onComplete() {
+                         progressDialog.setVisibility(View.INVISIBLE);
+                     }
+                 });
     }
 
     @Override
@@ -319,5 +330,12 @@ VoucherListDialogFragment.Listener{
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
                 android.R.anim.fade_in, android.R.anim.fade_out);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    protected void onDestroy() {
+        compositeDisposable.clear();
+        super.onDestroy();
+
     }
 }

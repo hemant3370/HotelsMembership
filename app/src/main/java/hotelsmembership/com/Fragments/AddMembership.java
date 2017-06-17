@@ -39,12 +39,12 @@ import hotelsmembership.com.Model.HotelsDatabase;
 import hotelsmembership.com.Model.Membership;
 import hotelsmembership.com.R;
 import hotelsmembership.com.Retrofit.Client.RestClient;
-import hotelsmembership.com.Retrofit.Loader.RetrofitLoader;
 import hotelsmembership.com.Retrofit.Services.ApiInterface;
 import hotelsmembership.com.databinding.FragmentAddMembershipBinding;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
 /**
@@ -71,6 +71,8 @@ public class AddMembership extends LifecycleFragment {
     FragmentAddMembershipBinding fragmentAddCardBinding;
     private OnFragmentInteractionListener mListener;
     private ProgressDialog progressBar;
+    private CompositeDisposable compositeDisposable =
+            new CompositeDisposable();
     public AddMembership() {
         // Required empty public constructor
     }
@@ -216,35 +218,47 @@ public class AddMembership extends LifecycleFragment {
             mRetrofit = RestClient.getClient();
         }
         ApiInterface apiInterface = mRetrofit.create(ApiInterface.class);
-        Call<AddMembershipResponse> call = apiInterface.addMembership(fragmentAddCardBinding.getData(), selectedHotel.getHotelId());
-        RetrofitLoader.load(getContext(), getActivity().getLoaderManager(), fragmentAddCardBinding.getData().hashCode(), call, new Callback<AddMembershipResponse>() {
-            @Override
-            public void onResponse(Call<AddMembershipResponse> call, final Response<AddMembershipResponse> response) {
-                progressBar.dismiss();
-                if (response.code() == 200 && response.body() != null && response.body().getContent() != null ){
-                    new Thread(new Runnable() {
-                        public void run() {
-                            // a potentially  time consuming task
-                            Membership membership = response.body().getContent();
-                            membership.setHotel(selectedHotel);
-                            hotelsDatabase.daoAccess().insertOnlySingleRecord(membership);
-                        }
-                    }).start();
-                    Toast.makeText(getContext(),"Membership Added",Toast.LENGTH_SHORT).show();
-                    if (mListener != null) {
-                        mListener.onMembershipAdded();
+        apiInterface.addMembership(fragmentAddCardBinding.getData(), selectedHotel.getHotelId())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new io.reactivex.Observer<AddMembershipResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable disposable) {
+                        compositeDisposable.add(disposable);
                     }
-                }
-                else {
-                    Toast.makeText(getContext(),"Error " + response.message(),Toast.LENGTH_SHORT).show();
-                }
-            }
 
-            @Override
-            public void onFailure(Call<AddMembershipResponse> call, Throwable t) {
-                if (progressBar != null){progressBar.dismiss();}
-            }
-        });
+                    @Override
+                    public void onNext(final AddMembershipResponse addMembershipResponse) {
+                        if (addMembershipResponse.getStatusCode() == 200 && addMembershipResponse.getContent() != null ){
+                            new Thread(new Runnable() {
+                                public void run() {
+                                    // a potentially  time consuming task
+                                    Membership membership = addMembershipResponse.getContent();
+                                    membership.setHotel(selectedHotel);
+                                    hotelsDatabase.daoAccess().insertOnlySingleRecord(membership);
+                                }
+                            }).start();
+                            Toast.makeText(getContext(),"Membership Added",Toast.LENGTH_SHORT).show();
+                            if (mListener != null) {
+                                mListener.onMembershipAdded();
+                            }
+                        }
+                        else {
+                            Toast.makeText(getContext(),"Error " + addMembershipResponse.getMessage(),Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        progressBar.dismiss();
+                        Toast.makeText(getContext(),throwable.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        progressBar.dismiss();
+                    }
+                });
     }
 
 
@@ -263,6 +277,7 @@ public class AddMembership extends LifecycleFragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        compositeDisposable.clear();
     }
 
     public interface OnFragmentInteractionListener {

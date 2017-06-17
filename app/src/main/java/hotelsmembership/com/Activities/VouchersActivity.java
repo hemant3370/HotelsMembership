@@ -27,11 +27,12 @@ import hotelsmembership.com.Model.RedeemPayload;
 import hotelsmembership.com.Model.Vouchers.Voucher;
 import hotelsmembership.com.R;
 import hotelsmembership.com.Retrofit.Client.RestClient;
-import hotelsmembership.com.Retrofit.Loader.RetrofitLoader;
 import hotelsmembership.com.Retrofit.Services.ApiInterface;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
 public class VouchersActivity extends AppCompatActivity implements VoucherDetails.OnFragmentInteractionListener,
@@ -55,7 +56,8 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
     private static final String ARG_VOUCHERS = "vouchers";
     private static final String ARG_CARD = "cardNumber";
     private static final String ARG_MEMBERSHIP = "membership";
-
+    private CompositeDisposable compositeDisposable =
+            new CompositeDisposable();
     List<Voucher> vouchers ;
     String cardNumber;
     Membership membership;
@@ -90,34 +92,44 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
         requestOTP(voucher,cardNumber, membership);
     }
 
-    void requestOTP(final Voucher voucher, String cardNumber, final Membership membership){
+    void requestOTP(final Voucher voucher, String cardNumber, final Membership membership) {
         progressDialog.setVisibility(View.VISIBLE);
-        if (mRetrofit == null){
+        if (mRetrofit == null) {
             mRetrofit = RestClient.getClient();
         }
         ApiInterface apiInterface = mRetrofit.create(ApiInterface.class);
-        Call<BasicResponse> call = apiInterface.sendOTP(new RedeemPayload(cardNumber, voucher.getVoucherNumber()),membership.getHotel().getHotelId(), membership.getAuthToken());
-        RetrofitLoader.load(this, getLoaderManager(), voucher.hashCode() + cardNumber.hashCode(), call, new Callback<BasicResponse>() {
-            @Override
-            public void onResponse(Call<BasicResponse> call, final Response<BasicResponse> response) {
-                if (response.code() == 200 && response.body() != null && response.body().getContent() != null ){
+        apiInterface.sendOTP(new RedeemPayload(cardNumber, voucher.getVoucherNumber()), membership.getHotel().getHotelId(), membership.getAuthToken())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<BasicResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable disposable) {
+                        compositeDisposable.add(disposable);
+                    }
 
-                    Toast.makeText(VouchersActivity.this,"OTP Sent",Toast.LENGTH_SHORT).show();
-                    RedeemFragment redeemFragment = RedeemFragment.newInstance(voucher.getVoucherNumber(), membership);
-                    redeemFragment.show(getSupportFragmentManager(),redeemFragment.getTag());
-                    progressDialog.setVisibility(View.GONE);
-                }
-                else {
-                    Toast.makeText(VouchersActivity.this,"Error " + response.body().getMessage(),Toast.LENGTH_SHORT).show();
-                    progressDialog.setVisibility(View.GONE);
-                }
+                    @Override
+                    public void onNext(BasicResponse basicResponse) {
+                        if (basicResponse.getStatusCode() == 200) {
+                            Toast.makeText(VouchersActivity.this, "OTP Sent", Toast.LENGTH_SHORT).show();
+                            RedeemFragment redeemFragment = RedeemFragment.newInstance(voucher.getVoucherNumber(), membership);
+                            redeemFragment.show(getSupportFragmentManager(), redeemFragment.getTag());
+                            progressDialog.setVisibility(View.GONE);
+                        } else {
+                            Toast.makeText(VouchersActivity.this, "Error " + basicResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                            progressDialog.setVisibility(View.GONE);
+                        }
+                    }
 
-            }
-            @Override
-            public void onFailure(Call<BasicResponse> call, Throwable t) {
+                    @Override
+                    public void onError(Throwable throwable) {
+                        Toast.makeText(VouchersActivity.this, "Error " + throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    }
 
-            }
-        });
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     @Override
@@ -158,5 +170,12 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
         public CharSequence getPageTitle(int position) {
             return "Vouchers";
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        compositeDisposable.clear();
+        super.onDestroy();
+
     }
 }

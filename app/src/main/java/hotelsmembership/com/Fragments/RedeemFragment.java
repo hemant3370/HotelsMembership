@@ -20,12 +20,13 @@ import hotelsmembership.com.Model.Membership;
 import hotelsmembership.com.Model.VerifyOTPPayload;
 import hotelsmembership.com.R;
 import hotelsmembership.com.Retrofit.Client.RestClient;
-import hotelsmembership.com.Retrofit.Loader.RetrofitLoader;
 import hotelsmembership.com.Retrofit.Services.ApiInterface;
 import hotelsmembership.com.databinding.FragmentRedeemBinding;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
 /**
@@ -50,7 +51,7 @@ public class RedeemFragment extends BottomSheetDialogFragment {
     private VerifyOTPPayload verifyPayload;
     Membership membership;
     private ProgressDialog progressBar;
-
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
     public RedeemFragment() {
         // Required empty public constructor
     }
@@ -88,7 +89,7 @@ public class RedeemFragment extends BottomSheetDialogFragment {
             public void onClick(View v) {
                 progressBar=new ProgressDialog(getContext());
                 progressBar.setMessage("Verifying OTP...");
-                progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 progressBar.setIndeterminate(true);
                 progressBar.show();
                 redeemVoucher();
@@ -101,28 +102,40 @@ public class RedeemFragment extends BottomSheetDialogFragment {
             mRetrofit = RestClient.getClient();
         }
         ApiInterface apiInterface = mRetrofit.create(ApiInterface.class);
-        Call<BasicResponse> call = apiInterface.redeemVoucher(fragmentRedeemBinding.getData(),membership.getHotel().getHotelId(), membership.getAuthToken());
-        RetrofitLoader.load(getContext(), getActivity().getLoaderManager(), fragmentRedeemBinding.getData().hashCode(), call, new Callback<BasicResponse>() {
-            @Override
-            public void onResponse(Call<BasicResponse> call, final Response<BasicResponse> response) {
-                progressBar.dismiss();
-                if (response.code() == 200 && response.body() != null && response.body().getContent() != null ){
-
-                    Toast.makeText(getContext(),response.body().getContent(),Toast.LENGTH_SHORT).show();
-                    if (mListener != null) {
-
+        apiInterface.redeemVoucher(fragmentRedeemBinding.getData(),membership.getHotel().getHotelId(), membership.getAuthToken())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<BasicResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable disposable) {
+                        compositeDisposable.add(disposable);
                     }
-                }
-                else {
-                    Toast.makeText(getContext(),"Error " + response.body().getMessage(),Toast.LENGTH_SHORT).show();
-                }
-            }
 
-            @Override
-            public void onFailure(Call<BasicResponse> call, Throwable t) {
-                if (progressBar != null){progressBar.dismiss();}
-            }
-        });
+                    @Override
+                    public void onNext(BasicResponse basicResponse) {
+                        if (basicResponse.getStatusCode() == 200 && basicResponse.getContent() != null ){
+
+                            Toast.makeText(getContext(),basicResponse.getContent(),Toast.LENGTH_SHORT).show();
+                            if (mListener != null) {
+
+                            }
+                        }
+                        else {
+                            Toast.makeText(getContext(),"Error " + basicResponse.getMessage(),Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        if (progressBar != null){progressBar.dismiss();}
+                        Toast.makeText(getContext(),throwable.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        progressBar.dismiss();
+                    }
+                });
     }
 
 
@@ -141,6 +154,7 @@ public class RedeemFragment extends BottomSheetDialogFragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        compositeDisposable.clear();
     }
 
     /**

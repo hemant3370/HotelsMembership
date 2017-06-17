@@ -8,7 +8,7 @@ import hotelsmembership.com.Model.HotelsResponse;
 import hotelsmembership.com.Model.RedeemPayload;
 import hotelsmembership.com.Model.VerifyOTPPayload;
 import hotelsmembership.com.Model.Vouchers.VouchersResponse;
-import retrofit2.Call;
+import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -30,23 +30,23 @@ public interface ApiInterface {
 ////
 //    //Hotels
     @GET("hotels")
-    Call<HotelsResponse> getHotels();
+    Observable<HotelsResponse> getHotels();
     //Add Card
     @Headers("Content-Type: application/json")
     @POST("memberDetail/{hotelid}")
-    Call<AddMembershipResponse> addMembership(@Body AddCardPayload payload, @Path("hotelid") String hotelid);
+    Observable<AddMembershipResponse> addMembership(@Body AddCardPayload payload, @Path("hotelid") String hotelid);
 
     @Headers("Content-Type: application/json")
     @POST("vouchers/{hotelid}")
-    Call<VouchersResponse> getVouchers(@Body AddCardPayload payload, @Path("hotelid") String hotelid, @Header("auth_token") String authToken);
+    Observable<VouchersResponse> getVouchers(@Body AddCardPayload payload, @Path("hotelid") String hotelid, @Header("auth_token") String authToken);
 
     @Headers("Content-Type: application/json")
     @POST("sendOTP/{hotelid}")
-    Call<BasicResponse> sendOTP(@Body RedeemPayload payload, @Path("hotelid") String hotelid, @Header("auth_token") String authToken);
+    Observable<BasicResponse> sendOTP(@Body RedeemPayload payload, @Path("hotelid") String hotelid, @Header("auth_token") String authToken);
 
     @Headers("Content-Type: application/json")
     @POST("redeemVoucher/{hotelid}")
-    Call<BasicResponse> redeemVoucher(@Body VerifyOTPPayload payload, @Path("hotelid") String hotelid, @Header("auth_token") String authToken);
+    Observable<BasicResponse> redeemVoucher(@Body VerifyOTPPayload payload, @Path("hotelid") String hotelid, @Header("auth_token") String authToken);
 
 
 }

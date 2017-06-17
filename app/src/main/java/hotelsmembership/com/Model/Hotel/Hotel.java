@@ -11,7 +11,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "Hotels")
-public class Hotel implements Parcelable {
+public class Hotel implements Parcelable  {
     @PrimaryKey
     @Expose
     private String hotelId;
@@ -123,6 +123,8 @@ public class Hotel implements Parcelable {
 
     public Hotel() {
     }
+
+
 
     protected Hotel(Parcel in) {
         this.hotelId = in.readString();

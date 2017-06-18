@@ -39,6 +39,7 @@ import hotelsmembership.com.Model.Vouchers.VouchersResponse;
 import hotelsmembership.com.R;
 import hotelsmembership.com.Retrofit.Client.RestClient;
 import hotelsmembership.com.Retrofit.Services.ApiInterface;
+import hotelsmembership.com.Utils.ConnectivityUtil;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -246,6 +247,8 @@ VoucherListDialogFragment.Listener{
     }
     public void onHomeItemClick(View view){
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
+                android.R.anim.slide_out_right, android.R.anim.slide_in_left);
         switch (view.getId()){
             case R.id.mymemberships:
                 setTitle("My Memberships");
@@ -254,9 +257,11 @@ VoucherListDialogFragment.Listener{
                 break;
             case R.id.addmembership:
             case R.id.fabAdd:
-                setTitle("Add Membership");
-                fab.setVisibility(View.INVISIBLE);
-                fragmentTransaction.replace(R.id.frame, AddMembership.newInstance("","")).addToBackStack(null);
+                if (new ConnectivityUtil(getApplicationContext()).connected()) {
+                    setTitle("Add Membership");
+                    fab.setVisibility(View.INVISIBLE);
+                    fragmentTransaction.replace(R.id.frame, AddMembership.newInstance("", "")).addToBackStack(null);
+                }
                 break;
             case R.id.myprofile:
                 setTitle("My Profile");
@@ -269,9 +274,6 @@ VoucherListDialogFragment.Listener{
             default:
                 return;
         }
-
-        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
-                android.R.anim.fade_in, android.R.anim.fade_out);
         fragmentTransaction.commit();
     }
 

@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.inject.Singleton;
@@ -13,6 +14,8 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import hotelsmembership.com.Constants;
+import hotelsmembership.com.Retrofit.Interceptor.CachingControlInterceptor;
+import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -27,16 +30,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class NetModule {
     private String BASE_URL = Constants.MyUrl.BASE_URL;
-
+    private Context context;
     public NetModule(Context context) {
+        this.context = context;
     }
 
     @Provides
     @Singleton
     Retrofit provideRetrofit()
     {
-//        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-//        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        long SIZE_OF_CACHE = 10 * 1024 * 1024; // 10 MiB
+        Cache cache = new Cache(new File(context.getCacheDir(), "http"), SIZE_OF_CACHE);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(new Interceptor() {
                                       @Override
@@ -50,7 +54,9 @@ public class NetModule {
 
                                           return chain.proceed(request);
                                       }
-                                  });
+                                  })
+                .addNetworkInterceptor(new CachingControlInterceptor())
+                .cache(cache);
 //                .addInterceptor(logging);
 //        .addNetworkInterceptor(new CachingControlInterceptor())
 //                .cache(cache);

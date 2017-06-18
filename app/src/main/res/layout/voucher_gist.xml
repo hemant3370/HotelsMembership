@@ -78,6 +78,7 @@
                 android:hint="@string/vouchers"
                 android:layout_marginStart="4dp"
                 android:layout_marginLeft="4dp"
+                android:layout_marginBottom="4dp"
                 android:layout_below="@id/voucherNo"
                 android:layout_toRightOf="@id/voucherLogo"
                 android:layout_toEndOf="@id/voucherLogo"

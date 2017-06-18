@@ -33,6 +33,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hotelsmembership.com.Activities.MainActivity" />
         </activity>
+        <activity
+            android:name=".Activities.CardActivity"
+            android:label="@string/title_activity_card"
+            android:parentActivityName=".Activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hotelsmembership.com.Activities.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

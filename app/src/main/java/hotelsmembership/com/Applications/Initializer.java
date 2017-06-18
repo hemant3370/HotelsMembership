@@ -9,7 +9,6 @@ import android.util.DisplayMetrics;
 import hotelsmembership.com.Dagger.Component.DaggerNetComponent;
 import hotelsmembership.com.Dagger.Component.NetComponent;
 import hotelsmembership.com.Dagger.Module.NetModule;
-import okhttp3.OkHttpClient;
 
 
 /**
@@ -59,10 +58,10 @@ public class Initializer extends Application {
         return metrics;
     }
     private NetComponent mNetComponent;
+
     @Override
     public void onCreate() {
         super.onCreate();
-        OkHttpClient client = new OkHttpClient(); // create your own OkHttp clien
         //Dagger
         mNetComponent = DaggerNetComponent.builder()
                 .netModule(new NetModule(getApplicationContext()))

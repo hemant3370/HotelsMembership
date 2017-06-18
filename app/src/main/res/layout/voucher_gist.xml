@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <data class="VouchergistItemBinding">
+        <variable name="data" type="hotelsmembership.com.Model.Vouchers.Voucher"/>
+        <variable
+            name="index"
+            type="int"/>
+        <variable
+            name="mlistener"
+            type="hotelsmembership.com.Interfaces.CardVoucherClickListener"/>
+    </data>
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/voucher_card"
+        android:layout_margin="8dp"
+        app:cardElevation="@dimen/appbar_padding_top"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{() -> mlistener.onVoucherGistClick(index)}"
+        android:foreground="?android:selectableItemBackground"
+        app:cardCornerRadius="8dp">
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/voucher_card_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <ImageView
+                android:id="@+id/voucherLogo"
+                android:layout_width="72dp"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                app:srcCompat="@drawable/ic_card_giftcard_black_24dp"
+                android:scaleType="fitCenter"
+                app:image_url="@{data.imageURL}"
+                />
+            <TextView
+                android:id="@+id/voucherName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_toRightOf="@id/voucherLogo"
+                android:layout_toEndOf="@id/voucherLogo"
+                android:shadowColor="@color/text_shadow"
+                android:hint="@string/vouchers"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="2"
+                android:textColor="@android:color/black"
+                android:textColorHint="@color/blue_color"
+                android:textSize="@dimen/text_size_small"
+                android:text="@={data.voucherCategory.categoryTitle}"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:hint="@string/vouchers"
+                android:layout_below="@id/voucherName"
+                android:layout_toRightOf="@id/voucherLogo"
+                android:layout_toEndOf="@id/voucherLogo"
+                android:shadowColor="@color/text_shadow"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="2"
+                android:textColor="@android:color/black"
+                android:textColorHint="@color/blue_color"
+                android:textSize="@dimen/text_size_normal_small"
+                android:text="@={data.voucherCategory.description}"
+                />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</layout>

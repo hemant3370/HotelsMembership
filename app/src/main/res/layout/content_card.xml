@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <data>
+        <variable name="data" type="hotelsmembership.com.Model.Membership"/>
+        <variable
+            name="imageUrl"
+            type="String"/>
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:orientation="vertical">
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/membership_card"
+            android:layout_margin="8dp"
+            app:cardElevation="@dimen/appbar_padding_top"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:selectableItemBackground"
+            app:cardCornerRadius="21dp">
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/front_card_container"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:orientation="vertical"
+                >
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    app:image_url="@{imageUrl}"
+                    />
+                <TextView
+                    android:id="@+id/front_card_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="25dp"
+                    android:hint="@string/card_placeholder"
+                    android:shadowColor="@color/text_shadow"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="2"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@color/blue_color"
+                    android:textSize="@dimen/text_size_normal_plus"
+                    android:text="@={data.cardNumber}"
+                    />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="134dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/card_name_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/card_holder"
+                        android:textColor="@android:color/darker_gray"
+                        android:textColorHint="@color/blue_color"
+                        android:textSize="9sp"
+
+                        />
+
+                    <TextView
+                        android:id="@+id/front_card_holder_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:hint="@string/card_holder_name_sample"
+                        android:text="@={data.memberName}"
+                        android:maxWidth="150dp"
+                        android:minWidth="150dp"
+                        android:paddingBottom="@dimen/padding_small"
+                        android:paddingTop="@dimen/padding_small"
+                        android:shadowColor="@color/text_shadow"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="2"
+                        android:textColor="@android:color/black"
+                        android:textColorHint="@color/blue_color" />
+
+
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/front_card_expiry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="145dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textAlignment="textEnd"
+                    android:gravity="end"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:hint="@string/mm_yy"
+                    android:text="@={data.cardExpiryDate}"
+                    android:maxWidth="150dp"
+                    android:minWidth="150dp"
+                    android:paddingBottom="@dimen/padding_small"
+                    android:paddingTop="@dimen/padding_small"
+                    android:shadowColor="@color/text_shadow"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="2"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@color/blue_color" />
+
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:orientation="horizontal">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:textColor="@android:color/white"
+                android:shadowColor="@android:color/holo_red_dark"
+                android:background="@android:color/holo_red_light"
+                style="?android:textAppearanceSmall"
+                android:text="@string/book_table"
+                android:textStyle="bold"
+                android:onClick="callForTableBooking"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:textColor="@android:color/white"
+                android:shadowColor="@android:color/holo_red_dark"
+                android:background="@android:color/holo_red_light"
+                style="?android:textAppearanceSmall"
+                android:text="@string/book_room"
+                android:textStyle="bold"
+                android:onClick="callForRoomBooking"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_normal_plus"
+            android:layout_margin="10dp"
+            android:text="@string/vouchers"/>
+        <android.support.v7.widget.RecyclerView
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/voucher_recy"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            app:layoutManager="LinearLayoutManager"
+
+            tools:context="hotelsmembership.com.Activities.CardActivity"
+            tools:listitem="@layout/voucher_gist" />
+    </LinearLayout>
+</layout>

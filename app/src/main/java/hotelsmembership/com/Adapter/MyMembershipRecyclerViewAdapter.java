@@ -56,11 +56,6 @@ public class MyMembershipRecyclerViewAdapter extends RecyclerView.Adapter<MyMemb
         public void bind(Membership item) {
             itemBinding.setData(item);
             itemBinding.setMlistener(mListener);
-            if (item.getCardType().equals("")) {
-                itemBinding.setImageUrl(item.getHotel().getHotelLogoURL());
-            } else {
-                itemBinding.setImageUrl(item.getCardType().equals("G") ? item.getHotel().getCardsImageURLs().getGold() : item.getHotel().getCardsImageURLs().getSilver());
-            }
             itemBinding.executePendingBindings();
         }
 

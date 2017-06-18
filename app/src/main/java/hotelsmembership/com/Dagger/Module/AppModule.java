@@ -8,7 +8,7 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * Created by Rahul on 6/20/2016.
+ * Created by HemantSingh on 6/20/2016.
  */
 @Module
 public class AppModule {
@@ -24,4 +24,6 @@ public class AppModule {
     Application providesApplication() {
         return mApplication;
     }
+
+
 }

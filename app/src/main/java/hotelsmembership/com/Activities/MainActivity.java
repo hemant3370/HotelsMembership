@@ -1,9 +1,7 @@
 package hotelsmembership.com.Activities;
 
 import android.arch.persistence.room.Room;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -12,7 +10,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -66,6 +63,7 @@ VoucherListDialogFragment.Listener{
      FrameLayout frameLayout;
     @BindView(R.id.fabAdd)
     FloatingActionButton fab;
+
     private CompositeDisposable compositeDisposable =
             new CompositeDisposable();
     private static final String ARG_VOUCHERS = "vouchers";
@@ -164,12 +162,16 @@ VoucherListDialogFragment.Listener{
 
                      @Override
                      public void onNext(VouchersResponse vouchersResponse) {
-                         if (vouchersResponse.getContent().size() > 0) {
-                             Intent vouchersIntent = new Intent(MainActivity.this, VouchersActivity.class);
-                             vouchersIntent.putExtra(ARG_CARD, payload.getCardNumber());
-                             vouchersIntent.putExtra(ARG_MEMBERSHIP, membership);
-                             vouchersIntent.putParcelableArrayListExtra(ARG_VOUCHERS, (ArrayList<? extends Parcelable>) vouchersResponse.getContent());
-                             startActivity(vouchersIntent);
+                         if (vouchersResponse.getStatusCode() == 200 && vouchersResponse.getContent().size() > 0) {
+                             Intent membershipIntent = new Intent(MainActivity.this, CardActivity.class);
+
+                             membershipIntent.putExtra(ARG_CARD, payload.getCardNumber());
+                             membershipIntent.putExtra(ARG_MEMBERSHIP, membership);
+                             membershipIntent.putParcelableArrayListExtra(ARG_VOUCHERS, (ArrayList<? extends Parcelable>) vouchersResponse.getContent());
+                             startActivity(membershipIntent);
+                         }
+                         else if (vouchersResponse.getStatusCode() > 400 && vouchersResponse.getStatusCode() < 500){
+
                          }
                          else{
                              progressDialog.setVisibility(View.INVISIBLE);
@@ -287,38 +289,6 @@ VoucherListDialogFragment.Listener{
     @Override
     public void onListFragmentInteraction(Membership item) {
         getVouchers(new AddCardPayload(item.getCardNumber(),"31/05/2018", item.getPhoneNumber()),item);
-    }
-
-    @Override
-    public void callForTableBooking(Membership item) {
-        String[] tokens = item.getHotel().getPhoneNumbers().getTableResevation().replace("|",",").split(",");
-        if (tokens.length > 1) {
-            chooseNumberToCall(tokens);
-        }
-        else {
-            startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",item.getHotel().getPhoneNumbers().getTableResevation() , null)));
-        }
-    }
-    void chooseNumberToCall(final String[] numbers){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Call to Book");
-        builder.setItems(numbers, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                // Do something with the selection
-                startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",numbers[item] , null)));
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-    @Override
-    public void callForRoomBooking(Membership item) {
-        String[] tokens = item.getHotel().getPhoneNumbers().getRoomResevation().replace("|",",").split(",");
-        if (tokens.length > 1) {
-            chooseNumberToCall(tokens);
-        } else {
-            startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", item.getHotel().getPhoneNumbers().getRoomResevation(), null)));
-        }
     }
 
     @Override

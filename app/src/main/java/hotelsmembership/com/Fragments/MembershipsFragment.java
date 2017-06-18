@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
+
 import java.util.List;
 
 import hotelsmembership.com.Adapter.MyMembershipRecyclerViewAdapter;
@@ -33,12 +35,12 @@ public class MembershipsFragment extends LifecycleFragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
+    HotelsDatabase hotelsDatabase;
+    LiveData<List<Membership>> memberships;
     private OnListFragmentInteractionListener mListener;
     RecyclerView recyclerView;
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
+    SwipeableRecyclerViewTouchListener swipeTouchListener;
+
     public MembershipsFragment() {
     }
 
@@ -69,14 +71,41 @@ public class MembershipsFragment extends LifecycleFragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             recyclerView = (RecyclerView) view;
+            swipeTouchListener = new SwipeableRecyclerViewTouchListener(recyclerView,
+                    new SwipeableRecyclerViewTouchListener.SwipeListener() {
+                        @Override
+                        public boolean canSwipeLeft(int position) {
+                            return true;
+                        }
+
+                        @Override
+                        public boolean canSwipeRight(int position) {
+                            return false;
+                        }
+
+                        @Override
+                        public void onDismissedBySwipeLeft(final RecyclerView recyclerView, final int[] reverseSortedPositions) {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    hotelsDatabase.daoAccess().deleteMembership(memberships.getValue().get(reverseSortedPositions[0]));
+                                }
+                            }).start();
+                        }
+
+                        @Override
+                        public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
+
+                        }
+                    });
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            HotelsDatabase hotelsDatabase = Room.databaseBuilder(getContext(),
+             hotelsDatabase = Room.databaseBuilder(getContext(),
                     HotelsDatabase.class, "hotel-db").build();
-            LiveData<List<Membership>> memberships = hotelsDatabase.daoAccess().fetchAllMemberships();
+            memberships = hotelsDatabase.daoAccess().fetchAllMemberships();
             memberships.observe(this, new Observer<List<Membership>>() {
                 @Override
                 public void onChanged(@Nullable List<Membership> memberships) {
@@ -84,7 +113,7 @@ public class MembershipsFragment extends LifecycleFragment {
                     recyclerView.requestLayout();
                 }
             });
-
+            recyclerView.addOnItemTouchListener(swipeTouchListener);
         }
         return view;
     }
@@ -110,8 +139,6 @@ public class MembershipsFragment extends LifecycleFragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(Membership item);
-        void callForTableBooking(Membership item);
-        void callForRoomBooking(Membership item);
 
     }
 }

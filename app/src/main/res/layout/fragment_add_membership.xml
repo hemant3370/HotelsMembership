@@ -19,6 +19,8 @@
 <ImageView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/hotelLogo"
+    android:visibility="gone"
     app:image_url="@{imageUrl}"
     />
                 <android.support.design.widget.TextInputLayout
@@ -29,8 +31,9 @@
                         android:id="@+id/hotel_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+
                         android:hint="@string/hotel_name"
-                        android:inputType="text"
+                        android:inputType="textCapWords"
                         android:imeOptions="actionNext"
                         android:maxLines="1" />
 
@@ -45,7 +48,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/name"
                         android:text="@={data.memberName}"
-                        android:inputType="textPersonName"
+                        android:inputType="textCapWords"
                         android:imeOptions="actionNext"
                         android:maxLines="1" />
 
@@ -96,6 +99,13 @@
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="false"
+                    android:text="@string/i_accept_terms_and_conditions"
+                    android:id="@+id/checkbox"/>
                 <Button
                     android:id="@+id/submit_Btn"
                     style="?android:textAppearanceSmall"

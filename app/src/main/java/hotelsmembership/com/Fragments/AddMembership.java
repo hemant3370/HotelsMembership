@@ -134,6 +134,7 @@ public class AddMembership extends LifecycleFragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                fragmentAddCardBinding.hotelLogo.setVisibility(View.VISIBLE);
                                 fragmentAddCardBinding.setImageUrl(selectedHotel.getHotelLogoURL());
                                 fragmentAddCardBinding.executePendingBindings();
                             }
@@ -171,6 +172,11 @@ public class AddMembership extends LifecycleFragment {
                 InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
                 // Check for a valid password, if the user entered one.
+                if(!fragmentAddCardBinding.checkbox.isChecked()){
+                    fragmentAddCardBinding.checkbox.setError("Please accept terms & conditions.");
+                    focusView = fragmentAddCardBinding.checkbox;
+                    cancel = true;
+                }
                 if (TextUtils.isEmpty(fragmentAddCardBinding.hotelName.getText())) {
                     fragmentAddCardBinding.hotelName.setError(getString(R.string.error_field_required));
                     focusView = fragmentAddCardBinding.hotelName;

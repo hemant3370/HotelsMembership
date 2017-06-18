@@ -56,9 +56,10 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
     private static final String ARG_VOUCHERS = "vouchers";
     private static final String ARG_CARD = "cardNumber";
     private static final String ARG_MEMBERSHIP = "membership";
+    private static final String ARG_INDEX = "index";
     private CompositeDisposable compositeDisposable =
             new CompositeDisposable();
-    List<Voucher> vouchers ;
+    List<Voucher> vouchers;
     String cardNumber;
     Membership membership;
     @BindView(R.id.progressBar)
@@ -84,7 +85,7 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
+        mViewPager.setCurrentItem(getIntent().getIntExtra(ARG_INDEX,0));
     }
 
     @Override

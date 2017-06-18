@@ -40,7 +40,9 @@ public interface DaoAccess {
     @Update
     void updateRecord(Hotel hotel);
 
-    @Delete
-    void deleteRecord(Hotel hotel);
+    @Query("DELETE FROM memberships WHERE cardNumber =:card_number")
+    void deleteCard(String card_number);
 
+    @Delete()
+    void deleteMembership(Membership membership);
 }

@@ -21,7 +21,10 @@ public class CardsImageURLs implements Parcelable {
     private String silver;
 
     public String getGold() {
-        return "http://hotelsmembership.com" + gold;
+        if (gold != null) {
+            return "http://hotelsmembership.com" + gold.replace("http://hotelsmembership.com", "");
+        }
+        return "";
     }
 
     public void setGold(String gold) {
@@ -29,7 +32,10 @@ public class CardsImageURLs implements Parcelable {
     }
 
     public String getSilver() {
-        return "http://hotelsmembership.com" + silver;
+        if (silver != null) {
+            return "http://hotelsmembership.com" + silver.replace("http://hotelsmembership.com", "");
+        }
+        return "";
     }
 
     public void setSilver(String silver) {

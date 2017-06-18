@@ -1,11 +1,11 @@
 package hotelsmembership.com.Activities;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -134,8 +134,14 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void onRedemption(Boolean success, String voucherNo) {
+        if (success){
+            AlertDialog.Builder builder = new AlertDialog.Builder(VouchersActivity.this);
+            builder.setTitle("Hey!!");
+            builder.setMessage("Voucher Number " + voucherNo + " successfully redeemed.");
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
     }
 
     /**

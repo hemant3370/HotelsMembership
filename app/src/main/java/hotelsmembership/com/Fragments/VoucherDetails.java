@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import hotelsmembership.com.Model.Membership;
 import hotelsmembership.com.Model.Vouchers.Voucher;
@@ -62,7 +63,7 @@ public class VoucherDetails extends Fragment {
                 inflater, R.layout.fragment_voucher_details, container, false);
         voucherDetailsBinding.setData(voucher);
         if (voucher.getStatus().equals("Redeemed")){
-            voucherDetailsBinding.redeemBtn.setVisibility(View.INVISIBLE);
+            voucherDetailsBinding.redeemBtn.setText("Redeemed");
         }
         voucherDetailsBinding.tncBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +91,10 @@ public class VoucherDetails extends Fragment {
         voucherDetailsBinding.redeemBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mListener != null ) {
+                if (voucher.getStatus().equals("Redeemed")){
+                    Toast.makeText(getContext(),"Already redeemed!",Toast.LENGTH_SHORT).show();
+                }
+                else if (mListener != null  ) {
                     mListener.onRedeemClick(voucher,cardNumber, membership);
                 }
             }

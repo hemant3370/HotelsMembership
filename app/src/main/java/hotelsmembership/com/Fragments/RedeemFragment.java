@@ -3,7 +3,6 @@ package hotelsmembership.com.Fragments;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
@@ -169,6 +168,6 @@ public class RedeemFragment extends BottomSheetDialogFragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onRedemption(Boolean success,String voucherNo);
     }
 }

@@ -70,7 +70,7 @@ public class VoucherDetails extends Fragment {
             public void onClick(View v) {
                  String[] terms = new String[voucher.getVoucherCategory().getTermsAndConditions().size()];
                 for (int i = 0; i < terms.length; i++){
-                    terms[i] = voucher.getVoucherCategory().getTermsAndConditions().get(i).getTermDescription();
+                    terms[i] = (i+1) + ". " + voucher.getVoucherCategory().getTermsAndConditions().get(i).getTermDescription();
                 }
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
                 adapter.addAll(terms);

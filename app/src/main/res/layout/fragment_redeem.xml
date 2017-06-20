@@ -3,6 +3,9 @@
     >
     <data >
         <variable name="data" type="hotelsmembership.com.Model.VerifyOTPPayload"/>
+        <variable
+            name="voucher"
+            type="hotelsmembership.com.Model.Vouchers.Voucher"/>
     </data>
         <LinearLayout
             android:layout_width="match_parent"
@@ -12,12 +15,18 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:textSize="@dimen/text_size_normal"
+                android:layout_margin="4dp"
+                android:text="@={voucher.voucherCategory.categoryTitle}"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:text="Voucher Number"/>
 <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
+    android:layout_margin="5dp"
     android:text="@={data.voucherNumber}"/>
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"

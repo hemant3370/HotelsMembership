@@ -17,6 +17,7 @@ import hotelsmembership.com.Applications.Initializer;
 import hotelsmembership.com.Model.BasicResponse;
 import hotelsmembership.com.Model.Membership;
 import hotelsmembership.com.Model.VerifyOTPPayload;
+import hotelsmembership.com.Model.Vouchers.Voucher;
 import hotelsmembership.com.R;
 import hotelsmembership.com.Retrofit.Client.RestClient;
 import hotelsmembership.com.Retrofit.Services.ApiInterface;
@@ -39,15 +40,15 @@ import retrofit2.Retrofit;
 public class RedeemFragment extends BottomSheetDialogFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "voucherNo";
     private static final String ARG_MEMBERSHIP = "membership";
+    private static final String ARG_VOUCHER = "voucher";
     @Inject
     Retrofit mRetrofit;
     // TODO: Rename and change types of parameters
-    private String voucherNo;
     FragmentRedeemBinding fragmentRedeemBinding;
     private OnFragmentInteractionListener mListener;
     private VerifyOTPPayload verifyPayload;
+    Voucher voucher;
     Membership membership;
     private ProgressDialog progressBar;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -56,11 +57,11 @@ public class RedeemFragment extends BottomSheetDialogFragment {
     }
 
     // TODO: Rename and change types and number of parameters
-    public static RedeemFragment newInstance(String param1, Membership membership) {
+    public static RedeemFragment newInstance( Membership membership, Voucher voucher) {
         RedeemFragment fragment = new RedeemFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
         args.putParcelable(ARG_MEMBERSHIP, membership);
+        args.putParcelable(ARG_VOUCHER, voucher);
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,8 +70,8 @@ public class RedeemFragment extends BottomSheetDialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            voucherNo = getArguments().getString(ARG_PARAM1);
             membership = getArguments().getParcelable(ARG_MEMBERSHIP);
+            voucher = getArguments().getParcelable(ARG_VOUCHER);
         }
     }
 
@@ -81,8 +82,9 @@ public class RedeemFragment extends BottomSheetDialogFragment {
         fragmentRedeemBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_redeem, container, false);
         ((Initializer) getActivity().getApplication()).getNetComponent().inject(this);
-        verifyPayload = new VerifyOTPPayload(voucherNo);
+        verifyPayload = new VerifyOTPPayload(voucher.getVoucherNumber());
         fragmentRedeemBinding.setData(verifyPayload);
+        fragmentRedeemBinding.setVoucher(voucher);
         fragmentRedeemBinding.verifyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,7 +118,7 @@ public class RedeemFragment extends BottomSheetDialogFragment {
 
                             Toast.makeText(getContext(),basicResponse.getContent(),Toast.LENGTH_SHORT).show();
                             if (mListener != null) {
-
+                                mListener.onRedemption(true,voucher.getVoucherNumber());
                             }
                         }
                         else {

@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -64,7 +65,7 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
     Membership membership;
     @BindView(R.id.progressBar)
     ProgressBar progressDialog;
-
+    RedeemFragment redeemFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +78,7 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),vouchers,cardNumber,membership);
@@ -112,7 +113,7 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
                     public void onNext(BasicResponse basicResponse) {
                         if (basicResponse.getStatusCode() == 200) {
                             Toast.makeText(VouchersActivity.this, "OTP Sent", Toast.LENGTH_SHORT).show();
-                            RedeemFragment redeemFragment = RedeemFragment.newInstance(voucher.getVoucherNumber(), membership);
+                             redeemFragment = RedeemFragment.newInstance(membership, voucher);
                             redeemFragment.show(getSupportFragmentManager(), redeemFragment.getTag());
                             progressDialog.setVisibility(View.GONE);
                         } else {
@@ -135,7 +136,12 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
 
     @Override
     public void onRedemption(Boolean success, String voucherNo) {
+        if(redeemFragment != null) redeemFragment.dismissAllowingStateLoss();
         if (success){
+            vouchers.get(getIntent().getIntExtra(ARG_INDEX,0)).setStatus("R");
+            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),vouchers,cardNumber,membership);
+            mViewPager.setAdapter(mSectionsPagerAdapter);
+            mViewPager.setCurrentItem(getIntent().getIntExtra(ARG_INDEX,0));
             AlertDialog.Builder builder = new AlertDialog.Builder(VouchersActivity.this);
             builder.setTitle("Hey!!");
             builder.setMessage("Voucher Number " + voucherNo + " successfully redeemed.");

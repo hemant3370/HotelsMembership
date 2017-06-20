@@ -11,6 +11,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -87,7 +88,7 @@ VoucherListDialogFragment.Listener{
         navigationView.setNavigationItemSelectedListener(this);
         invalidateOptionsMenu();
         setTitle("Home");
-
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
@@ -165,7 +166,6 @@ VoucherListDialogFragment.Listener{
                      public void onNext(VouchersResponse vouchersResponse) {
                          if (vouchersResponse.getStatusCode() == 200 && vouchersResponse.getContent().size() > 0) {
                              Intent membershipIntent = new Intent(MainActivity.this, CardActivity.class);
-
                              membershipIntent.putExtra(ARG_CARD, payload.getCardNumber());
                              membershipIntent.putExtra(ARG_MEMBERSHIP, membership);
                              membershipIntent.putParcelableArrayListExtra(ARG_VOUCHERS, (ArrayList<? extends Parcelable>) vouchersResponse.getContent());
@@ -247,8 +247,8 @@ VoucherListDialogFragment.Listener{
     }
     public void onHomeItemClick(View view){
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
-                android.R.anim.slide_out_right, android.R.anim.slide_in_left);
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
+                android.R.anim.fade_in, android.R.anim.fade_out);
         switch (view.getId()){
             case R.id.mymemberships:
                 setTitle("My Memberships");
@@ -261,6 +261,9 @@ VoucherListDialogFragment.Listener{
                     setTitle("Add Membership");
                     fab.setVisibility(View.INVISIBLE);
                     fragmentTransaction.replace(R.id.frame, AddMembership.newInstance("", "")).addToBackStack(null);
+                }
+                else{
+                    Toast.makeText(MainActivity.this, "Please connect to Internet first.",Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.myprofile:
@@ -290,7 +293,12 @@ VoucherListDialogFragment.Listener{
 
     @Override
     public void onListFragmentInteraction(Membership item) {
-        getVouchers(new AddCardPayload(item.getCardNumber(),"31/05/2018", item.getPhoneNumber()),item);
+        if(new ConnectivityUtil(this).connected()) {
+            getVouchers(new AddCardPayload(item.getCardNumber(), "31/05/2018", item.getPhoneNumber()), item);
+        }
+        else {
+            Toast.makeText(MainActivity.this, "Please connect to Internet first.",Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

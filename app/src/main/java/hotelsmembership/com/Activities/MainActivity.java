@@ -28,6 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import hotelsmembership.com.Applications.Initializer;
 import hotelsmembership.com.Fragments.AddMembership;
+import hotelsmembership.com.Fragments.HomeFragment;
 import hotelsmembership.com.Fragments.MembershipsFragment;
 import hotelsmembership.com.Fragments.VoucherDetails;
 import hotelsmembership.com.Fragments.VoucherListDialogFragment;
@@ -90,7 +91,7 @@ VoucherListDialogFragment.Listener{
         setTitle("Home");
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
+        fragmentTransaction.replace(R.id.frame, HomeFragment.newInstance("",""));
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
                 android.R.anim.fade_in, android.R.anim.fade_out);
         fragmentTransaction.commit();
@@ -220,11 +221,11 @@ VoucherListDialogFragment.Listener{
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        fab.setVisibility(View.VISIBLE);
+        //fab.setVisibility(View.VISIBLE);
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if (id == R.id.nav_home) {
             setTitle("Home");
-            fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
+            fragmentTransaction.replace(R.id.frame, HomeFragment.newInstance("",""));
         } else if (id == R.id.nav_mymembership) {
             setTitle("My Memberships");
             fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
@@ -252,14 +253,14 @@ VoucherListDialogFragment.Listener{
         switch (view.getId()){
             case R.id.mymemberships:
                 setTitle("My Memberships");
-                fab.setVisibility(View.VISIBLE);
+              //  fab.setVisibility(View.VISIBLE);
                 fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1)).addToBackStack(null);
                 break;
             case R.id.addmembership:
             case R.id.fabAdd:
                 if (new ConnectivityUtil(getApplicationContext()).connected()) {
                     setTitle("Add Membership");
-                    fab.setVisibility(View.INVISIBLE);
+                  //  fab.setVisibility(View.INVISIBLE);
                     fragmentTransaction.replace(R.id.frame, AddMembership.newInstance("", "")).addToBackStack(null);
                 }
                 else{
@@ -268,11 +269,11 @@ VoucherListDialogFragment.Listener{
                 break;
             case R.id.myprofile:
                 setTitle("My Profile");
-                fragmentTransaction.replace(R.id.frame, AddMembership.newInstance("","")).addToBackStack(null);
+                fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1)).addToBackStack(null);
                 break;
             case R.id.offers:
                 setTitle("Offers");
-                fragmentTransaction.replace(R.id.frame, AddMembership.newInstance("","")).addToBackStack(null);
+                fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1)).addToBackStack(null);
                 break;
             default:
                 return;
@@ -283,7 +284,7 @@ VoucherListDialogFragment.Listener{
     @Override
     public void onMembershipAdded() {
         setTitle("My Memberships");
-        fab.setVisibility(View.VISIBLE);
+      //  fab.setVisibility(View.VISIBLE);
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,

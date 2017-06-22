@@ -9,6 +9,7 @@ import android.util.DisplayMetrics;
 import hotelsmembership.com.Dagger.Component.DaggerNetComponent;
 import hotelsmembership.com.Dagger.Component.NetComponent;
 import hotelsmembership.com.Dagger.Module.NetModule;
+import hotelsmembership.com.Model.CardContext;
 
 
 /**
@@ -57,6 +58,16 @@ public class Initializer extends Application {
         metrics = getResources().getDisplayMetrics();
         return metrics;
     }
+    CardContext cardContext;
+
+    public CardContext getCardContext() {
+        return cardContext;
+    }
+
+    public void setCardContext(CardContext cardContext) {
+        this.cardContext = cardContext;
+    }
+
     private NetComponent mNetComponent;
 
     @Override

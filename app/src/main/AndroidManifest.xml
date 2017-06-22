@@ -28,11 +28,11 @@
         <activity
             android:name=".Activities.VouchersActivity"
             android:label="@string/title_activity_vouchers"
-            android:parentActivityName=".Activities.MainActivity"
+            android:parentActivityName=".Activities.CardActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="hotelsmembership.com.Activities.MainActivity" />
+                android:value="hotelsmembership.com.Activities.CardActivity" />
         </activity>
         <activity
             android:name=".Activities.CardActivity"

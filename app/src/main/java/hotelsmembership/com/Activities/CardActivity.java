@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -22,6 +23,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import hotelsmembership.com.Adapter.VoucherGistAdapter;
+import hotelsmembership.com.Applications.Initializer;
 import hotelsmembership.com.Fragments.MembershipsFragment;
 import hotelsmembership.com.Interfaces.CardVoucherClickListener;
 import hotelsmembership.com.Model.Membership;
@@ -56,13 +58,18 @@ public class CardActivity extends AppCompatActivity implements CardVoucherClickL
             membership = getIntent().getParcelableExtra(ARG_PARAM_MEMBERSHIP);
             cardNumber = getIntent().getStringExtra(ARG_CARD);
             vouchers = getIntent().getParcelableArrayListExtra(ARG_VOUCHERS);
-            setup();
         }
+        else{
+            membership = ((Initializer) getApplication()).getCardContext().getMembership();
+            cardNumber = membership.getCardNumber();
+            vouchers = ((Initializer) getApplication()).getCardContext().getVouchers();
+        }setup();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
     void setup(){
         setTitle(membership.getHotel().getHotelName());
@@ -97,13 +104,21 @@ public class CardActivity extends AppCompatActivity implements CardVoucherClickL
         alert.show();
     }
 
-    public void callForRoomBooking(View view) {
-        String[] tokens = membership.getHotel().getPhoneNumbers().getRoomResevation().replace("|",",").split(",");
-        if (tokens.length > 1) {
-            chooseNumberToCall(tokens);
-        } else {
-            startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", membership.getHotel().getPhoneNumbers().getRoomResevation(), null)));
-        }
+    public void mailForBooking(View view) {
+//        String[] tokens = membership.getHotel().getPhoneNumbers().getRoomResevation().replace("|",",").split(",");
+//        if (tokens.length > 1) {
+//            chooseNumberToCall(tokens);
+//        } else {
+//            startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", membership.getHotel().getPhoneNumbers().getRoomResevation(), null)));
+//        }
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setData(Uri.parse("mailto:" + TextUtils.join(", ",membership.getHotel().getEmailIds()))); // only email apps should handle
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Booking Request");
+        Intent chooser = Intent.createChooser(intent, "Send Email Via");
+
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(chooser);
+            }
     }
 
     @Override

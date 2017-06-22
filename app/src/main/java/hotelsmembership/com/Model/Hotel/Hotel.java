@@ -4,12 +4,15 @@ package hotelsmembership.com.Model.Hotel;
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+@TypeConverters(ListConverter.class)
 @Entity(tableName = "Hotels")
 public class Hotel implements Parcelable  {
     @PrimaryKey
@@ -24,9 +27,9 @@ public class Hotel implements Parcelable  {
     @SerializedName("hotelLogoURL")
     @Expose
     private String hotelLogoURL;
-//    @SerializedName("emailIds")
-//    @Expose
-//    private List<String> emailIds = null;
+    @SerializedName("emailIds")
+    @Expose
+    private List<String> emailIds = null;
     @Embedded
     @SerializedName("phoneNumbers")
     @Expose
@@ -67,13 +70,13 @@ public class Hotel implements Parcelable  {
         this.hotelLogoURL = hotelLogoURL;
     }
 
-//    public List<String> getEmailIds() {
-//        return emailIds;
-//    }
-//
-//    public void setEmailIds(List<String> emailIds) {
-//        this.emailIds = emailIds;
-//    }
+    public List<String> getEmailIds() {
+        return emailIds;
+    }
+
+    public void setEmailIds(List<String> emailIds) {
+        this.emailIds = emailIds;
+    }
 
     public PhoneNumbers getPhoneNumbers() {
         return phoneNumbers;
@@ -115,7 +118,7 @@ public class Hotel implements Parcelable  {
         dest.writeString(this.hotelName);
         dest.writeString(this.hotelAddress);
         dest.writeString(this.hotelLogoURL);
-//        dest.writeStringList(this.emailIds);
+        dest.writeStringList(this.emailIds);
         dest.writeParcelable(this.phoneNumbers, flags);
         dest.writeParcelable(this.cardsImageURLs, flags);
 //        dest.writeList(this.offersAndDiscounts);
@@ -131,7 +134,7 @@ public class Hotel implements Parcelable  {
         this.hotelName = in.readString();
         this.hotelAddress = in.readString();
         this.hotelLogoURL = in.readString();
-//        this.emailIds = in.createStringArrayList();
+        this.emailIds = in.createStringArrayList();
         this.phoneNumbers = in.readParcelable(PhoneNumbers.class.getClassLoader());
         this.cardsImageURLs = in.readParcelable(CardsImageURLs.class.getClassLoader());
 //        this.offersAndDiscounts = new ArrayList<Object>();

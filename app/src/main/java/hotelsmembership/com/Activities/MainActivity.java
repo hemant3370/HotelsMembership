@@ -33,6 +33,7 @@ import hotelsmembership.com.Fragments.MembershipsFragment;
 import hotelsmembership.com.Fragments.VoucherDetails;
 import hotelsmembership.com.Fragments.VoucherListDialogFragment;
 import hotelsmembership.com.Model.AddCardPayload;
+import hotelsmembership.com.Model.CardContext;
 import hotelsmembership.com.Model.HotelsDatabase;
 import hotelsmembership.com.Model.HotelsResponse;
 import hotelsmembership.com.Model.Membership;
@@ -167,6 +168,7 @@ VoucherListDialogFragment.Listener{
                      public void onNext(VouchersResponse vouchersResponse) {
                          if (vouchersResponse.getStatusCode() == 200 && vouchersResponse.getContent().size() > 0) {
                              Intent membershipIntent = new Intent(MainActivity.this, CardActivity.class);
+                             ((Initializer) getApplication()).setCardContext(new CardContext(membership,membership.getCardNumber(),vouchersResponse.getContent()));
                              membershipIntent.putExtra(ARG_CARD, payload.getCardNumber());
                              membershipIntent.putExtra(ARG_MEMBERSHIP, membership);
                              membershipIntent.putParcelableArrayListExtra(ARG_VOUCHERS, (ArrayList<? extends Parcelable>) vouchersResponse.getContent());
@@ -267,14 +269,14 @@ VoucherListDialogFragment.Listener{
                     Toast.makeText(MainActivity.this, "Please connect to Internet first.",Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case R.id.myprofile:
-                setTitle("My Profile");
-                fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1)).addToBackStack(null);
-                break;
-            case R.id.offers:
-                setTitle("Offers");
-                fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1)).addToBackStack(null);
-                break;
+//            case R.id.myprofile:
+//                setTitle("My Profile");
+//                fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1)).addToBackStack(null);
+//                break;
+//            case R.id.offers:
+//                setTitle("Offers");
+//                fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1)).addToBackStack(null);
+//                break;
             default:
                 return;
         }

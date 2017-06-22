@@ -27,4 +27,7 @@
 
     <color name="brown_color">#800000</color>
     <color name="brown_color_gradient">#A52A2A</color>
+
+    <color name="gold">#FFD700</color>
+    <color name="silver">#D3D3D3</color>
 </resources>

@@ -20,6 +20,7 @@ public class GlideBindingAdapter {
         Glide.with(imageView.getContext()).load(url).skipMemoryCache(false)
                 .diskCacheStrategy(DiskCacheStrategy.ALL).crossFade().thumbnail(0.5f)
                 .placeholder(ContextCompat.getDrawable(imageView.getContext(), R.drawable.ic_hotel_black_24dp))
+                .error(ContextCompat.getDrawable(imageView.getContext(), R.drawable.ic_hotel_black_24dp))
                 .fitCenter().into(imageView);
     }
 }

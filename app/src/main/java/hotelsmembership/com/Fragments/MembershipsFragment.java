@@ -103,13 +103,14 @@ public class MembershipsFragment extends LifecycleFragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+
              hotelsDatabase = Room.databaseBuilder(getContext(),
                     HotelsDatabase.class, "hotel-db").build();
             memberships = hotelsDatabase.daoAccess().fetchAllMemberships();
             memberships.observe(this, new Observer<List<Membership>>() {
                 @Override
                 public void onChanged(@Nullable List<Membership> memberships) {
-                    recyclerView.setAdapter(new MyMembershipRecyclerViewAdapter(memberships, mListener));
+                    recyclerView.setAdapter(new MyMembershipRecyclerViewAdapter(memberships, mListener, recyclerView.getContext()));
                     recyclerView.requestLayout();
                 }
             });

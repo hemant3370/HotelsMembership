@@ -1,5 +1,7 @@
 package hotelsmembership.com.Adapter;
 
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import java.util.List;
 
 import hotelsmembership.com.Fragments.MembershipsFragment.OnListFragmentInteractionListener;
 import hotelsmembership.com.Model.Membership;
+import hotelsmembership.com.R;
 import hotelsmembership.com.databinding.MembershipItemBinding;
 
 /**
@@ -19,10 +22,11 @@ public class MyMembershipRecyclerViewAdapter extends RecyclerView.Adapter<MyMemb
 
     private final List<Membership> mValues;
     private final OnListFragmentInteractionListener mListener;
-
-    public MyMembershipRecyclerViewAdapter(List<Membership> items, OnListFragmentInteractionListener listener) {
+    Context context;
+    public MyMembershipRecyclerViewAdapter(List<Membership> items, OnListFragmentInteractionListener listener, Context context) {
         mValues = items;
         mListener = listener;
+        this.context = context;
     }
 
     @Override
@@ -37,7 +41,6 @@ public class MyMembershipRecyclerViewAdapter extends RecyclerView.Adapter<MyMemb
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.bind(mValues.get(position));
-
     }
 
     @Override
@@ -54,6 +57,13 @@ public class MyMembershipRecyclerViewAdapter extends RecyclerView.Adapter<MyMemb
         }
 
         public void bind(Membership item) {
+            if(item.getCardType().equals("G")){
+                itemBinding.frontCardContainer.setBackgroundColor(ContextCompat.getColor(context, R.color.gold));
+            }
+            else if(item.getCardType().equals("S")){
+                itemBinding.frontCardContainer.setBackgroundColor(ContextCompat.getColor(context, R.color.silver));
+            }
+
             itemBinding.setData(item);
             itemBinding.setMlistener(mListener);
             itemBinding.executePendingBindings();

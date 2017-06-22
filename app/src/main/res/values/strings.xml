@@ -45,4 +45,5 @@
     <string name="vouchers">Vouchers</string>
     <string name="title_activity_card">CardActivity</string>
     <string name="i_accept_terms_and_conditions">I accept the terms and conditions.</string>
+    <string name="valid_through">Valid through</string>
 </resources>

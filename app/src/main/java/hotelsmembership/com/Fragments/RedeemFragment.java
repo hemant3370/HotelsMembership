@@ -1,11 +1,19 @@
 package hotelsmembership.com.Fragments;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +22,16 @@ import android.widget.Toast;
 import javax.inject.Inject;
 
 import hotelsmembership.com.Applications.Initializer;
+import hotelsmembership.com.Interfaces.SmsListener;
 import hotelsmembership.com.Model.BasicResponse;
 import hotelsmembership.com.Model.Membership;
 import hotelsmembership.com.Model.VerifyOTPPayload;
 import hotelsmembership.com.Model.Vouchers.Voucher;
 import hotelsmembership.com.R;
+import hotelsmembership.com.Receiver.SmsBroadcastReceiver;
 import hotelsmembership.com.Retrofit.Client.RestClient;
 import hotelsmembership.com.Retrofit.Services.ApiInterface;
+import hotelsmembership.com.Utils.OTPFinder;
 import hotelsmembership.com.databinding.FragmentRedeemBinding;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -42,6 +53,7 @@ public class RedeemFragment extends BottomSheetDialogFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_MEMBERSHIP = "membership";
     private static final String ARG_VOUCHER = "voucher";
+    final int GET_MY_PERMISSION = 3370;
     @Inject
     Retrofit mRetrofit;
     // TODO: Rename and change types of parameters
@@ -88,14 +100,50 @@ public class RedeemFragment extends BottomSheetDialogFragment {
         fragmentRedeemBinding.verifyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar=new ProgressDialog(getContext());
-                progressBar.setMessage("Verifying OTP...");
-                progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progressBar.setIndeterminate(true);
-                progressBar.show();
-                redeemVoucher();
+                if (fragmentRedeemBinding.getData().getOtp() != null) {
+                    progressBar = new ProgressDialog(getContext());
+                    progressBar.setMessage("Verifying OTP...");
+                    progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    progressBar.setIndeterminate(true);
+                    progressBar.show();
+                    redeemVoucher();
+                }
             }
         });
+
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.RECEIVE_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.RECEIVE_SMS)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        ActivityCompat.requestPermissions(getActivity(),
+                                new String[]{Manifest.permission.RECEIVE_SMS},
+                                GET_MY_PERMISSION);
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                            }});
+                builder.create().show();
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.RECEIVE_SMS},
+                        GET_MY_PERMISSION);
+
+            }
+        }
+        else{
+            bindSMSListener();
+        }
         return fragmentRedeemBinding.getRoot();
     }
     void redeemVoucher(){
@@ -171,5 +219,23 @@ public class RedeemFragment extends BottomSheetDialogFragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onRedemption(Boolean success,String voucherNo);
+    }
+    void bindSMSListener(){
+        SmsBroadcastReceiver.bindListener(new SmsListener() {
+            @Override
+            public void messageReceived(String messageText) {
+                Log.d("Text",messageText);
+                fragmentRedeemBinding.redeemOtp.setText(new OTPFinder().getOTPFrom(messageText));
+                fragmentRedeemBinding.verifyBtn.performClick();
+            }
+        });
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == GET_MY_PERMISSION && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            bindSMSListener();
+        }
     }
 }

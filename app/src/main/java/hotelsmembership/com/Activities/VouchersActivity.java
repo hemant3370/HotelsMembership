@@ -1,6 +1,7 @@
 package hotelsmembership.com.Activities;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -190,5 +191,10 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
         compositeDisposable.clear();
         super.onDestroy();
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

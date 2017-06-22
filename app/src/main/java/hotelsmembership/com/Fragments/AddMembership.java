@@ -207,7 +207,7 @@ public class AddMembership extends LifecycleFragment {
 
                     progressBar=new ProgressDialog(getContext());
                     progressBar.setMessage("Submitting...");
-                    progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                    progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                     progressBar.setIndeterminate(true);
                     progressBar.show();
                     addCard();

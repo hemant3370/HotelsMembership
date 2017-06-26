@@ -6,12 +6,12 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -25,6 +25,7 @@ import butterknife.ButterKnife;
 import hotelsmembership.com.Adapter.VoucherGistAdapter;
 import hotelsmembership.com.Applications.Initializer;
 import hotelsmembership.com.Fragments.MembershipsFragment;
+import hotelsmembership.com.Fragments.RoomReservation;
 import hotelsmembership.com.Interfaces.CardVoucherClickListener;
 import hotelsmembership.com.Model.Membership;
 import hotelsmembership.com.Model.Vouchers.Voucher;
@@ -105,20 +106,18 @@ public class CardActivity extends AppCompatActivity implements CardVoucherClickL
     }
 
     public void mailForBooking(View view) {
-//        String[] tokens = membership.getHotel().getPhoneNumbers().getRoomResevation().replace("|",",").split(",");
-//        if (tokens.length > 1) {
-//            chooseNumberToCall(tokens);
-//        } else {
-//            startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", membership.getHotel().getPhoneNumbers().getRoomResevation(), null)));
-//        }
-            Intent intent = new Intent(Intent.ACTION_SENDTO);
-            intent.setData(Uri.parse("mailto:" + TextUtils.join(", ",membership.getHotel().getEmailIds()))); // only email apps should handle
-            intent.putExtra(Intent.EXTRA_SUBJECT, "Booking Request");
-        Intent chooser = Intent.createChooser(intent, "Send Email Via");
-
-            if (intent.resolveActivity(getPackageManager()) != null) {
-                startActivity(chooser);
-            }
+        FragmentManager fm = getSupportFragmentManager();
+        RoomReservation dialogFragment = RoomReservation.newInstance("","");
+        dialogFragment.setCancelable(true);
+        dialogFragment.show(fm, "room");
+//            Intent intent = new Intent(Intent.ACTION_SENDTO);
+//            intent.setData(Uri.parse("mailto:" + TextUtils.join(", ",membership.getHotel().getEmailIds()))); // only email apps should handle
+//            intent.putExtra(Intent.EXTRA_SUBJECT, "Booking Request");
+//        Intent chooser = Intent.createChooser(intent, "Send Email Via");
+//
+//            if (intent.resolveActivity(getPackageManager()) != null) {
+//                startActivity(chooser);
+//            }
     }
 
     @Override

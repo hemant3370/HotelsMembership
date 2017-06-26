@@ -46,4 +46,9 @@
     <string name="title_activity_card">CardActivity</string>
     <string name="i_accept_terms_and_conditions">I accept the terms and conditions.</string>
     <string name="valid_through">Valid through</string>
+    <string name="venue_name">Venue Name</string>
+    <string name="number_of_persons">Number of persons</string>
+    <string name="reservation_date">Reservation Date</string>
+    <string name="time_slot">Time Slot</string>
+    <string name="check_in">Check In Date</string>
 </resources>

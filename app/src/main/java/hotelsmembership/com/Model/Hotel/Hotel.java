@@ -16,6 +16,7 @@ import java.util.List;
 @Entity(tableName = "Hotels")
 public class Hotel implements Parcelable  {
     @PrimaryKey
+    @SerializedName("hotelId")
     @Expose
     private String hotelId;
     @SerializedName("hotelName")
@@ -38,9 +39,16 @@ public class Hotel implements Parcelable  {
     @SerializedName("cardsImageURLs")
     @Expose
     private CardsImageURLs cardsImageURLs;
-//    @SerializedName("offersAndDiscounts")
-//    @Expose
-//    private List<Object> offersAndDiscounts = null;
+    @SerializedName("offers")
+    @Expose
+    private List<String> offers;
+    @SerializedName("membershipTermsAndConditions")
+    @Expose
+    private List<String> membershipTermsAndConditions;
+    @SerializedName("hotelVenues")
+    @Expose
+    private List<String> hotelVenues;
+;
 
     public String getHotelId() {
         return hotelId;
@@ -94,13 +102,29 @@ public class Hotel implements Parcelable  {
         this.cardsImageURLs = cardsImageURLs;
     }
 
-//    public List<Object> getOffersAndDiscounts() {
-//        return offersAndDiscounts;
-//    }
-//
-//    public void setOffersAndDiscounts(List<Object> offersAndDiscounts) {
-//        this.offersAndDiscounts = offersAndDiscounts;
-//    }
+    public List<String> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(List<String> offers) {
+        this.offers = offers;
+    }
+
+    public List<String> getMembershipTermsAndConditions() {
+        return membershipTermsAndConditions;
+    }
+
+    public void setMembershipTermsAndConditions(List<String> membershipTermsAndConditions) {
+        this.membershipTermsAndConditions = membershipTermsAndConditions;
+    }
+
+    public List<String> getHotelVenues() {
+        return hotelVenues;
+    }
+
+    public void setHotelVenues(List<String> hotelVenues) {
+        this.hotelVenues = hotelVenues;
+    }
 
     public String getHotelLogoURL() {
         return "http://hotelsmembership.com" + hotelLogoURL.replace("http://hotelsmembership.com","");
@@ -121,13 +145,13 @@ public class Hotel implements Parcelable  {
         dest.writeStringList(this.emailIds);
         dest.writeParcelable(this.phoneNumbers, flags);
         dest.writeParcelable(this.cardsImageURLs, flags);
-//        dest.writeList(this.offersAndDiscounts);
+        dest.writeStringList(this.offers);
+        dest.writeStringList(this.membershipTermsAndConditions);
+        dest.writeStringList(this.hotelVenues);
     }
 
     public Hotel() {
     }
-
-
 
     protected Hotel(Parcel in) {
         this.hotelId = in.readString();
@@ -137,8 +161,9 @@ public class Hotel implements Parcelable  {
         this.emailIds = in.createStringArrayList();
         this.phoneNumbers = in.readParcelable(PhoneNumbers.class.getClassLoader());
         this.cardsImageURLs = in.readParcelable(CardsImageURLs.class.getClassLoader());
-//        this.offersAndDiscounts = new ArrayList<Object>();
-//        in.readList(this.offersAndDiscounts, Object.class.getClassLoader());
+        this.offers = in.createStringArrayList();
+        this.membershipTermsAndConditions = in.createStringArrayList();
+        this.hotelVenues = in.createStringArrayList();
     }
 
     public static final Creator<Hotel> CREATOR = new Creator<Hotel>() {

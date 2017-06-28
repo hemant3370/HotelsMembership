@@ -177,8 +177,8 @@ public class AddMembership extends LifecycleFragment {
                     focusView = fragmentAddCardBinding.checkbox;
                     cancel = true;
                 }
-                if (TextUtils.isEmpty(fragmentAddCardBinding.hotelName.getText())) {
-                    fragmentAddCardBinding.hotelName.setError(getString(R.string.error_field_required));
+                if (TextUtils.isEmpty(fragmentAddCardBinding.hotelName.getText()) || selectedHotel == null) {
+                    fragmentAddCardBinding.hotelName.setError(getString(R.string.error_field_nohotel));
                     focusView = fragmentAddCardBinding.hotelName;
                     cancel = true;
                 }

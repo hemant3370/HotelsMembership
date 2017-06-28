@@ -18,7 +18,7 @@
     <string name="card_number">Card Number</string>
     <string name="hotel_name">Hotel Name</string>
     <string name="error_field_required">This is required</string>
-
+    <string name="error_field_nohotel">No such Hotel Found</string>
     <string name="next">NEXT</string>
     <string name="previous">PREVIOUS</string>
     <string name="done">DONE</string>

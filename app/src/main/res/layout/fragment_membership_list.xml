@@ -6,8 +6,8 @@
     android:name="hotelsmembership.com.Fragments.MembershipsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
+    android:layout_margin="1dp"
+    android:background="@drawable/background"
     app:layoutManager="LinearLayoutManager"
     tools:context="hotelsmembership.com.Fragments.MembershipsFragment"
     tools:listitem="@layout/fragment_membership" />

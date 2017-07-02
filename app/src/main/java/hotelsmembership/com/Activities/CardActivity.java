@@ -33,7 +33,7 @@ import hotelsmembership.com.R;
 import hotelsmembership.com.databinding.MembershipDetailBinding;
 import retrofit2.Retrofit;
 
-public class CardActivity extends AppCompatActivity implements CardVoucherClickListener {
+public class CardActivity extends AppCompatActivity implements CardVoucherClickListener, RoomReservation.OnFragmentInteractionListener {
 
     private static final String ARG_PARAM_MEMBERSHIP = "membership";
     private static final String ARG_VOUCHERS = "vouchers";
@@ -133,5 +133,10 @@ public class CardActivity extends AppCompatActivity implements CardVoucherClickL
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

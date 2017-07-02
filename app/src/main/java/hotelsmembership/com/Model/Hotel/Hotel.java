@@ -3,6 +3,7 @@ package hotelsmembership.com.Model.Hotel;
 
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.os.Parcel;
@@ -11,6 +12,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 @TypeConverters(ListConverter.class)
 @Entity(tableName = "Hotels")
@@ -39,15 +41,17 @@ public class Hotel implements Parcelable  {
     @SerializedName("cardsImageURLs")
     @Expose
     private CardsImageURLs cardsImageURLs;
+    @Ignore
     @SerializedName("offers")
     @Expose
-    private List<String> offers;
+    private List<Offer> offers;
     @SerializedName("membershipTermsAndConditions")
     @Expose
     private List<String> membershipTermsAndConditions;
+    @Ignore
     @SerializedName("hotelVenues")
     @Expose
-    private List<String> hotelVenues;
+    private List<HotelVenue> hotelVenues;
 ;
 
     public String getHotelId() {
@@ -102,11 +106,11 @@ public class Hotel implements Parcelable  {
         this.cardsImageURLs = cardsImageURLs;
     }
 
-    public List<String> getOffers() {
+    public List<Offer> getOffers() {
         return offers;
     }
 
-    public void setOffers(List<String> offers) {
+    public void setOffers(List<Offer> offers) {
         this.offers = offers;
     }
 
@@ -118,11 +122,11 @@ public class Hotel implements Parcelable  {
         this.membershipTermsAndConditions = membershipTermsAndConditions;
     }
 
-    public List<String> getHotelVenues() {
+    public List<HotelVenue> getHotelVenues() {
         return hotelVenues;
     }
 
-    public void setHotelVenues(List<String> hotelVenues) {
+    public void setHotelVenues(List<HotelVenue> hotelVenues) {
         this.hotelVenues = hotelVenues;
     }
 
@@ -145,9 +149,9 @@ public class Hotel implements Parcelable  {
         dest.writeStringList(this.emailIds);
         dest.writeParcelable(this.phoneNumbers, flags);
         dest.writeParcelable(this.cardsImageURLs, flags);
-        dest.writeStringList(this.offers);
+        dest.writeTypedList(this.offers);
         dest.writeStringList(this.membershipTermsAndConditions);
-        dest.writeStringList(this.hotelVenues);
+        dest.writeList(this.hotelVenues);
     }
 
     public Hotel() {
@@ -161,9 +165,10 @@ public class Hotel implements Parcelable  {
         this.emailIds = in.createStringArrayList();
         this.phoneNumbers = in.readParcelable(PhoneNumbers.class.getClassLoader());
         this.cardsImageURLs = in.readParcelable(CardsImageURLs.class.getClassLoader());
-        this.offers = in.createStringArrayList();
+        this.offers = in.createTypedArrayList(Offer.CREATOR);
         this.membershipTermsAndConditions = in.createStringArrayList();
-        this.hotelVenues = in.createStringArrayList();
+        this.hotelVenues = new ArrayList<HotelVenue>();
+        in.readList(this.hotelVenues, HotelVenue.class.getClassLoader());
     }
 
     public static final Creator<Hotel> CREATOR = new Creator<Hotel>() {

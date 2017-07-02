@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/background"
     android:weightSum="2"
     tools:context="hotelsmembership.com.Fragments.HomeFragment">
 <LinearLayout
@@ -12,39 +13,48 @@
     android:layout_weight="1"
     android:weightSum="2"
     android:orientation="horizontal">
+
     <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:elevation="@dimen/appbar_padding_top"
         android:id="@+id/mymemberships"
-        android:clickable="true"
-        android:onClick="onHomeItemClick"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_margin="4dp"
-        app:cardCornerRadius="4dp"
-        android:layout_height="match_parent">
+        android:layout_weight="1"
+        app:cardBackgroundColor="@color/lightblue"
+        android:clickable="true"
+        android:elevation="@dimen/appbar_padding_top"
+        android:onClick="onHomeItemClick"
+        app:cardCornerRadius="4dp">
+
         <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical">
+
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_card_membership_black_24dp"/>
+                android:tint="#375E97"
+                app:srcCompat="@drawable/ic_card_membership_black_24dp" />
+
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:text="@string/my_memberships"
                 android:textAlignment="center"
-                android:text="@string/my_memberships"/>
+                android:textColor="#375E97" />
         </android.support.v7.widget.LinearLayoutCompat>
     </android.support.v7.widget.CardView>
     <android.support.v7.widget.CardView
         android:id="@+id/addmembership"
         android:layout_width="match_parent"
         android:layout_weight="1"
+        app:cardBackgroundColor="@color/lightblue"
         android:clickable="true"
+        android:background="@android:color/transparent"
         android:onClick="onHomeItemClick"
         android:layout_margin="4dp"
         app:cardCornerRadius="4dp"
@@ -58,11 +68,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:tint="#FB6542"
                 app:srcCompat="@drawable/ic_add_box_black_24dp"/>
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:textColor="#FB6542"
                 android:textAlignment="center"
                 android:text="@string/add_membership"/>
         </android.support.v7.widget.LinearLayoutCompat>
@@ -74,12 +86,15 @@
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:weightSum="2"
+    android:background="@android:color/transparent"
     android:orientation="horizontal">
 
     <android.support.v7.widget.CardView
         android:id="@+id/myprofile"
         android:layout_width="match_parent"
         android:layout_weight="1"
+        app:cardBackgroundColor="@color/lightblue"
+        android:background="@android:color/transparent"
         android:clickable="true"
         app:cardCornerRadius="4dp"
         android:onClick="onHomeItemClick"
@@ -93,11 +108,13 @@
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:tint="#FFBB00"
                 android:layout_gravity="center"
                 app:srcCompat="@drawable/ic_account_box_black_24dp"/>
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="#FFBB00"
                 android:layout_margin="10dp"
                 android:textAlignment="center"
                 android:text="@string/my_profle"/>
@@ -109,6 +126,7 @@
     android:layout_weight="1"
     android:clickable="true"
     android:onClick="onHomeItemClick"
+        app:cardBackgroundColor="@color/lightblue"
     app:cardCornerRadius="4dp"
     android:layout_margin="4dp"
     android:layout_height="match_parent">
@@ -121,11 +139,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:tint="#386F1C"
             app:srcCompat="@drawable/ic_card_giftcard_black_24dp"/>
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:textColor="#386F1C"
             android:textAlignment="center"
             android:text="@string/offers"/>
     </android.support.v7.widget.LinearLayoutCompat>

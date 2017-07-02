@@ -9,11 +9,13 @@
     </data>
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
+        android:background="@drawable/background"
         android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:layout_margin="8dp"
                 android:orientation="vertical">
 <ImageView
@@ -99,13 +101,23 @@
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
-                <CheckBox
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:checked="false"
-                    android:text="@string/i_accept_terms_and_conditions"
-                    android:id="@+id/checkbox"/>
+                    android:orientation="horizontal">
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:checked="false"
+                        android:id="@+id/checkbox"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/acceptTV"
+                        android:text="@string/i_accept_terms_and_conditions"/>
+                </LinearLayout>
+
                 <Button
                     android:id="@+id/submit_Btn"
                     style="?android:textAppearanceSmall"

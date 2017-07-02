@@ -7,10 +7,12 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -142,6 +144,39 @@ public class AddMembership extends LifecycleFragment {
                     }
                 }).start();
 
+            }
+        });
+        fragmentAddCardBinding.acceptTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectedHotel != null && selectedHotel.getMembershipTermsAndConditions() != null && selectedHotel.getMembershipTermsAndConditions().size() > 0) {
+                    String[] terms = new String[selectedHotel.getMembershipTermsAndConditions().size()];
+                    for (int i = 0; i < terms.length; i++) {
+                        terms[i] = (i + 1) + ". " + selectedHotel.getMembershipTermsAndConditions().get(i);
+                    }
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
+                    adapter.addAll(terms);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Terms and Conditions");
+                    builder.setAdapter(adapter, null);
+                    final AlertDialog alert = builder.create();
+                    alert.setCancelable(false);
+                    alert.setButton(DialogInterface.BUTTON_POSITIVE, "Accept", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            fragmentAddCardBinding.checkbox.setChecked(true);
+                            alert.hide();
+                        }
+                    });
+                    alert.setButton(DialogInterface.BUTTON_NEGATIVE, "Deny", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            fragmentAddCardBinding.checkbox.setChecked(false);
+                            alert.hide();
+                        }
+                    });
+                    alert.show();
+                }
             }
         });
         fragmentAddCardBinding.cardExpiryDate.setOnTouchListener(new View.OnTouchListener() {

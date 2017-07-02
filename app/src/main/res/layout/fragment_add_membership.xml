@@ -15,16 +15,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:layout_margin="8dp"
                 android:orientation="vertical">
-<ImageView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/hotelLogo"
-    android:visibility="gone"
-    app:image_url="@{imageUrl}"
-    />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/hotelLogo"
+                android:visibility="gone"
+                app:image_url="@{imageUrl}"
+                />
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">

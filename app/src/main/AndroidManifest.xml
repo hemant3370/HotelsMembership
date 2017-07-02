@@ -29,6 +29,7 @@
         <activity
             android:name=".Activities.VouchersActivity"
             android:label="@string/title_activity_vouchers"
+            android:screenOrientation="portrait"
             android:parentActivityName=".Activities.CardActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -38,6 +39,7 @@
         <activity
             android:name=".Activities.CardActivity"
             android:label="@string/title_activity_card"
+            android:screenOrientation="portrait"
             android:parentActivityName=".Activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

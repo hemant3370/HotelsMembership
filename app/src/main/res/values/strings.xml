@@ -51,4 +51,9 @@
     <string name="reservation_date">Reservation Date</string>
     <string name="time_slot">Time Slot</string>
     <string name="check_in">Check In Date</string>
+    <string name="title_activity_membership">MembershipActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="card">Card</string>
 </resources>

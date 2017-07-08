@@ -3,8 +3,8 @@
     package="hotelsmembership.com">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <application
         android:name=".Applications.Initializer"
@@ -29,8 +29,8 @@
         <activity
             android:name=".Activities.VouchersActivity"
             android:label="@string/title_activity_vouchers"
-            android:screenOrientation="portrait"
             android:parentActivityName=".Activities.CardActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -39,18 +39,30 @@
         <activity
             android:name=".Activities.CardActivity"
             android:label="@string/title_activity_card"
-            android:screenOrientation="portrait"
             android:parentActivityName=".Activities.MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hotelsmembership.com.Activities.MainActivity" />
         </activity>
-        <receiver android:name=".Receiver.SmsBroadcastReceiver" android:exported="true" >
-            <intent-filter android:priority="999" >
+
+        <receiver
+            android:name=".Receiver.SmsBroadcastReceiver"
+            android:exported="true">
+            <intent-filter android:priority="999">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".Activities.MembershipActivity"
+            android:label="@string/title_activity_membership"
+            android:parentActivityName=".Activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hotelsmembership.com.Activities.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

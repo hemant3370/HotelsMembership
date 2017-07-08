@@ -3,7 +3,6 @@ package hotelsmembership.com.Activities;
 import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -20,8 +19,6 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -31,7 +28,7 @@ import hotelsmembership.com.Fragments.AddMembership;
 import hotelsmembership.com.Fragments.HomeFragment;
 import hotelsmembership.com.Fragments.MembershipsFragment;
 import hotelsmembership.com.Fragments.VoucherDetails;
-import hotelsmembership.com.Fragments.VoucherListDialogFragment;
+import hotelsmembership.com.Fragments.VouchersFragment;
 import hotelsmembership.com.Model.AddCardPayload;
 import hotelsmembership.com.Model.CardContext;
 import hotelsmembership.com.Model.HotelsDatabase;
@@ -53,7 +50,7 @@ import retrofit2.Retrofit;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener ,
 AddMembership.OnFragmentInteractionListener, MembershipsFragment.OnListFragmentInteractionListener,
-VoucherListDialogFragment.Listener{
+VouchersFragment.Listener{
     android.support.v4.app.FragmentTransaction fragmentTransaction;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
@@ -99,6 +96,7 @@ VoucherListDialogFragment.Listener{
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         getHotels();
+
     }
 
     @Override
@@ -167,12 +165,14 @@ VoucherListDialogFragment.Listener{
                      @Override
                      public void onNext(VouchersResponse vouchersResponse) {
                          if (vouchersResponse.getStatusCode() == 200 && vouchersResponse.getContent().size() > 0) {
-                             Intent membershipIntent = new Intent(MainActivity.this, CardActivity.class);
+//                             Intent membershipIntent = new Intent(MainActivity.this, CardActivity.class);
                              ((Initializer) getApplication()).setCardContext(new CardContext(membership,membership.getCardNumber(),vouchersResponse.getContent()));
-                             membershipIntent.putExtra(ARG_CARD, payload.getCardNumber());
-                             membershipIntent.putExtra(ARG_MEMBERSHIP, membership);
-                             membershipIntent.putParcelableArrayListExtra(ARG_VOUCHERS, (ArrayList<? extends Parcelable>) vouchersResponse.getContent());
-                             startActivity(membershipIntent);
+//                             membershipIntent.putExtra(ARG_CARD, payload.getCardNumber());
+//                             membershipIntent.putExtra(ARG_MEMBERSHIP, membership);
+//                             membershipIntent.putParcelableArrayListExtra(ARG_VOUCHERS, (ArrayList<? extends Parcelable>) vouchersResponse.getContent());
+//                             startActivity(membershipIntent);
+                             Intent i = new Intent(MainActivity.this,MembershipActivity.class);
+                             startActivity(i);
                          }
                          else if (vouchersResponse.getStatusCode() > 400 && vouchersResponse.getStatusCode() < 500){
 

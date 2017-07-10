@@ -6,7 +6,7 @@
     </data>
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:background="@drawable/background"
+        android:background="@color/screenbg"
         android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"

@@ -156,7 +156,7 @@ public class AddMembership extends LifecycleFragment {
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
                     adapter.addAll(terms);
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.MyDialogTheme);
                     builder.setTitle("Terms and Conditions");
                     builder.setAdapter(adapter, null);
                     final AlertDialog alert = builder.create();

@@ -13,11 +13,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import hotelsmembership.com.Adapter.MyMembershipRecyclerViewAdapter;
 import hotelsmembership.com.Model.HotelsDatabase;
 import hotelsmembership.com.Model.Membership;
@@ -38,7 +41,10 @@ public class MembershipsFragment extends LifecycleFragment {
     HotelsDatabase hotelsDatabase;
     LiveData<List<Membership>> memberships;
     private OnListFragmentInteractionListener mListener;
+    @BindView(R.id.membership_list)
     RecyclerView recyclerView;
+    @BindView(R.id.addmembership_onlist)
+    Button addMembersipButton;
     SwipeableRecyclerViewTouchListener swipeTouchListener;
 
     public MembershipsFragment() {
@@ -67,10 +73,14 @@ public class MembershipsFragment extends LifecycleFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_membership_list, container, false);
-        // Set the adapter
-        if (view instanceof RecyclerView) {
+         ButterKnife.bind(this,view);
             Context context = view.getContext();
-            recyclerView = (RecyclerView) view;
+            addMembersipButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onAddClicked();
+                }
+            });
             swipeTouchListener = new SwipeableRecyclerViewTouchListener(recyclerView,
                     new SwipeableRecyclerViewTouchListener.SwipeListener() {
                         @Override
@@ -115,7 +125,6 @@ public class MembershipsFragment extends LifecycleFragment {
                 }
             });
             recyclerView.addOnItemTouchListener(swipeTouchListener);
-        }
         return view;
     }
 
@@ -140,6 +149,6 @@ public class MembershipsFragment extends LifecycleFragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(Membership item);
-
+        void onAddClicked();
     }
 }

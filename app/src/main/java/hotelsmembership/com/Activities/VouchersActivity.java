@@ -143,7 +143,7 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
             mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),vouchers,cardNumber,membership);
             mViewPager.setAdapter(mSectionsPagerAdapter);
             mViewPager.setCurrentItem(getIntent().getIntExtra(ARG_INDEX,0));
-            AlertDialog.Builder builder = new AlertDialog.Builder(VouchersActivity.this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(VouchersActivity.this,R.style.MyDialogTheme);
             builder.setTitle("Hey!!");
             builder.setMessage("Voucher Number " + voucherNo + " successfully redeemed.");
             AlertDialog dialog = builder.create();

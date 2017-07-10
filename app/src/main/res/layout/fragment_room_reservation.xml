@@ -52,7 +52,7 @@
                     android:id="@+id/checkout_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/check_in"
+                    android:hint="@string/check_out_date"
                     android:text="@={data.checkOutDate}"
                     android:inputType="date"
                     android:imeOptions="actionNext"

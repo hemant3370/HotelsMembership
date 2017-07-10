@@ -9,10 +9,14 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -72,6 +76,10 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_membership);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         membership = ((Initializer) getApplication()).getCardContext().getMembership();
         cardNumber = membership.getCardNumber();
         vouchers = ((Initializer) getApplication()).getCardContext().getVouchers();
@@ -92,16 +100,23 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
 
     }
     public void callForTableBooking(View view) {
+        ArrayList<String> calllist = new ArrayList<>();
+
         String[] tokens = membership.getHotel().getPhoneNumbers().getTableResevation().replace("|",",").split(",");
         if (tokens.length > 1) {
-            chooseNumberToCall(tokens);
+            calllist.add("For Table Booking: ");
+            Collections.addAll(calllist, tokens);
         }
-        else {
-            startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",membership.getHotel().getPhoneNumbers().getTableResevation() , null)));
+        tokens = membership.getHotel().getPhoneNumbers().getRoomResevation().replace("|",",").split(",");
+        if (tokens.length > 1) {
+            calllist.add("For Room Booking: ");
+            Collections.addAll(calllist, tokens);
         }
+
+        chooseNumberToCall(calllist.toArray(tokens));
     }
     void chooseNumberToCall(final String[] numbers){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.MyDialogTheme);
         builder.setTitle("Call to Book");
         builder.setItems(numbers, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {

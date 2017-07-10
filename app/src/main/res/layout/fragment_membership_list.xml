@@ -1,13 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
-    android:name="hotelsmembership.com.Fragments.MembershipsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="1dp"
-    android:background="@drawable/background"
-    app:layoutManager="LinearLayoutManager"
-    tools:context="hotelsmembership.com.Fragments.MembershipsFragment"
-    tools:listitem="@layout/fragment_membership" />
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/membership_list"
+        android:name="hotelsmembership.com.Fragments.MembershipsFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/screenbg"
+        app:layoutManager="LinearLayoutManager"
+        tools:context="hotelsmembership.com.Fragments.MembershipsFragment"
+        tools:listitem="@layout/fragment_membership"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="2dp"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/addmembership_onlist" />
+
+    <Button
+        android:id="@+id/addmembership_onlist"
+        style="?android:textAppearanceButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/add_membership"
+        android:textColor="@android:color/white"
+        android:shadowColor="@android:color/holo_red_dark"
+        android:background="@android:color/holo_red_light"
+        android:textStyle="bold"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="0dp" />
+</android.support.constraint.ConstraintLayout>

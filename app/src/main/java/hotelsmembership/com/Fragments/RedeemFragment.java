@@ -110,7 +110,7 @@ public class RedeemFragment extends BottomSheetDialogFragment {
                 }
             }
         });
-
+        bindSMSListener();
         if (ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.RECEIVE_SMS)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -119,10 +119,11 @@ public class RedeemFragment extends BottomSheetDialogFragment {
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                     Manifest.permission.RECEIVE_SMS)) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage(R.string.sms_permission);
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         ActivityCompat.requestPermissions(getActivity(),
-                                new String[]{Manifest.permission.RECEIVE_SMS},
+                                new String[]{Manifest.permission.RECEIVE_SMS,Manifest.permission.READ_SMS},
                                 GET_MY_PERMISSION);
                     }
                 }).setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -136,7 +137,7 @@ public class RedeemFragment extends BottomSheetDialogFragment {
                 // No explanation needed, we can request the permission.
 
                 ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.RECEIVE_SMS},
+                        new String[]{Manifest.permission.RECEIVE_SMS,Manifest.permission.READ_SMS},
                         GET_MY_PERMISSION);
 
             }
@@ -232,10 +233,11 @@ public class RedeemFragment extends BottomSheetDialogFragment {
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         if (requestCode == GET_MY_PERMISSION && grantResults.length > 0
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
             bindSMSListener();
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 }

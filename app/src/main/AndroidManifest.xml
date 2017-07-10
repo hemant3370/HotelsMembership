@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
 
     <application
         android:name=".Applications.Initializer"
@@ -14,12 +15,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        >
         <activity
             android:name=".Activities.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -58,6 +59,7 @@
         <activity
             android:name=".Activities.MembershipActivity"
             android:label="@string/title_activity_membership"
+            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".Activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

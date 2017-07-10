@@ -249,25 +249,19 @@ VouchersFragment.Listener{
         return true;
     }
     public void onHomeItemClick(View view){
-        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
-                android.R.anim.fade_in, android.R.anim.fade_out);
+
         switch (view.getId()){
             case R.id.mymemberships:
                 setTitle("My Memberships");
-              //  fab.setVisibility(View.VISIBLE);
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
+                        android.R.anim.fade_in, android.R.anim.fade_out);
                 fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1)).addToBackStack(null);
+                fragmentTransaction.commit();
                 break;
             case R.id.addmembership:
             case R.id.fabAdd:
-                if (new ConnectivityUtil(getApplicationContext()).connected()) {
-                    setTitle("Add Membership");
-                  //  fab.setVisibility(View.INVISIBLE);
-                    fragmentTransaction.replace(R.id.frame, AddMembership.newInstance("", "")).addToBackStack(null);
-                }
-                else{
-                    Toast.makeText(MainActivity.this, "Please connect to Internet first.",Toast.LENGTH_SHORT).show();
-                }
+                onAddClicked();
                 break;
 //            case R.id.myprofile:
 //                setTitle("My Profile");
@@ -280,7 +274,7 @@ VouchersFragment.Listener{
             default:
                 return;
         }
-        fragmentTransaction.commit();
+
     }
 
     @Override
@@ -300,6 +294,21 @@ VouchersFragment.Listener{
             getVouchers(new AddCardPayload(item.getCardNumber(), "31/05/2018", item.getPhoneNumber()), item);
         }
         else {
+            Toast.makeText(MainActivity.this, "Please connect to Internet first.",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onAddClicked() {
+        if (new ConnectivityUtil(getApplicationContext()).connected()) {
+            setTitle("Add Membership");
+            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
+                    android.R.anim.fade_in, android.R.anim.fade_out);
+            fragmentTransaction.replace(R.id.frame, AddMembership.newInstance("", "")).addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+        else{
             Toast.makeText(MainActivity.this, "Please connect to Internet first.",Toast.LENGTH_SHORT).show();
         }
     }

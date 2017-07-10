@@ -34,12 +34,12 @@
     <string name="redeem">Redeem</string>
     <string name="terms_amp_conditions"><![CDATA[Terms & Conditions]]></string>
     <string name="voucher_image">Voucher Image</string>
-    <string name="cardnum_hint">XXXX XXXX XXXX XXXX</string>
+    <string name="cardnum_hint">XXXX XXXX XXXX</string>
     <string name="enter_otp">Enter OTP</string>
     <string name="title_activity_vouchers">Vouchers</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="name">Your Name</string>
-    <string name="card_placeholder">XXXX XXXX XXXX XXXX</string>
+    <string name="card_placeholder">XXXX XXXX XXXX</string>
     <string name="book_table">Book Table</string>
     <string name="book_room">Book Room</string>
     <string name="vouchers">Vouchers</string>
@@ -56,4 +56,6 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="card">Card</string>
+    <string name="check_out_date">Check Out Date</string>
+    <string name="sms_permission">Grant permission to read SMS to autofill the OTP.</string>
 </resources>

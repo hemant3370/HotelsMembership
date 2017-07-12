@@ -104,12 +104,12 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
 
         String[] tokens = membership.getHotel().getPhoneNumbers().getTableResevation().replace("|",",").split(",");
         if (tokens.length > 1) {
-            calllist.add("For Table Booking: ");
+            calllist.add("For Table Booking :");
             Collections.addAll(calllist, tokens);
         }
         tokens = membership.getHotel().getPhoneNumbers().getRoomResevation().replace("|",",").split(",");
         if (tokens.length > 1) {
-            calllist.add("For Room Booking: ");
+            calllist.add("For Room Booking :");
             Collections.addAll(calllist, tokens);
         }
 
@@ -121,7 +121,9 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
         builder.setItems(numbers, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 // Do something with the selection
-                startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",numbers[item] , null)));
+                if (numbers[item].matches("[0-9]+") && numbers[item].length() < 14) {
+                    startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", numbers[item], null)));
+                }
             }
         });
         AlertDialog alert = builder.create();

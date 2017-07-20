@@ -47,8 +47,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/navigation" />
+        android:background="@drawable/palewood"
+        app:itemTextColor="@color/colorPrimaryDark"
+        app:menu="@menu/navigation"
+        />
 
 </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

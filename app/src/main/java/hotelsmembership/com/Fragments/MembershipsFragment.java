@@ -7,6 +7,7 @@ import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -95,12 +96,22 @@ public class MembershipsFragment extends LifecycleFragment {
 
                         @Override
                         public void onDismissedBySwipeLeft(final RecyclerView recyclerView, final int[] reverseSortedPositions) {
-                            new Thread(new Runnable() {
+                            final Snackbar mySnackbar = Snackbar.make(getActivity().findViewById(R.id.main_coordinator),
+                                    "Are you sure?", Snackbar.LENGTH_LONG);
+                            mySnackbar.setAction("YES", new View.OnClickListener() {
                                 @Override
-                                public void run() {
-                                    hotelsDatabase.daoAccess().deleteMembership(memberships.getValue().get(reverseSortedPositions[0]));
+                                public void onClick(View v) {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            hotelsDatabase.daoAccess().deleteMembership(memberships.getValue().get(reverseSortedPositions[0]));
+                                        }
+                                    }).start();
                                 }
-                            }).start();
+                            });
+
+                            mySnackbar.show();
+
                         }
 
                         @Override

@@ -21,7 +21,7 @@
             android:onClick="@{() -> mlistener.onVoucherGistClick(index)}"
             android:orientation="vertical">
             <android.support.v7.widget.CardView
-                android:layout_width="100dp"
+                android:layout_width="90dp"
                 android:layout_height="match_parent"
                 android:id="@+id/voucher_card"
                 android:foreground="?android:selectableItemBackground"

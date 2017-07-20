@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import hotelsmembership.com.Interfaces.CardVoucherClickListener;
@@ -20,7 +21,20 @@ public class VoucherGistAdapter extends RecyclerView.Adapter<VoucherGistAdapter.
     private final CardVoucherClickListener mListener;
 
     public VoucherGistAdapter(List<Voucher> items, CardVoucherClickListener listener) {
-        mValues = items;
+        List<Voucher> sorted = new ArrayList<>();
+        for (Voucher v :
+                items) {
+            if (!v.getStatus().equals("Redeemed")) {
+                sorted.add(v);
+            }
+            }
+        for (Voucher v :
+                items) {
+            if (v.getStatus().equals("Redeemed")) {
+                sorted.add(v);
+            }
+        }
+        mValues = sorted;
         mListener = listener;
     }
 
@@ -36,6 +50,8 @@ public class VoucherGistAdapter extends RecyclerView.Adapter<VoucherGistAdapter.
     @Override
     public void onBindViewHolder(final VoucherGistAdapter.ViewHolder holder, int position) {
         holder.bind(mValues.get(position),position);
+        Voucher voucher = mValues.get(position);
+        holder.itemBinding.getRoot().setAlpha(voucher.getStatus().equals("Redeemed") ? (float) 0.5 : (float) 1.0);
 
     }
 

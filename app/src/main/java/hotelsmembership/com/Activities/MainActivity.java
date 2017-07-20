@@ -231,16 +231,17 @@ VouchersFragment.Listener{
         } else if (id == R.id.nav_mymembership) {
             setTitle("My Memberships");
             fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
-        } else if (id == R.id.nav_offers) {
-            setTitle("Offers");
-            fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
-        } else if (id == R.id.nav_profile) {
-            setTitle("My Profile");
-            fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
-        } else if (id == R.id.nav_contactus) {
-            setTitle("Contact Us");
-            fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
         }
+//        else if (id == R.id.nav_offers) {
+//            setTitle("Offers");
+//            fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
+//        } else if (id == R.id.nav_profile) {
+//            setTitle("My Profile");
+//            fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
+//        } else if (id == R.id.nav_contactus) {
+//            setTitle("Contact Us");
+//            fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
+//        }
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
                 android.R.anim.fade_in, android.R.anim.fade_out);
         fragmentTransaction.commit();

@@ -78,7 +78,7 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
         setContentView(R.layout.activity_membership);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         membership = ((Initializer) getApplication()).getCardContext().getMembership();
         cardNumber = membership.getCardNumber();

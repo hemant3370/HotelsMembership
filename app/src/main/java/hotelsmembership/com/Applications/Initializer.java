@@ -6,10 +6,12 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 
+import com.crashlytics.android.Crashlytics;
 import hotelsmembership.com.Dagger.Component.DaggerNetComponent;
 import hotelsmembership.com.Dagger.Component.NetComponent;
 import hotelsmembership.com.Dagger.Module.NetModule;
 import hotelsmembership.com.Model.CardContext;
+import io.fabric.sdk.android.Fabric;
 
 
 /**
@@ -73,6 +75,7 @@ public class Initializer extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         //Dagger
         mNetComponent = DaggerNetComponent.builder()
                 .netModule(new NetModule(getApplicationContext()))

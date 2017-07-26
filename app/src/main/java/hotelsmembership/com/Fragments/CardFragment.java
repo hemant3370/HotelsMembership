@@ -4,7 +4,11 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +48,12 @@ public class CardFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private BookingSectionPageAdapter mSectionsPagerAdapter;
 
+    /**
+     * The {@link ViewPager} that will host the section contents.
+     */
+    private ViewPager mViewPager;
     private OnFragmentInteractionListener mListener;
 
     public CardFragment() {
@@ -83,6 +92,14 @@ public class CardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         membershipDetailBinding = DataBindingUtil.inflate(inflater,R.layout.content_card,container,false);
+        mSectionsPagerAdapter = new BookingSectionPageAdapter(this.getFragmentManager());
+
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = membershipDetailBinding.formviewpager;
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        TabLayout tabLayout = membershipDetailBinding.tabs;
+        tabLayout.setupWithViewPager(mViewPager);
         membership = ((Initializer) getActivity().getApplication()).getCardContext().getMembership();
         cardNumber = membership.getCardNumber();
         vouchers = ((Initializer) getActivity().getApplication()).getCardContext().getVouchers();
@@ -135,5 +152,38 @@ public class CardFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+    public class BookingSectionPageAdapter extends FragmentPagerAdapter {
+
+        public BookingSectionPageAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a PlaceholderFragment (defined as a static inner class below).
+            if (position == 0)
+            return RoomReservation.newInstance("","");
+            else
+                return TableReservation.newInstance("","");
+        }
+
+        @Override
+        public int getCount() {
+            // Show 3 total pages.
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "ROOM";
+                case 1:
+                    return "TABLE";
+            }
+            return null;
+        }
     }
 }

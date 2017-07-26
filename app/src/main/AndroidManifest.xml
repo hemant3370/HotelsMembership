@@ -14,8 +14,7 @@
         android:icon="@drawable/ic_hotel_black_24dp"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        >
+        android:supportsRtl="true">
         <activity
             android:name=".Activities.MainActivity"
             android:label="@string/app_name"
@@ -59,8 +58,22 @@
         <activity
             android:name=".Activities.MembershipActivity"
             android:label="@string/title_activity_membership"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".Activities.MainActivity">
+            android:parentActivityName=".Activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hotelsmembership.com.Activities.MainActivity" />
+        </activity>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="227e1d7cc69adb4e51c1dfde279aa5592307902a" />
+
+        <activity
+            android:name=".Activities.ReservationActivity"
+            android:label="@string/title_activity_reservation"
+            android:parentActivityName=".Activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hotelsmembership.com.Activities.MainActivity" />

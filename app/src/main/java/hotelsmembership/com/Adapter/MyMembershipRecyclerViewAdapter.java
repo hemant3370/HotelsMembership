@@ -63,7 +63,11 @@ public class MyMembershipRecyclerViewAdapter extends RecyclerView.Adapter<MyMemb
             else if(item.getCardType().equals("S")){
                 itemBinding.frontCardContainer.setBackgroundColor(ContextCompat.getColor(context, R.color.silver));
             }
-
+            if (item.getCardType().equals("")) {
+                itemBinding.setImageUrl(item.getHotel().getCardsImageURLs().getGold());
+            } else {
+                itemBinding.setImageUrl(item.getCardType().equals("G") ? item.getHotel().getCardsImageURLs().getGold() : item.getHotel().getCardsImageURLs().getSilver());
+            }
             itemBinding.setData(item);
             itemBinding.setMlistener(mListener);
             itemBinding.executePendingBindings();

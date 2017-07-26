@@ -23,13 +23,14 @@ import butterknife.BindView;
 import hotelsmembership.com.Applications.Initializer;
 import hotelsmembership.com.Fragments.CardFragment;
 import hotelsmembership.com.Fragments.RoomReservation;
+import hotelsmembership.com.Fragments.TableReservation;
 import hotelsmembership.com.Fragments.VouchersFragment;
 import hotelsmembership.com.Model.Membership;
 import hotelsmembership.com.Model.Vouchers.Voucher;
 import hotelsmembership.com.R;
 
 public class MembershipActivity extends AppCompatActivity implements VouchersFragment.Listener, CardFragment.OnFragmentInteractionListener,
-        RoomReservation.OnFragmentInteractionListener{
+        RoomReservation.OnFragmentInteractionListener, TableReservation.OnFragmentInteractionListener{
 
     @BindView(R.id.frame)
     FrameLayout frameLayout;

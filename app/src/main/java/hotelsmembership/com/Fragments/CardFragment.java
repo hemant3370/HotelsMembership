@@ -92,12 +92,12 @@ public class CardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         membershipDetailBinding = DataBindingUtil.inflate(inflater,R.layout.content_card,container,false);
-        mSectionsPagerAdapter = new BookingSectionPageAdapter(this.getFragmentManager());
+        mSectionsPagerAdapter = new BookingSectionPageAdapter(getChildFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = membershipDetailBinding.formviewpager;
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
+        mViewPager.setOffscreenPageLimit(0);
         TabLayout tabLayout = membershipDetailBinding.tabs;
         tabLayout.setupWithViewPager(mViewPager);
         membership = ((Initializer) getActivity().getApplication()).getCardContext().getMembership();

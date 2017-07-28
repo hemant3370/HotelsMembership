@@ -1,17 +1,36 @@
 package hotelsmembership.com.Fragments;
 
-import android.app.Dialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.TimePicker;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
+
+import hotelsmembership.com.Applications.Initializer;
+import hotelsmembership.com.Model.Hotel.HotelVenue;
+import hotelsmembership.com.Model.TableReservationPayload;
 import hotelsmembership.com.R;
+import hotelsmembership.com.databinding.FragmentTableReservationBinding;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,7 +40,7 @@ import hotelsmembership.com.R;
  * Use the {@link TableReservation#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TableReservation extends DialogFragment {
+public class TableReservation extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -30,7 +49,8 @@ public class TableReservation extends DialogFragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    TableReservationPayload tableReservationPayload;
+    FragmentTableReservationBinding tableReservationBinding;
     private OnFragmentInteractionListener mListener;
 
     public TableReservation() {
@@ -67,15 +87,83 @@ public class TableReservation extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_table_reservation, container, false);
-    }
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return super.onCreateDialog(savedInstanceState);
+        tableReservationBinding = DataBindingUtil.inflate(
+                inflater, R.layout.fragment_table_reservation, container, false);
+        tableReservationPayload = new TableReservationPayload();
+        tableReservationPayload.setPaxCount(1);
+        tableReservationBinding.setData(tableReservationPayload);
+        tableReservationBinding.venueName.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    chooseVenue();
+                }
+                return true;
+            }
+        });
+        tableReservationBinding.reservationDate.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    Calendar myCalendar = Calendar.getInstance();
+                    new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                            Date date = new GregorianCalendar(year, month, dayOfMonth).getTime();
+                            DateFormat df = new SimpleDateFormat("dd/MM/yyyy", new Locale("en"));
+                            String strDate = df.format(date);
+                            tableReservationBinding.reservationDate.setText(strDate);
+                        }
+                    }, myCalendar
+                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                }
+                return true;
+            }
+        });
+        tableReservationBinding.timeSlot.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    Calendar myCalendar = Calendar.getInstance();
+                    new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                            Date date = new GregorianCalendar(2017, 9, 1, hourOfDay, minute).getTime();
+                            Date endTime = new GregorianCalendar(2017, 9, 1, hourOfDay+1, minute).getTime();
+                            DateFormat df = new SimpleDateFormat("hh:mm aa", new Locale("en"));
+                            String strDate = df.format(date);
+                            tableReservationBinding.timeSlot.setText(strDate + "-" + df.format(endTime));
+                        }
+                    }, myCalendar.get(Calendar.HOUR_OF_DAY),myCalendar.get(Calendar.MINUTE), true).show();
+                }
+                return true;
+            }
+        });
+        return tableReservationBinding.getRoot();
     }
 
+
+    public void chooseVenue() {
+        List<HotelVenue> venues = ((Initializer)getActivity().getApplication()).getCardContext().getHotelVenues();
+        final List<String> names =  new ArrayList<>();
+        for (HotelVenue hotelVenue : venues) {
+            if(hotelVenue.getVenueName() != null) {
+                names.add(hotelVenue.getVenueName());
+            }
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
+        builder.setTitle("Choose Venue");
+        builder.setItems( names.toArray(new CharSequence[names.size()]), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                // Do something with the selection
+                tableReservationBinding.venueName.setText(names.get(item));
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+    @NonNull
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

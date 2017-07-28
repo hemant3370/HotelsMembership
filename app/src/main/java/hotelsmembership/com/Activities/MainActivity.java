@@ -31,19 +31,24 @@ import hotelsmembership.com.Fragments.VoucherDetails;
 import hotelsmembership.com.Fragments.VouchersFragment;
 import hotelsmembership.com.Model.AddCardPayload;
 import hotelsmembership.com.Model.CardContext;
+import hotelsmembership.com.Model.CardNumberPayload;
 import hotelsmembership.com.Model.HotelsDatabase;
 import hotelsmembership.com.Model.HotelsResponse;
 import hotelsmembership.com.Model.Membership;
+import hotelsmembership.com.Model.OffersResponse;
+import hotelsmembership.com.Model.VenuesResponse;
 import hotelsmembership.com.Model.Vouchers.Voucher;
 import hotelsmembership.com.Model.Vouchers.VouchersResponse;
 import hotelsmembership.com.R;
 import hotelsmembership.com.Retrofit.Client.RestClient;
 import hotelsmembership.com.Retrofit.Services.ApiInterface;
 import hotelsmembership.com.Utils.ConnectivityUtil;
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function3;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
@@ -130,7 +135,21 @@ VouchersFragment.Listener{
                        new Thread(new Runnable() {
                            public void run() {
                                // a potentially  time consuming task
-                               hotelsDatabase.daoAccess().insertMultipleListRecord(hotelsResponse.getContent());
+//                               hotelsDatabase.daoAccess().insertMultipleListRecord(hotelsResponse.getContent());
+//                               for (Hotel hotel : hotelsResponse.getContent()){
+//                                   if (hotel.getOffers() != null) {
+//                                       for (Offer offer : hotel.getOffers()) {
+//                                           offer.setHotelId(hotel.getHotelId());
+//                                           hotelsDatabase.daoAccess().insertOffer(offer);
+//                                       }
+//                                   }
+//                                   if (hotel.getHotelVenues() != null) {
+//                                       for (HotelVenue hotelVenue : hotel.getHotelVenues()) {
+//                                           hotelVenue.setHotelId(hotel.getHotelId());
+//                                           hotelsDatabase.daoAccess().insertVenue(hotelVenue);
+//                                       }
+//                                   }
+                                   hotelsDatabase.daoAccess().insertMultipleListRecord(hotelsResponse.getContent());
                            }
                        }).start();
                    }
@@ -153,35 +172,40 @@ VouchersFragment.Listener{
         }
         ApiInterface apiInterface = mRetrofit.create(ApiInterface.class);
 
-         apiInterface.getVouchers(payload,membership.getHotel().getHotelId(), membership.getAuthToken())
+        Observable<VouchersResponse> vouchersResponseObservable =  apiInterface.getVouchers(payload,membership.getHotel().getHotelId(), membership.getAuthToken())
                  .subscribeOn(Schedulers.newThread())
-                 .observeOn(AndroidSchedulers.mainThread())
-                 .subscribe(new Observer<VouchersResponse>() {
+                 .observeOn(AndroidSchedulers.mainThread());
+       Observable<OffersResponse> offersResponseObservable =  apiInterface.getOffers(new CardNumberPayload(membership.getCardNumber()),membership.getHotel().getHotelId(), membership.getAuthToken())
+               .subscribeOn(Schedulers.newThread())
+               .observeOn(AndroidSchedulers.mainThread());
+       Observable<VenuesResponse> venuesResponseObservable =  apiInterface.getVenues(new CardNumberPayload(membership.getCardNumber()),membership.getHotel().getHotelId(), membership.getAuthToken())
+               .subscribeOn(Schedulers.newThread())
+               .observeOn(AndroidSchedulers.mainThread());
+       Observable<CardContext> combined = Observable.zip(vouchersResponseObservable, offersResponseObservable, venuesResponseObservable, new Function3<VouchersResponse, OffersResponse, VenuesResponse, CardContext>() {
+           @Override
+           public CardContext apply(VouchersResponse vouchersResponse, OffersResponse offersResponse, VenuesResponse venuesResponse) throws Exception {
+               return new CardContext(membership,membership.getCardNumber(),vouchersResponse.getContent(),offersResponse.getContent(),venuesResponse.getContent());
+           }
+   });
+
+       combined.subscribe(new Observer<CardContext>() {
                      @Override
                      public void onSubscribe(Disposable disposable) {
                          compositeDisposable.add(disposable);
                      }
 
-                     @Override
-                     public void onNext(VouchersResponse vouchersResponse) {
-                         if (vouchersResponse.getStatusCode() == 200 && vouchersResponse.getContent().size() > 0) {
-//                             Intent membershipIntent = new Intent(MainActivity.this, CardActivity.class);
-                             ((Initializer) getApplication()).setCardContext(new CardContext(membership,membership.getCardNumber(),vouchersResponse.getContent()));
-//                             membershipIntent.putExtra(ARG_CARD, payload.getCardNumber());
-//                             membershipIntent.putExtra(ARG_MEMBERSHIP, membership);
-//                             membershipIntent.putParcelableArrayListExtra(ARG_VOUCHERS, (ArrayList<? extends Parcelable>) vouchersResponse.getContent());
-//                             startActivity(membershipIntent);
-                             Intent i = new Intent(MainActivity.this,MembershipActivity.class);
-                             startActivity(i);
-                         }
-                         else if (vouchersResponse.getStatusCode() > 400 && vouchersResponse.getStatusCode() < 500){
-
-                         }
-                         else{
-                             progressDialog.setVisibility(View.INVISIBLE);
-                             Toast.makeText(MainActivity.this, "No Voucher available to redeem",Toast.LENGTH_SHORT).show();
-                         }
-                     }
+           @Override
+           public void onNext(CardContext value) {
+               if (value != null) {
+                   ((Initializer) getApplication()).setCardContext(value);
+                   Intent i = new Intent(MainActivity.this, MembershipActivity.class);
+                   startActivity(i);
+               }
+               else{
+                   progressDialog.setVisibility(View.INVISIBLE);
+                   Toast.makeText(MainActivity.this, "No Voucher available to redeem",Toast.LENGTH_SHORT).show();
+               }
+           }
 
                      @Override
                      public void onError(Throwable throwable) {
@@ -326,8 +350,13 @@ VouchersFragment.Listener{
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onStop() {
         compositeDisposable.clear();
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
 
     }

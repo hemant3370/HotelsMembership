@@ -1,17 +1,30 @@
 package hotelsmembership.com.Fragments;
 
-import android.app.Dialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
+
+import hotelsmembership.com.Applications.Initializer;
+import hotelsmembership.com.Model.Hotel.HotelVenue;
 import hotelsmembership.com.Model.RoomReservationPayload;
 import hotelsmembership.com.R;
 import hotelsmembership.com.databinding.FragmentRoomReservationBinding;
@@ -24,7 +37,7 @@ import hotelsmembership.com.databinding.FragmentRoomReservationBinding;
  * Use the {@link RoomReservation#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RoomReservation extends DialogFragment {
+public class RoomReservation extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -72,7 +85,57 @@ public class RoomReservation extends DialogFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         roomReservationBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_room_reservation, container, false);
+        roomReservationPayload = new RoomReservationPayload();
         roomReservationBinding.setData(roomReservationPayload);
+        roomReservationBinding.venueName.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    chooseVenue();
+                }
+                return true;
+            }
+        });
+        roomReservationBinding.checkinDate.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    Calendar myCalendar = Calendar.getInstance();
+                    new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                            Date date = new GregorianCalendar(year, month, dayOfMonth).getTime();
+                            DateFormat df = new SimpleDateFormat("dd/MM/yyyy", new Locale("en"));
+                            String strDate = df.format(date);
+                            roomReservationBinding.checkinDate.setText(strDate);
+                        }
+                    }, myCalendar
+                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                }
+                return true;
+            }
+        });
+        roomReservationBinding.checkoutDate.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    Calendar myCalendar = Calendar.getInstance();
+                    new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                            Date date = new GregorianCalendar(year, month, dayOfMonth).getTime();
+                            DateFormat df = new SimpleDateFormat("dd/MM/yyyy", new Locale("en"));
+                            String strDate = df.format(date);
+                            roomReservationBinding.checkoutDate.setText(strDate);
+                        }
+                    }, myCalendar
+                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                }
+                return true;
+            }
+        });
         return roomReservationBinding.getRoot();
     }
 
@@ -82,10 +145,24 @@ public class RoomReservation extends DialogFragment {
             mListener.onFragmentInteraction(uri);
         }
     }
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return super.onCreateDialog(savedInstanceState);
+    public void chooseVenue() {
+        List<HotelVenue> venues = ((Initializer)getActivity().getApplication()).getCardContext().getHotelVenues();
+        final List<String> names =  new ArrayList<>();
+        for (HotelVenue hotelVenue : venues) {
+            if(hotelVenue.getVenueName() != null) {
+                names.add(hotelVenue.getVenueName());
+            }
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
+        builder.setTitle("Choose Venue");
+        builder.setItems( names.toArray(new CharSequence[names.size()]), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                // Do something with the selection
+                roomReservationBinding.venueName.setText(names.get(item));
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
     @Override
     public void onAttach(Context context) {

@@ -4,8 +4,11 @@ package hotelsmembership.com.Retrofit.Services;
 import hotelsmembership.com.Model.AddCardPayload;
 import hotelsmembership.com.Model.AddMembershipResponse;
 import hotelsmembership.com.Model.BasicResponse;
+import hotelsmembership.com.Model.CardNumberPayload;
 import hotelsmembership.com.Model.HotelsResponse;
+import hotelsmembership.com.Model.OffersResponse;
 import hotelsmembership.com.Model.RedeemPayload;
+import hotelsmembership.com.Model.VenuesResponse;
 import hotelsmembership.com.Model.VerifyOTPPayload;
 import hotelsmembership.com.Model.Vouchers.VouchersResponse;
 import io.reactivex.Observable;
@@ -36,5 +39,9 @@ public interface ApiInterface {
     @POST("redeemVoucher/{hotelid}")
     Observable<BasicResponse> redeemVoucher(@Body VerifyOTPPayload payload, @Path("hotelid") String hotelid, @Header("auth_token") String authToken);
 
+    @POST("offers/{hotelid}")
+    Observable<OffersResponse> getOffers(@Body CardNumberPayload payload, @Path("hotelid") String hotelid, @Header("auth_token") String authToken);
 
+    @POST("venues/{hotelid}")
+    Observable<VenuesResponse> getVenues(@Body CardNumberPayload payload, @Path("hotelid") String hotelid, @Header("auth_token") String authToken);
 }

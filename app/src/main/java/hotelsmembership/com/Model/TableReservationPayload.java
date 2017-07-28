@@ -16,7 +16,7 @@ public class TableReservationPayload {
     private String venue;
     @SerializedName("paxCount")
     @Expose
-    private Integer paxCount;
+    private Integer paxCount = 1;
     @SerializedName("reservationDate")
     @Expose
     private String reservationDate;

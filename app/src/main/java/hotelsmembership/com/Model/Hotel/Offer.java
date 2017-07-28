@@ -1,7 +1,5 @@
 package hotelsmembership.com.Model.Hotel;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -11,9 +9,10 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by hemantsingh on 02/07/17.
  */
-@Entity(tableName = "offers")
-class Offer implements Parcelable {
-    @PrimaryKey
+
+public class Offer  {
+
+
     @SerializedName("offerId")
     @Expose
     private String offerId;
@@ -29,17 +28,9 @@ class Offer implements Parcelable {
     @SerializedName("validThrough")
     @Expose
     private String validThrough;
-
-    @Override
-    public String toString() {
-        return "Offer{" +
-                "offerId='" + offerId + '\'' +
-                ", description='" + description + '\'' +
-                ", offerCategory='" + offerCategory + '\'' +
-                ", validFrom='" + validFrom + '\'' +
-                ", validThrough='" + validThrough + '\'' +
-                '}';
-    }
+    @SerializedName("offerImageUrl")
+    @Expose
+    private String offerImageUrl;
 
     public String getOfferId() {
         return offerId;
@@ -81,40 +72,12 @@ class Offer implements Parcelable {
         this.validThrough = validThrough;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getOfferImageUrl() {
+        return offerImageUrl;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.offerId);
-        dest.writeString(this.description);
-        dest.writeString(this.offerCategory);
-        dest.writeString(this.validFrom);
-        dest.writeString(this.validThrough);
+    public void setOfferImageUrl(String offerImageUrl) {
+        this.offerImageUrl = offerImageUrl;
     }
 
-    public Offer() {
-    }
-
-    protected Offer(Parcel in) {
-        this.offerId = in.readString();
-        this.description = in.readString();
-        this.offerCategory = in.readString();
-        this.validFrom = in.readString();
-        this.validThrough = in.readString();
-    }
-
-    public static final Parcelable.Creator<Offer> CREATOR = new Parcelable.Creator<Offer>() {
-        @Override
-        public Offer createFromParcel(Parcel source) {
-            return new Offer(source);
-        }
-
-        @Override
-        public Offer[] newArray(int size) {
-            return new Offer[size];
-        }
-    };
 }

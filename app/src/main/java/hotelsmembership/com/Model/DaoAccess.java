@@ -33,10 +33,15 @@ public interface DaoAccess {
     @Query("SELECT * FROM memberships")
     LiveData<List<Membership>> fetchAllMemberships();
 
+
+
     @Query("SELECT * FROM Hotels WHERE hotelName =:hotel_name")
     Hotel getSingleRecord(String hotel_name);
+
     @Query("SELECT hotelName FROM Hotels")
     LiveData<String[]> fetchAllNames();
+
+
     @Update
     void updateRecord(Hotel hotel);
 

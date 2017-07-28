@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
@@ -34,7 +33,6 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
 
     @BindView(R.id.frame)
     FrameLayout frameLayout;
-    CardFragment cardFragment;
     Membership membership;
     String cardNumber;
     List<Voucher> vouchers;
@@ -47,24 +45,18 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
             switch (item.getItemId()) {
                 case R.id.navigation_card:
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.content, cardFragment);
-                    fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
-                            android.R.anim.fade_in, android.R.anim.fade_out);
+                    fragmentTransaction.replace(R.id.content, CardFragment.newInstance("",""));
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_vouchers:
 
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.content, VouchersFragment.newInstance(((Initializer) getApplication()).getCardContext().getVouchers(),((Initializer) getApplication()).getCardContext().getCardNumber(),((Initializer) getApplication()).getCardContext().getMembership()));
-                    fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
-                            android.R.anim.fade_in, android.R.anim.fade_out);
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_offers:
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.content, VouchersFragment.newInstance(((Initializer) getApplication()).getCardContext().getVouchers(),((Initializer) getApplication()).getCardContext().getCardNumber(),((Initializer) getApplication()).getCardContext().getMembership()));
-                    fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
-                            android.R.anim.fade_in, android.R.anim.fade_out);
                     fragmentTransaction.commit();
                     return true;
             }
@@ -88,11 +80,8 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        cardFragment = CardFragment.newInstance("","");
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.content, cardFragment);
-        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
-                android.R.anim.fade_in, android.R.anim.fade_out);
+        fragmentTransaction.replace(R.id.content, CardFragment.newInstance("",""));
         fragmentTransaction.commit();
     }
 
@@ -132,18 +121,7 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
     }
 
     public void mailForBooking(View view) {
-        FragmentManager fm = getSupportFragmentManager();
-        RoomReservation dialogFragment = RoomReservation.newInstance("","");
-        dialogFragment.setCancelable(true);
-        dialogFragment.show(fm, "room");
-//            Intent intent = new Intent(Intent.ACTION_SENDTO);
-//            intent.setData(Uri.parse("mailto:" + TextUtils.join(", ",membership.getHotel().getEmailIds()))); // only email apps should handle
-//            intent.putExtra(Intent.EXTRA_SUBJECT, "Booking Request");
-//        Intent chooser = Intent.createChooser(intent, "Send Email Via");
-//
-//            if (intent.resolveActivity(getPackageManager()) != null) {
-//                startActivity(chooser);
-//            }
+
     }
 
     @Override

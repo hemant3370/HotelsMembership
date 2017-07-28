@@ -22,9 +22,10 @@
                     android:id="@+id/venue_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@={data.venue}"
                     android:hint="@string/venue_name"
                     android:inputType="textCapWords"
-                    android:imeOptions="actionNext"
+                    android:imeOptions="actionDone"
                     android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
@@ -39,7 +40,7 @@
                     android:hint="@string/number_of_persons"
                     android:text="@={`` + data.paxCount}"
                     android:inputType="number"
-                    android:imeOptions="actionNext"
+                    android:imeOptions="actionDone"
                     android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
@@ -53,8 +54,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/reservation_date"
                     android:text="@={data.reservationDate}"
-                    android:inputType="date"
-                    android:imeOptions="actionNext"
+                    android:inputType="none"
+                    android:imeOptions="actionDone"
                     android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
@@ -69,12 +70,42 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/time_slot"
                     android:text="@={data.timeSlot}"
-                    android:inputType="time"
+                    android:inputType="none"
+                    android:imeOptions="actionNext"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/discount_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/discount_detail"
+                    android:text="@={data.discountDetail}"
+                    android:inputType="none"
                     android:imeOptions="actionDone"
                     android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/voucher_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/voucher_detail"
+                    android:text="@={data.voucherDetail}"
+                    android:inputType="none"
+                    android:imeOptions="actionDone"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
             <Button
                 android:id="@+id/submit_Btn"
                 style="?android:textAppearanceSmall"

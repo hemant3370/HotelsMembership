@@ -59,4 +59,7 @@
     <string name="check_out_date">Check Out Date</string>
     <string name="sms_permission">Grant permission to read SMS to autofill the OTP.</string>
     <string name="title_activity_reservation">ReservationActivity</string>
+    <string name="voucher_detail">Voucher Detail</string>
+    <string name="discount_detail">Discount detail</string>
+    <string name="occupancy">Occupancy</string>
 </resources>

@@ -1,6 +1,7 @@
 package hotelsmembership.com.Fragments;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
@@ -8,11 +9,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -23,11 +27,24 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import hotelsmembership.com.Applications.Initializer;
+import hotelsmembership.com.Interfaces.VoucherPicker;
+import hotelsmembership.com.Model.BasicResponse;
 import hotelsmembership.com.Model.Hotel.HotelVenue;
+import hotelsmembership.com.Model.Hotel.Offer;
 import hotelsmembership.com.Model.RoomReservationPayload;
+import hotelsmembership.com.Model.Vouchers.Voucher;
 import hotelsmembership.com.R;
+import hotelsmembership.com.Retrofit.Client.RestClient;
+import hotelsmembership.com.Retrofit.Services.ApiInterface;
 import hotelsmembership.com.databinding.FragmentRoomReservationBinding;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,18 +54,25 @@ import hotelsmembership.com.databinding.FragmentRoomReservationBinding;
  * Use the {@link RoomReservation#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RoomReservation extends Fragment {
+public class RoomReservation extends Fragment implements VoucherPicker, OfferPickerFragment.OfferPicker {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    private ProgressDialog progressBar;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    @Inject
+    Retrofit mRetrofit;
+    private CompositeDisposable compositeDisposable =
+            new CompositeDisposable();
     RoomReservationPayload roomReservationPayload;
     private OnFragmentInteractionListener mListener;
     FragmentRoomReservationBinding roomReservationBinding;
+    OfferPickerFragment offerPickerFragment;
+    private VoucherPickerFragment voucherPickerFragment;
+
     public RoomReservation() {
         // Required empty public constructor
     }
@@ -86,16 +110,17 @@ public class RoomReservation extends Fragment {
         // Inflate the layout for this fragment
         roomReservationBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_room_reservation, container, false);
         roomReservationPayload = new RoomReservationPayload();
+        roomReservationPayload.setCardNumber(((Initializer) getActivity().getApplication()).getCardContext().getCardNumber());
         roomReservationBinding.setData(roomReservationPayload);
-        roomReservationBinding.venueName.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    chooseVenue();
-                }
-                return true;
-            }
-        });
+//        roomReservationBinding.venueName.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if (event.getAction() == MotionEvent.ACTION_UP) {
+//                    chooseVenue();
+//                }
+//                return true;
+//            }
+//        });
         roomReservationBinding.checkinDate.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -136,7 +161,116 @@ public class RoomReservation extends Fragment {
                 return true;
             }
         });
+        roomReservationBinding.voucherDetail.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP){
+                    voucherPickerFragment = VoucherPickerFragment.newInstance("ROOM");
+                    voucherPickerFragment.setmListener(RoomReservation.this);
+                    voucherPickerFragment.show(getChildFragmentManager(), voucherPickerFragment.getTag());
+                }
+                return true;
+            }
+        });
+        roomReservationBinding.discountDetail.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                     offerPickerFragment = OfferPickerFragment.newInstance("ROOM");
+                    offerPickerFragment.setmListener(RoomReservation.this);
+                    offerPickerFragment.show(getChildFragmentManager(), offerPickerFragment.getTag());
+                }
+                return true;
+            }
+        });
+        roomReservationBinding.submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean cancel = false;
+                View focusView = null;
+                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                // Check for a valid password, if the user entered one.
+
+                if (TextUtils.isEmpty(roomReservationBinding.checkinDate.getText())) {
+                    roomReservationBinding.checkinDate.setError(getString(R.string.error_field_nohotel));
+                    focusView = roomReservationBinding.checkinDate;
+                    cancel = true;
+                }
+                if (TextUtils.isEmpty(roomReservationBinding.checkoutDate.getText())) {
+                    roomReservationBinding.checkoutDate.setError(getString(R.string.error_field_required));
+                    focusView = roomReservationBinding.checkoutDate;
+                    cancel = true;
+                }
+                if (TextUtils.isEmpty(roomReservationBinding.occupancy.getText())) {
+                    roomReservationBinding.occupancy.setError(getString(R.string.error_field_required));
+                    focusView = roomReservationBinding.occupancy;
+                    cancel = true;
+                }
+
+
+                if (cancel) {
+                    // There was an error; don't attempt login and focus the first
+                    // form field with an error.
+                    focusView.requestFocus();
+                } else if (roomReservationBinding.getData() != null) {
+                    // Show a progress spinner,
+
+                    progressBar=new ProgressDialog(getContext());
+                    progressBar.setMessage("Submitting...");
+                    progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    progressBar.setIndeterminate(true);
+                    progressBar.show();
+                    book();
+                }
+                else {
+                    Toast.makeText(getContext(),"Fill All Details",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         return roomReservationBinding.getRoot();
+    }
+
+    private void book() {
+        if (mRetrofit == null){
+            mRetrofit = RestClient.getClient();
+        }
+        ApiInterface apiInterface = mRetrofit.create(ApiInterface.class);
+        apiInterface.bookRoom(roomReservationBinding.getData(), ((Initializer) getActivity().getApplication()).getCardContext().getMembership().getHotel().getHotelId(),((Initializer) getActivity().getApplication()).getCardContext().getMembership().getAuthToken())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new io.reactivex.Observer<BasicResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable disposable) {
+                        compositeDisposable.add(disposable);
+                    }
+
+                    @Override
+                    public void onNext(final BasicResponse addMembershipResponse) {
+                        progressBar.dismiss();
+                        if (addMembershipResponse.getStatusCode() == 200 && addMembershipResponse.getContent() != null ){
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setTitle("Success!!!");
+                            builder.setMessage(addMembershipResponse.getContent());
+                            // Create the AlertDialog object and return it
+                             builder.create().show();
+                        }
+                        else {
+                            Toast.makeText(getContext(),"Error " + addMembershipResponse.getMessage(),Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        progressBar.dismiss();
+                        Toast.makeText(getContext(),throwable.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        progressBar.dismiss();
+                    }
+                });
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -158,7 +292,7 @@ public class RoomReservation extends Fragment {
         builder.setItems( names.toArray(new CharSequence[names.size()]), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 // Do something with the selection
-                roomReservationBinding.venueName.setText(names.get(item));
+//                roomReservationBinding.venueName.setText(names.get(item));
             }
         });
         AlertDialog alert = builder.create();
@@ -167,12 +301,7 @@ public class RoomReservation extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+
     }
 
     @Override
@@ -181,16 +310,22 @@ public class RoomReservation extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
+
+    @Override
+    public void onVoucherPicked(Voucher voucher) {
+        voucherPickerFragment.dismiss();
+        roomReservationBinding.voucherDetail.setText(voucher.getVoucherCategory().getCategoryTitle());
+
+    }
+
+    @Override
+    public void onOfferPicked(Offer offer) {
+        offerPickerFragment.dismiss();
+        roomReservationBinding.discountDetail.setText(offer.getDescription());
+
+    }
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

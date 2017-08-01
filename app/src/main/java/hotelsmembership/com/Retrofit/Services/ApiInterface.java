@@ -8,6 +8,8 @@ import hotelsmembership.com.Model.CardNumberPayload;
 import hotelsmembership.com.Model.HotelsResponse;
 import hotelsmembership.com.Model.OffersResponse;
 import hotelsmembership.com.Model.RedeemPayload;
+import hotelsmembership.com.Model.RoomReservationPayload;
+import hotelsmembership.com.Model.TableReservationPayload;
 import hotelsmembership.com.Model.VenuesResponse;
 import hotelsmembership.com.Model.VerifyOTPPayload;
 import hotelsmembership.com.Model.Vouchers.VouchersResponse;
@@ -44,4 +46,11 @@ public interface ApiInterface {
 
     @POST("venues/{hotelid}")
     Observable<VenuesResponse> getVenues(@Body CardNumberPayload payload, @Path("hotelid") String hotelid, @Header("auth_token") String authToken);
+
+    @POST("roomReservation/{hotelid}")
+    Observable<BasicResponse> bookRoom(@Body RoomReservationPayload payload, @Path("hotelid") String hotelid, @Header("auth_token") String authToken);
+
+    @POST("tableReservation/{hotelid}")
+    Observable<BasicResponse> bookTable(@Body TableReservationPayload payload, @Path("hotelid") String hotelid, @Header("auth_token") String authToken);
+
 }

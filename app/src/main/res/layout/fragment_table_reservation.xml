@@ -115,8 +115,8 @@
                 android:textColor="@android:color/white"
                 android:shadowColor="@android:color/holo_red_dark"
                 android:background="@android:color/holo_red_light"
-                android:layout_marginStart="64dp"
-                android:layout_marginEnd="64dp"
+                android:layout_marginStart="72dp"
+                android:layout_marginEnd="72dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
                 android:textStyle="bold" />

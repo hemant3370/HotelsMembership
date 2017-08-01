@@ -21,6 +21,7 @@ import java.util.List;
 import butterknife.BindView;
 import hotelsmembership.com.Applications.Initializer;
 import hotelsmembership.com.Fragments.CardFragment;
+import hotelsmembership.com.Fragments.OffersFragment;
 import hotelsmembership.com.Fragments.RoomReservation;
 import hotelsmembership.com.Fragments.TableReservation;
 import hotelsmembership.com.Fragments.VouchersFragment;
@@ -56,7 +57,7 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
                     return true;
                 case R.id.navigation_offers:
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.content, VouchersFragment.newInstance(((Initializer) getApplication()).getCardContext().getVouchers(),((Initializer) getApplication()).getCardContext().getCardNumber(),((Initializer) getApplication()).getCardContext().getMembership()));
+                    fragmentTransaction.replace(R.id.content, OffersFragment.newInstance(""));
                     fragmentTransaction.commit();
                     return true;
             }

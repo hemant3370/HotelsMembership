@@ -14,21 +14,21 @@
             android:layout_margin="8dp"
             android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <!--<android.support.design.widget.TextInputLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content">-->
 
-                <AutoCompleteTextView
-                    android:id="@+id/venue_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/venue_name"
-                    android:text="@={data.venue}"
-                    android:inputType="textCapWords"
-                    android:imeOptions="actionDone"
-                    android:maxLines="1" />
+                <!--<AutoCompleteTextView-->
+                    <!--android:id="@+id/venue_name"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:hint="@string/venue_name"-->
+                    <!--android:text="@={data.venue}"-->
+                    <!--android:inputType="textCapWords"-->
+                    <!--android:imeOptions="actionDone"-->
+                    <!--android:maxLines="1" />-->
 
-            </android.support.design.widget.TextInputLayout>
+            <!--</android.support.design.widget.TextInputLayout>-->
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/time_slot"
+                    android:id="@+id/occupancy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/occupancy"
@@ -115,8 +115,8 @@
                 android:textColor="@android:color/white"
                 android:shadowColor="@android:color/holo_red_dark"
                 android:background="@android:color/holo_red_light"
-                android:layout_marginStart="64dp"
-                android:layout_marginEnd="64dp"
+                android:layout_marginStart="72dp"
+                android:layout_marginEnd="72dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
                 android:textStyle="bold" />

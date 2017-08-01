@@ -1,8 +1,5 @@
 package hotelsmembership.com.Model.Hotel;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -73,7 +70,7 @@ public class Offer  {
     }
 
     public String getOfferImageUrl() {
-        return offerImageUrl;
+        return "http://hotelsmembership.com" + offerImageUrl;
     }
 
     public void setOfferImageUrl(String offerImageUrl) {

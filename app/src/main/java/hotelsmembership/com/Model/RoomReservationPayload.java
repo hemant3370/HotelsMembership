@@ -11,9 +11,9 @@ public class RoomReservationPayload {
     @SerializedName("cardNumber")
     @Expose
     private String cardNumber;
-    @SerializedName("venue")
-    @Expose
-    private String venue;
+//    @SerializedName("venue")
+//    @Expose
+//    private String venue;
     @SerializedName("checkInDate")
     @Expose
     private String checkInDate;
@@ -78,11 +78,11 @@ public class RoomReservationPayload {
         this.voucherDetail = voucherDetail;
     }
 
-    public String getVenue() {
-        return venue;
-    }
-
-    public void setVenue(String venue) {
-        this.venue = venue;
-    }
+//    public String getVenue() {
+//        return venue;
+//    }
+//
+//    public void setVenue(String venue) {
+//        this.venue = venue;
+//    }
 }

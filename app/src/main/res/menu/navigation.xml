@@ -11,6 +11,10 @@
         android:icon="@drawable/ic_card_giftcard_black_24dp"
         android:title="@string/offers" />
     <item
+        android:id="@+id/navigation_venues"
+        android:icon="@drawable/ic_place_black_24dp"
+        android:title="@string/venues" />
+    <item
         android:id="@+id/navigation_card"
         android:icon="@drawable/ic_card_membership_black_24dp"
         android:title="@string/contact_us" />

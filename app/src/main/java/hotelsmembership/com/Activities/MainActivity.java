@@ -339,6 +339,13 @@ VouchersFragment.Listener{
     }
 
     @Override
+    public void onCardFullScreenAction(Membership item) {
+        Intent fullCard = new Intent(this, CardFullscreenActivity.class);
+        fullCard.putExtra("membership", item);
+        startActivity(fullCard);
+    }
+
+    @Override
     public void onVoucherClicked(Voucher voucher, String cardNumber, Membership membership) {
         getSupportFragmentManager().popBackStackImmediate();
         setTitle("Voucher Details");

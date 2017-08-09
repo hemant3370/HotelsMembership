@@ -53,7 +53,7 @@ public class HotelVenue {
     }
 
     public String getVenueImageUrl() {
-        return venueImageUrl;
+        return "http://hotelsmembership.com" +  venueImageUrl;
     }
 
     public void setVenueImageUrl(String venueImageUrl) {

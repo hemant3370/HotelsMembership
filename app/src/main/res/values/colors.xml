@@ -32,4 +32,6 @@
 
     <color name="gold">#FFD700</color>
     <color name="silver">#D3D3D3</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>

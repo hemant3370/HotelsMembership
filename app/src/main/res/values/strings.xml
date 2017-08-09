@@ -63,4 +63,10 @@
     <string name="discount_detail">Discount detail</string>
     <string name="occupancy">Occupancy</string>
     <string name="contact_us">Contact Us</string>
+    <string name="venues">Venues</string>
+
+    <string name="title_activity_card_fullscreen">CardFullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="close">Close</string>
 </resources>

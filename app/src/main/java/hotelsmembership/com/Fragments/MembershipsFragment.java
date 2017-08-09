@@ -97,7 +97,7 @@ public class MembershipsFragment extends LifecycleFragment {
                         @Override
                         public void onDismissedBySwipeLeft(final RecyclerView recyclerView, final int[] reverseSortedPositions) {
                             final Snackbar mySnackbar = Snackbar.make(getActivity().findViewById(R.id.main_coordinator),
-                                    "Are you sure?", Snackbar.LENGTH_LONG);
+                                    "Confirm Card Deletion ?", Snackbar.LENGTH_LONG);
                             mySnackbar.setAction("YES", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -161,5 +161,6 @@ public class MembershipsFragment extends LifecycleFragment {
         // TODO: Update argument type and name
         void onListFragmentInteraction(Membership item);
         void onAddClicked();
+        void onCardFullScreenAction(Membership item);
     }
 }

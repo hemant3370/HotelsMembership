@@ -52,7 +52,8 @@ public class CardActivity extends AppCompatActivity implements RoomReservation.O
             membership = ((Initializer) getApplication()).getCardContext().getMembership();
             cardNumber = membership.getCardNumber();
             vouchers = ((Initializer) getApplication()).getCardContext().getVouchers();
-        }setup();
+        }
+        setup();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

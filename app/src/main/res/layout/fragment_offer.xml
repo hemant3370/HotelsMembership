@@ -15,12 +15,12 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/voucher_card_container"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:background="@drawable/background"
         android:onClick="@{() -> mlistener.onOfferPicked(data)}"
         android:orientation="vertical">
         <android.support.v7.widget.CardView
-            android:layout_width="90dp"
+            android:layout_width="72dp"
             android:layout_height="0dp"
             android:id="@+id/voucher_card"
             android:foreground="?android:selectableItemBackground"
@@ -33,7 +33,6 @@
             android:layout_marginLeft="4dp"
             app:layout_constraintLeft_toLeftOf="parent">
             <ImageView
-                android:background="@color/blue_color"
                 android:id="@+id/voucherLogo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

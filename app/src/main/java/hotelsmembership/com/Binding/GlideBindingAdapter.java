@@ -18,9 +18,8 @@ public class GlideBindingAdapter {
     public static void loadImage(ImageView imageView, String url)
     {
         Glide.with(imageView.getContext()).load(url).skipMemoryCache(false)
-                .diskCacheStrategy(DiskCacheStrategy.ALL).crossFade().thumbnail(0.5f)
-                .placeholder(ContextCompat.getDrawable(imageView.getContext(), R.drawable.ic_hotel_black_24dp))
-                .error(ContextCompat.getDrawable(imageView.getContext(), R.drawable.ic_hotel_black_24dp))
-                .fitCenter().into(imageView);
+                .diskCacheStrategy(DiskCacheStrategy.ALL).thumbnail(0.5f)
+                .placeholder(ContextCompat.getDrawable(imageView.getContext(), R.drawable.ic_card_giftcard_black_24dp))
+                .fitCenter().crossFade().into(imageView);
     }
 }

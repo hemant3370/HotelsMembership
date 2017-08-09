@@ -24,13 +24,14 @@ import hotelsmembership.com.Fragments.CardFragment;
 import hotelsmembership.com.Fragments.OffersFragment;
 import hotelsmembership.com.Fragments.RoomReservation;
 import hotelsmembership.com.Fragments.TableReservation;
+import hotelsmembership.com.Fragments.VenuesFragment;
 import hotelsmembership.com.Fragments.VouchersFragment;
 import hotelsmembership.com.Model.Membership;
 import hotelsmembership.com.Model.Vouchers.Voucher;
 import hotelsmembership.com.R;
 
 public class MembershipActivity extends AppCompatActivity implements VouchersFragment.Listener, CardFragment.OnFragmentInteractionListener,
-        RoomReservation.OnFragmentInteractionListener, TableReservation.OnFragmentInteractionListener{
+        RoomReservation.OnFragmentInteractionListener, TableReservation.OnFragmentInteractionListener, VenuesFragment.Listener{
 
     @BindView(R.id.frame)
     FrameLayout frameLayout;
@@ -52,12 +53,19 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
                 case R.id.navigation_vouchers:
 
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.content, VouchersFragment.newInstance(((Initializer) getApplication()).getCardContext().getVouchers(),((Initializer) getApplication()).getCardContext().getCardNumber(),((Initializer) getApplication()).getCardContext().getMembership()));
+                    fragmentTransaction.replace(R.id.content, VouchersFragment.newInstance(((Initializer) getApplication()).getCardContext().getVouchers(),
+                            ((Initializer) getApplication()).getCardContext().getCardNumber(),
+                            ((Initializer) getApplication()).getCardContext().getMembership()));
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_offers:
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.content, OffersFragment.newInstance(""));
+                    fragmentTransaction.commit();
+                    return true;
+                case R.id.navigation_venues:
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.content, new VenuesFragment());
                     fragmentTransaction.commit();
                     return true;
             }
@@ -82,7 +90,9 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.content, CardFragment.newInstance("",""));
+        fragmentTransaction.replace(R.id.content,  VouchersFragment.newInstance(((Initializer) getApplication()).getCardContext().getVouchers(),
+                ((Initializer) getApplication()).getCardContext().getCardNumber(),
+                ((Initializer) getApplication()).getCardContext().getMembership()));
         fragmentTransaction.commit();
     }
 

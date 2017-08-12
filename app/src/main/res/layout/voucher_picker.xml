@@ -16,12 +16,12 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/voucher_card_container"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:background="@drawable/background"
             android:onClick="@{() -> mlistener.onVoucherPicked(data)}"
             android:orientation="vertical">
             <android.support.v7.widget.CardView
-                android:layout_width="90dp"
+                android:layout_width="72dp"
                 android:layout_height="0dp"
                 android:id="@+id/voucher_card"
                 android:foreground="?android:selectableItemBackground"
@@ -77,12 +77,12 @@
                 android:shadowDx="1"
                 android:shadowDy="1"
                 android:shadowRadius="2"
-                android:textColor="@android:color/black"
+                android:textColor="@color/cardview_dark_background"
                 android:textColorHint="@color/blue_color"
                 android:textSize="@dimen/text_size_normal_small"
                 android:text="@={data.voucherNumber}"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginStart="20dp"
                 app:layout_constraintLeft_toRightOf="@+id/voucher_card"
                 android:layout_marginLeft="20dp" />
@@ -95,14 +95,14 @@
                 android:shadowDx="1"
                 android:shadowDy="1"
                 android:shadowRadius="2"
-                android:textColor="@android:color/black"
+                android:textColor="@color/cardview_dark_background"
                 android:textColorHint="@color/blue_color"
                 android:textSize="@dimen/text_size_normal_small"
                 android:text="@={data.status}"
                 android:layout_marginRight="8dp"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:id="@+id/textView3" />
         </android.support.constraint.ConstraintLayout>

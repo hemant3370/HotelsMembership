@@ -63,6 +63,7 @@ public class CardActivity extends AppCompatActivity implements RoomReservation.O
     }
     void setup(){
         setTitle(membership.getHotel().getHotelName());
+
         if (membership.getCardType().equals("")) {
             membershipDetailBinding.setImageUrl(membership.getHotel().getCardsImageURLs().getGold());
         } else {

@@ -14,6 +14,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -81,11 +87,12 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         membership = ((Initializer) getApplication()).getCardContext().getMembership();
         cardNumber = membership.getCardNumber();
         vouchers = ((Initializer) getApplication()).getCardContext().getVouchers();
-        setTitle(membership.getHotel().getHotelName());
+        setTitle( "   " + membership.getHotel().getHotelName());
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -94,6 +101,21 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
                 ((Initializer) getApplication()).getCardContext().getCardNumber(),
                 ((Initializer) getApplication()).getCardContext().getMembership()));
         fragmentTransaction.commit();
+        Glide.with(this).load(membership.getHotel().getHotelLogoURL()).listener(new RequestListener<String, GlideDrawable>() {
+            @Override
+            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                getSupportActionBar().setIcon(resource);
+                return false;
+            }
+        }).skipMemoryCache(false)
+                .diskCacheStrategy(DiskCacheStrategy.ALL).thumbnail(0.5f)
+                .fitCenter().crossFade().into(100,100);
     }
 
     @Override

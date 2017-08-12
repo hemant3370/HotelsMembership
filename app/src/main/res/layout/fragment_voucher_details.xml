@@ -6,7 +6,7 @@
     </data>
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:background="@color/screenbg"
+        android:background="@drawable/background"
         android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,6 +24,7 @@
             android:id="@+id/voucher_IV"
             app:image_url="@{data.imageURL}"
             android:layout_width="fill_parent"
+            android:layout_margin="4dp"
             android:layout_height="260dp"
             android:scaleType="fitXY"
             android:adjustViewBounds="true"
@@ -33,6 +34,7 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             android:layout_margin="4dp"
             android:text="@={data.voucherCategory.categoryTitle}"/>
         <TextView

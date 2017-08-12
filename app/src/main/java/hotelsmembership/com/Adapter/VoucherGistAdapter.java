@@ -1,5 +1,6 @@
 package hotelsmembership.com.Adapter;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -52,7 +53,7 @@ public class VoucherGistAdapter extends RecyclerView.Adapter<VoucherGistAdapter.
         holder.bind(mValues.get(position),position);
         Voucher voucher = mValues.get(position);
         holder.itemBinding.getRoot().setAlpha(voucher.getStatus().equals("Redeemed") ? (float) 0.5 : (float) 1.0);
-
+        holder.itemBinding.voucherStatus.setTextColor(voucher.getStatus().equals("Redeemed") ? Color.RED : Color.GREEN );
     }
 
     @Override

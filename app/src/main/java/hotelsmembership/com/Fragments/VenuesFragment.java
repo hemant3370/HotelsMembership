@@ -1,6 +1,8 @@
 package hotelsmembership.com.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -31,7 +33,7 @@ public class VenuesFragment extends Fragment implements CardVoucherClickListener
 
     @Override
     public void onVoucherGistClick(int item) {
-
+        startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", venues.get(item).getVenuePhone(), null)));
     }
     @Nullable
     @Override

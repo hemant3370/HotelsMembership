@@ -7,7 +7,6 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class VoucherCategory implements Parcelable {
@@ -15,6 +14,9 @@ public class VoucherCategory implements Parcelable {
     @SerializedName("categoryCode")
     @Expose
     private String categoryCode;
+    @SerializedName("categoryType")
+    @Expose
+    private String categoryType;
     @SerializedName("categoryTitle")
     @Expose
     private String categoryTitle;
@@ -49,6 +51,14 @@ public class VoucherCategory implements Parcelable {
         this.description = description;
     }
 
+    public String getCategoryType() {
+        return categoryType;
+    }
+
+    public void setCategoryType(String categoryType) {
+        this.categoryType = categoryType;
+    }
+
     public List<TermsAndCondition> getTermsAndConditions() {
         return termsAndConditions;
     }
@@ -56,6 +66,7 @@ public class VoucherCategory implements Parcelable {
     public void setTermsAndConditions(List<TermsAndCondition> termsAndConditions) {
         this.termsAndConditions = termsAndConditions;
     }
+
 
     @Override
     public int describeContents() {
@@ -65,9 +76,10 @@ public class VoucherCategory implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.categoryCode);
+        dest.writeString(this.categoryType);
         dest.writeString(this.categoryTitle);
         dest.writeString(this.description);
-        dest.writeList(this.termsAndConditions);
+        dest.writeTypedList(this.termsAndConditions);
     }
 
     public VoucherCategory() {
@@ -75,13 +87,13 @@ public class VoucherCategory implements Parcelable {
 
     protected VoucherCategory(Parcel in) {
         this.categoryCode = in.readString();
+        this.categoryType = in.readString();
         this.categoryTitle = in.readString();
         this.description = in.readString();
-        this.termsAndConditions = new ArrayList<TermsAndCondition>();
-        in.readList(this.termsAndConditions, TermsAndCondition.class.getClassLoader());
+        this.termsAndConditions = in.createTypedArrayList(TermsAndCondition.CREATOR);
     }
 
-    public static final Parcelable.Creator<VoucherCategory> CREATOR = new Parcelable.Creator<VoucherCategory>() {
+    public static final Creator<VoucherCategory> CREATOR = new Creator<VoucherCategory>() {
         @Override
         public VoucherCategory createFromParcel(Parcel source) {
             return new VoucherCategory(source);

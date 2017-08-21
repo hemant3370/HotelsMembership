@@ -24,8 +24,7 @@ public class VoucherPickerAdapter extends RecyclerView.Adapter<VoucherPickerAdap
         List<Voucher> sorted = new ArrayList<>();
         for (Voucher v :
                 items) {
-            if (!v.getStatus().equals("Redeemed")) {
-//                 && v.getVoucherCategory().equals(type)
+            if (!v.getStatus().equals("Redeemed") && v.getVoucherCategory().getCategoryType().equals(type)) {
                 sorted.add(v);
             }
             }

@@ -131,7 +131,7 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     Calendar myCalendar = Calendar.getInstance();
-                    new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                             Date date = new GregorianCalendar(year, month, dayOfMonth).getTime();
@@ -141,7 +141,9 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
                         }
                     }, myCalendar
                             .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                            myCalendar.get(Calendar.DAY_OF_MONTH));
+                    datePickerDialog.getDatePicker().setMinDate(new Date().getTime());
+                    datePickerDialog.show();
                 }
                 return true;
             }
@@ -150,15 +152,20 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    Calendar myCalendar = Calendar.getInstance();
+                    final Calendar myCalendar = Calendar.getInstance();
                     new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                             Date date = new GregorianCalendar(2017, 9, 1, hourOfDay, minute).getTime();
                             Date endTime = new GregorianCalendar(2017, 9, 1, hourOfDay+1, minute).getTime();
-                            DateFormat df = new SimpleDateFormat("hh:mm aa", new Locale("en"));
-                            String strDate = df.format(date);
-                            tableReservationBinding.timeSlot.setText(strDate + "-" + df.format(endTime));
+                            if (hourOfDay < myCalendar.get(Calendar.HOUR_OF_DAY) + 6){
+                               Toast.makeText(getActivity().getApplicationContext(),"You can only book six hours prior.", Toast.LENGTH_LONG).show();
+                            }
+                            else {
+                                DateFormat df = new SimpleDateFormat("hh:mm aa", new Locale("en"));
+                                String strDate = df.format(date);
+                                tableReservationBinding.timeSlot.setText(strDate + "-" + df.format(endTime));
+                            }
                         }
                     }, myCalendar.get(Calendar.HOUR_OF_DAY),myCalendar.get(Calendar.MINUTE), true).show();
                 }
@@ -169,7 +176,7 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP){
-                    voucherPickerFragment =  VoucherPickerFragment.newInstance("FOOD");
+                    voucherPickerFragment =  VoucherPickerFragment.newInstance("Dine");
                     voucherPickerFragment.setmListener(TableReservation.this);
                     voucherPickerFragment.show(getChildFragmentManager(), voucherPickerFragment.getTag());
                 }

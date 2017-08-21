@@ -19,6 +19,7 @@ import android.widget.DatePicker;
 import android.widget.Toast;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,7 +55,7 @@ import retrofit2.Retrofit;
  * Use the {@link RoomReservation#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RoomReservation extends Fragment implements VoucherPicker, OfferPickerFragment.OfferPicker {
+public class RoomReservation extends Fragment implements VoucherPicker, OfferPickerFragment.OfferPicker, OccupancyFragment.OnOccupancyInteractionListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -70,9 +71,9 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
     RoomReservationPayload roomReservationPayload;
     private OnFragmentInteractionListener mListener;
     FragmentRoomReservationBinding roomReservationBinding;
-    OfferPickerFragment offerPickerFragment;
+    private OfferPickerFragment offerPickerFragment;
     private VoucherPickerFragment voucherPickerFragment;
-
+    private OccupancyFragment occupancyFragment;
     public RoomReservation() {
         // Required empty public constructor
     }
@@ -126,17 +127,28 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     Calendar myCalendar = Calendar.getInstance();
-                    new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                             Date date = new GregorianCalendar(year, month, dayOfMonth).getTime();
                             DateFormat df = new SimpleDateFormat("dd/MM/yyyy", new Locale("en"));
-                            String strDate = df.format(date);
-                            roomReservationBinding.checkinDate.setText(strDate);
+                            try {
+                                if (roomReservationBinding.getData().getCheckInDate() != null && date.after(df.parse(roomReservationBinding.getData().getCheckInDate()))){
+                                    Toast.makeText(getActivity().getApplicationContext(),"Invalid Date",Toast.LENGTH_LONG).show();
+                                }
+                                else{
+                                    String strDate = df.format(date);
+                                    roomReservationBinding.checkinDate.setText(strDate);
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }, myCalendar
                             .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                            myCalendar.get(Calendar.DAY_OF_MONTH));
+                    datePickerDialog.getDatePicker().setMinDate(new Date().getTime());
+                    datePickerDialog.show();
                 }
                 return true;
             }
@@ -146,17 +158,39 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     Calendar myCalendar = Calendar.getInstance();
-                    new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                             Date date = new GregorianCalendar(year, month, dayOfMonth).getTime();
                             DateFormat df = new SimpleDateFormat("dd/MM/yyyy", new Locale("en"));
-                            String strDate = df.format(date);
-                            roomReservationBinding.checkoutDate.setText(strDate);
+                            try {
+                                if (roomReservationBinding.getData().getCheckOutDate() != null && date.before( df.parse(roomReservationBinding.getData().getCheckOutDate()))){
+                                    Toast.makeText(getActivity().getApplicationContext(),"Invalid Date",Toast.LENGTH_LONG).show();
+                                }
+                                else{
+                                    String strDate = df.format(date);
+                                    roomReservationBinding.checkoutDate.setText(strDate);
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }, myCalendar
                             .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                            myCalendar.get(Calendar.DAY_OF_MONTH));
+                    datePickerDialog.getDatePicker().setMinDate(new Date().getTime());
+                    datePickerDialog.show();
+                }
+                return true;
+            }
+        });
+        roomReservationBinding.occupancy.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP){
+                    occupancyFragment = new OccupancyFragment();
+                    occupancyFragment.setmListener(RoomReservation.this);
+                    occupancyFragment.show(getChildFragmentManager(), occupancyFragment.getTag());
                 }
                 return true;
             }
@@ -165,7 +199,7 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP){
-                    voucherPickerFragment = VoucherPickerFragment.newInstance("ROOM");
+                    voucherPickerFragment = VoucherPickerFragment.newInstance("Stay");
                     voucherPickerFragment.setmListener(RoomReservation.this);
                     voucherPickerFragment.show(getChildFragmentManager(), voucherPickerFragment.getTag());
                 }
@@ -324,6 +358,11 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
         offerPickerFragment.dismiss();
         roomReservationBinding.discountDetail.setText(offer.getDescription());
 
+    }
+
+    @Override
+    public void onOccupancyChanged(String occupancy) {
+        roomReservationBinding.occupancy.setText(occupancy);
     }
 
     public interface OnFragmentInteractionListener {

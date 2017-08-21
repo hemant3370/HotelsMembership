@@ -19,7 +19,7 @@ public class VoucherPickerFragment extends BottomSheetDialogFragment  {
 
     // TODO: Customize parameter argument names
 // TODO: Customize parameter argument names
-    private static final String ARG_TYPE = "column-count";
+    private static final String ARG_TYPE = "type";
     // TODO: Customize parameters
     private String mType;
     private VoucherPicker mListener;
@@ -36,7 +36,13 @@ public class VoucherPickerFragment extends BottomSheetDialogFragment  {
         return fragment;
     }
 
-
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mType = getArguments().getString(ARG_TYPE);
+        }
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,

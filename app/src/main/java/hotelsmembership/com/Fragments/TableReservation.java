@@ -22,6 +22,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -156,15 +157,29 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
                     new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                            Date date = new GregorianCalendar(2017, 9, 1, hourOfDay, minute).getTime();
-                            Date endTime = new GregorianCalendar(2017, 9, 1, hourOfDay+1, minute).getTime();
-                            if (hourOfDay < myCalendar.get(Calendar.HOUR_OF_DAY) + 6){
+                            Calendar calendar = Calendar.getInstance();
+                            if (tableReservationBinding.getData().getReservationDate() != null){
+                               try {
+                                   DateFormat df = new SimpleDateFormat("dd/MM/yyyy", new Locale("en"));
+                                   calendar.setTime(df.parse(tableReservationBinding.getData().getReservationDate()));
+                               } catch (ParseException e) {
+                                   calendar.setTime(new Date());
+                                   e.printStackTrace();
+                               }
+                            }
+                            else {
+                                calendar.setTime(new Date());
+                            }
+                            Date date = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), hourOfDay, minute).getTime();
+                            Date endTime = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), hourOfDay+1, minute).getTime();
+                            calendar.add(Calendar.HOUR, 6);
+                            if (date.before(calendar.getTime())){
                                Toast.makeText(getActivity().getApplicationContext(),"You can only book six hours prior.", Toast.LENGTH_LONG).show();
                             }
                             else {
                                 DateFormat df = new SimpleDateFormat("hh:mm aa", new Locale("en"));
                                 String strDate = df.format(date);
-                                tableReservationBinding.timeSlot.setText(strDate + "-" + df.format(endTime));
+                                tableReservationBinding.timeSlot.setText(strDate + " - " + df.format(endTime));
                             }
                         }
                     }, myCalendar.get(Calendar.HOUR_OF_DAY),myCalendar.get(Calendar.MINUTE), true).show();

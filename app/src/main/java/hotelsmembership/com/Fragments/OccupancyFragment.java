@@ -68,13 +68,13 @@ public class OccupancyFragment extends BottomSheetDialogFragment {
        void sendOccupancy(){
            String occupancy = new String("");
            if (single > 0){
-               occupancy = "1:" + String.valueOf(single) + "|";
+               occupancy = "Single Bed: " + String.valueOf(single) + "|";
            }
            if (two > 0){
-               occupancy = occupancy.concat("2:" + String.valueOf(two) + "|");
+               occupancy = occupancy.concat("Double Bedroom: " + String.valueOf(two) + "|");
            }
            if (extra > 0){
-               occupancy = occupancy.concat(String.valueOf(extra));
+               occupancy = occupancy.concat("Extra Bed: " + String.valueOf(extra));
            }
             mListener.onOccupancyChanged(occupancy);
         }

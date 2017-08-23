@@ -224,10 +224,12 @@ public class RedeemFragment extends BottomSheetDialogFragment {
     void bindSMSListener(){
         SmsBroadcastReceiver.bindListener(new SmsListener() {
             @Override
-            public void messageReceived(String messageText) {
-                Log.d("Text",messageText);
-                fragmentRedeemBinding.redeemOtp.setText(new OTPFinder().getOTPFrom(messageText));
-                fragmentRedeemBinding.verifyBtn.performClick();
+            public void messageReceived(@NonNull String messageText) {
+                if (!messageText.equals("") && messageText.contains("OTP")) {
+                    Log.d("Text", messageText);
+                    fragmentRedeemBinding.redeemOtp.setText(new OTPFinder().getOTPFrom(messageText));
+                    fragmentRedeemBinding.verifyBtn.performClick();
+                }
             }
         });
     }

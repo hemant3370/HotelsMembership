@@ -57,6 +57,23 @@ public class VouchersFragment extends Fragment implements CardVoucherClickListen
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        cardNumber = getArguments().getString(ARG_CARD);
+        membership = getArguments().getParcelable(ARG_MEMBERSHIP);
+        List<Voucher> items = getArguments().getParcelableArrayList(ARG_VOUCHERS);
+        List<Voucher> sorted = new ArrayList<>();
+        for (Voucher v :
+                items) {
+            if (!v.getStatus().equals("Redeemed")) {
+                sorted.add(v);
+            }
+        }
+        for (Voucher v :
+                items) {
+            if (v.getStatus().equals("Redeemed")) {
+                sorted.add(v);
+            }
+        }
+        vouchers = sorted;
         return inflater.inflate(R.layout.fragment_voucher_list_dialog, container, false);
     }
 
@@ -64,10 +81,8 @@ public class VouchersFragment extends Fragment implements CardVoucherClickListen
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         final RecyclerView recyclerView = (RecyclerView) view;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
-        recyclerView.setAdapter(new VoucherGistAdapter(getArguments().<Voucher>getParcelableArrayList(ARG_VOUCHERS),this));
-        cardNumber = getArguments().getString(ARG_CARD);
-        membership = getArguments().getParcelable(ARG_MEMBERSHIP);
-        vouchers = getArguments().getParcelableArrayList(ARG_VOUCHERS);
+        recyclerView.setAdapter(new VoucherGistAdapter(vouchers,this));
+
     }
 
     @Override

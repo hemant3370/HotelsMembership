@@ -1,13 +1,10 @@
 package hotelsmembership.com.Binding;
 
 import android.databinding.BindingAdapter;
-import android.support.v4.content.ContextCompat;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-
-import hotelsmembership.com.R;
 
 /**
  * Created by HemantSingh on 20/03/17.
@@ -19,7 +16,6 @@ public class GlideBindingAdapter {
     {
         Glide.with(imageView.getContext()).load(url).skipMemoryCache(false)
                 .diskCacheStrategy(DiskCacheStrategy.ALL).thumbnail(0.5f)
-                .placeholder(ContextCompat.getDrawable(imageView.getContext(), R.drawable.ic_card_giftcard_black_24dp))
                 .fitCenter().crossFade().into(imageView);
     }
 }

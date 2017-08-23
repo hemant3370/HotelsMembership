@@ -133,7 +133,7 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
                             Date date = new GregorianCalendar(year, month, dayOfMonth).getTime();
                             DateFormat df = new SimpleDateFormat("dd/MM/yyyy", new Locale("en"));
                             try {
-                                if (roomReservationBinding.getData().getCheckInDate() != null && date.after(df.parse(roomReservationBinding.getData().getCheckInDate()))){
+                                if (roomReservationBinding.getData().getCheckOutDate() != null && date.after(df.parse(roomReservationBinding.getData().getCheckOutDate()))){
                                     Toast.makeText(getActivity().getApplicationContext(),"Invalid Date",Toast.LENGTH_LONG).show();
                                 }
                                 else{
@@ -164,7 +164,7 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
                             Date date = new GregorianCalendar(year, month, dayOfMonth).getTime();
                             DateFormat df = new SimpleDateFormat("dd/MM/yyyy", new Locale("en"));
                             try {
-                                if (roomReservationBinding.getData().getCheckOutDate() != null && date.before( df.parse(roomReservationBinding.getData().getCheckOutDate()))){
+                                if (roomReservationBinding.getData().getCheckInDate() != null && date.before( df.parse(roomReservationBinding.getData().getCheckInDate()))){
                                     Toast.makeText(getActivity().getApplicationContext(),"Invalid Date",Toast.LENGTH_LONG).show();
                                 }
                                 else{

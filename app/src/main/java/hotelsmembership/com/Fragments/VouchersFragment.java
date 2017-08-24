@@ -80,6 +80,7 @@ public class VouchersFragment extends Fragment implements CardVoucherClickListen
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         final RecyclerView recyclerView = (RecyclerView) view;
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(new VoucherGistAdapter(vouchers,this));
 

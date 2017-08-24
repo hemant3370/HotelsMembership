@@ -118,6 +118,7 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
         tableReservationPayload.setCardNumber(((Initializer) getActivity().getApplication()).getCardContext().getCardNumber());
         tableReservationPayload.setPaxCount(1);
         tableReservationBinding.setData(tableReservationPayload);
+       
         tableReservationBinding.venueName.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

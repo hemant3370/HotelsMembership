@@ -29,6 +29,9 @@ public class TableReservationPayload {
     @SerializedName("voucherDetail")
     @Expose
     private String voucherDetail;
+    @SerializedName("remarks")
+    @Expose
+    private String remarks;
 
     public String getCardNumber() {
         return cardNumber;
@@ -80,6 +83,14 @@ public class TableReservationPayload {
 
     public String getVoucherDetail() {
         return voucherDetail;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
     public void setVoucherDetail(String voucherDetail) {

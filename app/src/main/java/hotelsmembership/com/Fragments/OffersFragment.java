@@ -52,7 +52,7 @@ public class OffersFragment extends BottomSheetDialogFragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setNestedScrollingEnabled(false);
+            recyclerView.setNestedScrollingEnabled(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             recyclerView.setAdapter(new OffersRecyclerViewAdapter(((Initializer) getActivity().getApplication()).getCardContext().getOffers()));
         }

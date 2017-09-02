@@ -46,10 +46,8 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
                     }
                 }
                 // Toast.makeText(context, smsMessageStr, Toast.LENGTH_SHORT).show();
+                if(mListener != null)
                 mListener.messageReceived(smsMessageStr);
-                //this will update the UI with message
-//            VouchersActivity inst = VouchersActivity.ins
-//            inst.updateList(smsMessageStr);
             }
         }
     }

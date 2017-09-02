@@ -27,6 +27,10 @@ public class HotelVenue {
     @SerializedName("venuePhone")
     @Expose
     private String venuePhone;
+    @SerializedName("openHours")
+    @Expose
+    private String openHours;
+
 
     public String getVenueId() {
         return venueId;
@@ -76,4 +80,11 @@ public class HotelVenue {
         this.venuePhone = venuePhone;
     }
 
+    public String getOpenHours() {
+        return openHours;
+    }
+
+    public void setOpenHours(String openHours) {
+        this.openHours = openHours;
+    }
 }

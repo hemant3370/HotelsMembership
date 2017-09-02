@@ -61,9 +61,10 @@ public class VouchersFragment extends Fragment implements CardVoucherClickListen
         membership = getArguments().getParcelable(ARG_MEMBERSHIP);
         List<Voucher> items = getArguments().getParcelableArrayList(ARG_VOUCHERS);
         List<Voucher> sorted = new ArrayList<>();
+
         for (Voucher v :
                 items) {
-            if (!v.getStatus().equals("Redeemed")) {
+            if (!v.getStatus().equals("Redeemed") && !checkDuplicate(v.getVoucherCategory().getCategoryCode(), sorted)) {
                 sorted.add(v);
             }
         }
@@ -76,7 +77,14 @@ public class VouchersFragment extends Fragment implements CardVoucherClickListen
         vouchers = sorted;
         return inflater.inflate(R.layout.fragment_voucher_list_dialog, container, false);
     }
-
+    boolean checkDuplicate(String type, List<Voucher> list){
+        for (Voucher voucher : list){
+            if(voucher.getVoucherCategory().getCategoryCode().equals(type)){
+                return true;
+            }
+        }
+        return  false;
+    }
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         final RecyclerView recyclerView = (RecyclerView) view;

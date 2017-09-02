@@ -72,8 +72,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@drawable/palewood"
-        app:itemIconTint="@color/green_color_gradient"
-        app:itemTextColor="@color/green_color"
+        app:itemIconTint="@color/blue_color_gradient"
+        app:itemTextColor="@color/blue_color_gradient"
         app:menu="@menu/navigation"
         />
 </android.support.design.widget.CoordinatorLayout>

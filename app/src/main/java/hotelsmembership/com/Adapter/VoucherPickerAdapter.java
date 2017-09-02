@@ -24,7 +24,7 @@ public class VoucherPickerAdapter extends RecyclerView.Adapter<VoucherPickerAdap
         List<Voucher> sorted = new ArrayList<>();
         for (Voucher v :
                 items) {
-            if (!v.getStatus().equals("Redeemed") && v.getVoucherCategory().getCategoryType().equals(type)) {
+            if (!v.getStatus().equals("Redeemed") && v.getVoucherCategory().getCategoryType().equals(type) && !checkDuplicate(v.getVoucherCategory().getCategoryCode(), sorted)) {
                 sorted.add(v);
             }
             }
@@ -32,7 +32,14 @@ public class VoucherPickerAdapter extends RecyclerView.Adapter<VoucherPickerAdap
         mValues = sorted;
         mListener = listener;
     }
-
+    private boolean checkDuplicate(String type, List<Voucher> list){
+        for (Voucher voucher : list){
+            if(voucher.getVoucherCategory().getCategoryCode().equals(type)){
+                return true;
+            }
+        }
+        return  false;
+    }
     @Override
     public VoucherPickerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater =

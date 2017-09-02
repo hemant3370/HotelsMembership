@@ -19,8 +19,6 @@ public class ConnectivityUtil {
                 .getSystemService(CONNECTIVITY_SERVICE);
     }
 
-
-
     public boolean connected() {
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();

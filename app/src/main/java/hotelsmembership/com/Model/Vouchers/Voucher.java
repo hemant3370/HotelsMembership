@@ -21,6 +21,7 @@ public class Voucher implements Parcelable {
     @SerializedName("imageURL")
     @Expose
     private String imageURL;
+    boolean isSelected;
 
     public String getVoucherNumber() {
         return voucherNumber;

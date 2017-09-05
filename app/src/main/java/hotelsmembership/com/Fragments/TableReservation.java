@@ -163,25 +163,28 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
                                try {
                                    DateFormat df = new SimpleDateFormat("dd/MM/yyyy", new Locale("en"));
                                    calendar.setTime(df.parse(tableReservationBinding.getData().getReservationDate()));
+                                   Date date = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), hourOfDay, minute).getTime();
+                                   Date endTime = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), hourOfDay+1, minute).getTime();
+                                   calendar.setTime(new Date());
+                                   calendar.add(Calendar.HOUR, 6);
+                                   Date now = calendar.getTime();
+                                   if (date.before(now)){
+                                       Toast.makeText(getActivity().getApplicationContext(),"You can only book six hours prior.", Toast.LENGTH_LONG).show();
+                                   }
+                                   else {
+                                       DateFormat dfTime = new SimpleDateFormat("hh:mm aa", new Locale("en"));
+                                       String strDate = dfTime.format(date);
+                                       tableReservationBinding.timeSlot.setText(strDate + " - " + dfTime.format(endTime));
+                                   }
                                } catch (ParseException e) {
                                    calendar.setTime(new Date());
                                    e.printStackTrace();
                                }
                             }
                             else {
-                                calendar.setTime(new Date());
+                                Toast.makeText(getActivity().getApplicationContext(),"Please set date first.", Toast.LENGTH_LONG).show();
                             }
-                            Date date = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), hourOfDay, minute).getTime();
-                            Date endTime = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), hourOfDay+1, minute).getTime();
-                            calendar.add(Calendar.HOUR, 6);
-                            if (date.before(calendar.getTime())){
-                               Toast.makeText(getActivity().getApplicationContext(),"You can only book six hours prior.", Toast.LENGTH_LONG).show();
-                            }
-                            else {
-                                DateFormat df = new SimpleDateFormat("hh:mm aa", new Locale("en"));
-                                String strDate = df.format(date);
-                                tableReservationBinding.timeSlot.setText(strDate + " - " + df.format(endTime));
-                            }
+
                         }
                     }, myCalendar.get(Calendar.HOUR_OF_DAY),myCalendar.get(Calendar.MINUTE), true).show();
                 }

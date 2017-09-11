@@ -40,7 +40,7 @@ public class VenuesFragment extends Fragment implements CardVoucherClickListener
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         venues = ((Initializer) getActivity().getApplication()).getCardContext().getHotelVenues();
-        return inflater.inflate(R.layout.fragment_voucher_list_dialog, container, false);
+        return inflater.inflate(R.layout.voucher_list, container, false);
     }
 
     @Override

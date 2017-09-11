@@ -70,4 +70,6 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="close">Close</string>
     <string name="remarks">Remarks</string>
+    <string name="reservation">Reservation</string>
+    <string name="none">None</string>
 </resources>

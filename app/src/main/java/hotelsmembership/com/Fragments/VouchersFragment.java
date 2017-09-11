@@ -75,7 +75,7 @@ public class VouchersFragment extends Fragment implements CardVoucherClickListen
             }
         }
         vouchers = sorted;
-        return inflater.inflate(R.layout.fragment_voucher_list_dialog, container, false);
+        return inflater.inflate(R.layout.voucher_list, container, false);
     }
     boolean checkDuplicate(String type, List<Voucher> list){
         for (Voucher voucher : list){

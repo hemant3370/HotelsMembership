@@ -121,20 +121,34 @@
                      />
 
             </android.support.design.widget.TextInputLayout>
-            <Button
-                android:id="@+id/submit_Btn"
-                style="?android:textAppearanceSmall"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/submit"
-                android:textColor="@android:color/white"
-                android:shadowColor="@android:color/darker_gray"
-                android:background="@drawable/button"
-                android:layout_marginStart="72dp"
-                android:layout_marginEnd="72dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:textStyle="bold" />
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/submit_Btn"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/submit"
+                    android:layout_weight="1"
+                    android:textColor="@android:color/white"
+                    android:shadowColor="@android:color/darker_gray"
+                    android:background="@drawable/button"
+                    android:layout_margin="8dp"
+                    android:textStyle="bold" />
+                <android.support.design.widget.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:elevation="8dp"
+                    android:layout_margin="8dp"
+                    android:tint="@color/semi_white"
+                    android:shadowColor="@android:color/holo_red_dark"
+                    app:srcCompat="@drawable/ic_call_black_24dp"
+                    android:onClick="callForTableBooking"
+                    />
+            </LinearLayout>
+
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </layout>

@@ -12,10 +12,10 @@
         android:title="@string/offers" />
     <item
         android:id="@+id/navigation_venues"
-        android:icon="@drawable/ic_local_bar_black_24dp"
+        android:icon="@drawable/ic_restaurant_black_24dp"
         android:title="@string/venues" />
     <item
         android:id="@+id/navigation_card"
         android:icon="@drawable/ic_book_black_24dp"
-        android:title="@string/contact_us" />
+        android:title="@string/reservation" />
 </menu>

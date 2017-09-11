@@ -61,6 +61,7 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private ProgressDialog progressBar;
+    List<Voucher> vouchers = new ArrayList<>();
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -112,6 +113,17 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
         roomReservationBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_room_reservation, container, false);
         roomReservationPayload = new RoomReservationPayload();
         roomReservationPayload.setCardNumber(((Initializer) getActivity().getApplication()).getCardContext().getCardNumber());
+        if (((Initializer) getActivity().getApplication()).getCardContext().getOffers().size() > 0){
+            roomReservationPayload.setDiscountDetail(((Initializer) getActivity().getApplication()).getCardContext().getOffers().get(0).getDescription());
+        }
+        List<Voucher> sorted = new ArrayList<>();
+        for (Voucher v :
+                ((Initializer) getActivity().getApplication()).getCardContext().getVouchers()) {
+            if (!v.getStatus().equals("Redeemed") && v.getVoucherCategory().getCategoryType().equals("Stay") && !checkDuplicate(v.getVoucherCategory().getCategoryCode(), sorted)) {
+                sorted.add(v);
+            }
+        }
+        vouchers = sorted;
         roomReservationBinding.setData(roomReservationPayload);
 //        roomReservationBinding.venueName.setOnTouchListener(new View.OnTouchListener() {
 //            @Override
@@ -199,7 +211,7 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP){
-                    voucherPickerFragment = VoucherPickerFragment.newInstance("Stay");
+                    voucherPickerFragment = VoucherPickerFragment.newInstance(vouchers);
                     voucherPickerFragment.setmListener(RoomReservation.this);
                     voucherPickerFragment.show(getChildFragmentManager(), voucherPickerFragment.getTag());
                 }
@@ -306,7 +318,14 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
                     }
                 });
     }
-
+    private boolean checkDuplicate(String type, List<Voucher> list){
+        for (Voucher voucher : list){
+            if(voucher.getVoucherCategory().getCategoryCode().equals(type)){
+                return true;
+            }
+        }
+        return  false;
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -344,13 +363,26 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
         mListener = null;
     }
 
-
-
     @Override
     public void onVoucherPicked(Voucher voucher) {
-        voucherPickerFragment.dismiss();
-        roomReservationBinding.voucherDetail.setText(voucher.getVoucherCategory().getCategoryTitle());
-
+        if(voucher != null) {
+            voucher.isSelected = !voucher.isSelected;
+            String selectedVouchers = "";
+            for (Voucher v : vouchers) {
+                if (v.isSelected) {
+                    selectedVouchers = selectedVouchers.concat(v.getVoucherCategory().getCategoryTitle() + "\n");
+                }
+            }
+            voucherPickerFragment.resetData();
+            roomReservationBinding.voucherDetail.setText(selectedVouchers);
+        }
+        else{
+            for (Voucher v : vouchers) {
+                v.isSelected = false;
+            }
+            voucherPickerFragment.dismiss();
+            roomReservationBinding.voucherDetail.setText("");
+        }
     }
 
     @Override

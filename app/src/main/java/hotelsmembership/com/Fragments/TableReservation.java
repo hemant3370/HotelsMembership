@@ -70,6 +70,7 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private List<Voucher> vouchers;
     TableReservationPayload tableReservationPayload;
     FragmentTableReservationBinding tableReservationBinding;
     private OnFragmentInteractionListener mListener;
@@ -117,8 +118,19 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
         tableReservationPayload = new TableReservationPayload();
         tableReservationPayload.setCardNumber(((Initializer) getActivity().getApplication()).getCardContext().getCardNumber());
         tableReservationPayload.setPaxCount(1);
+        if (((Initializer) getActivity().getApplication()).getCardContext().getOffers().size() > 0){
+            tableReservationPayload.setDiscountDetail(((Initializer) getActivity().getApplication()).getCardContext().getOffers().get(0).getDescription());
+        }
+        List<Voucher> sorted = new ArrayList<>();
+        for (Voucher v :
+                ((Initializer) getActivity().getApplication()).getCardContext().getVouchers()) {
+            if (!v.getStatus().equals("Redeemed") && v.getVoucherCategory().getCategoryType().equals("Dine") && !checkDuplicate(v.getVoucherCategory().getCategoryCode(), sorted)) {
+                sorted.add(v);
+            }
+        }
+        vouchers = sorted;
         tableReservationBinding.setData(tableReservationPayload);
-       
+        tableReservationBinding.discountDetail.setText(((Initializer) getActivity().getApplication()).getCardContext().getOffers().get(0).getDescription());
         tableReservationBinding.venueName.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -195,7 +207,7 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP){
-                    voucherPickerFragment =  VoucherPickerFragment.newInstance("Dine");
+                    voucherPickerFragment =  VoucherPickerFragment.newInstance(vouchers);
                     voucherPickerFragment.setmListener(TableReservation.this);
                     voucherPickerFragment.show(getChildFragmentManager(), voucherPickerFragment.getTag());
                 }
@@ -264,7 +276,14 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
         });
         return tableReservationBinding.getRoot();
     }
-
+    private boolean checkDuplicate(String type, List<Voucher> list){
+        for (Voucher voucher : list){
+            if(voucher.getVoucherCategory().getCategoryCode().equals(type)){
+                return true;
+            }
+        }
+        return  false;
+    }
     private void book() {
         if (mRetrofit == null){
             mRetrofit = RestClient.getClient();
@@ -354,9 +373,24 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
 
     @Override
     public void onVoucherPicked(Voucher voucher) {
-        voucherPickerFragment.dismiss();
-        tableReservationBinding.voucherDetail.setText(voucher.getVoucherCategory().getCategoryTitle());
-
+        if(voucher != null) {
+            voucher.isSelected = !voucher.isSelected;
+            String selectedVouchers = "";
+            for (Voucher v : vouchers) {
+                if (v.isSelected) {
+                    selectedVouchers = selectedVouchers.concat(v.getVoucherCategory().getCategoryTitle() + "\n");
+                }
+            }
+            voucherPickerFragment.resetData();
+            tableReservationBinding.voucherDetail.setText(selectedVouchers);
+        }
+        else{
+            for (Voucher v : vouchers) {
+                v.isSelected = false;
+            }
+            voucherPickerFragment.dismiss();
+            tableReservationBinding.voucherDetail.setText("");
+        }
     }
 
     @Override

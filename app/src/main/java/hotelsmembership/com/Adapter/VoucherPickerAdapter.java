@@ -1,14 +1,15 @@
 package hotelsmembership.com.Adapter;
 
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import hotelsmembership.com.Interfaces.VoucherPicker;
 import hotelsmembership.com.Model.Vouchers.Voucher;
+import hotelsmembership.com.R;
 import hotelsmembership.com.databinding.VoucherPickerItemBinding;
 
 /**
@@ -20,26 +21,11 @@ public class VoucherPickerAdapter extends RecyclerView.Adapter<VoucherPickerAdap
     private final List<Voucher> mValues;
     private final VoucherPicker mListener;
 
-    public VoucherPickerAdapter(List<Voucher> items, VoucherPicker listener, String type) {
-        List<Voucher> sorted = new ArrayList<>();
-        for (Voucher v :
-                items) {
-            if (!v.getStatus().equals("Redeemed") && v.getVoucherCategory().getCategoryType().equals(type) && !checkDuplicate(v.getVoucherCategory().getCategoryCode(), sorted)) {
-                sorted.add(v);
-            }
-            }
-
-        mValues = sorted;
+    public VoucherPickerAdapter(List<Voucher> items, VoucherPicker listener) {
+        mValues = items;
         mListener = listener;
     }
-    private boolean checkDuplicate(String type, List<Voucher> list){
-        for (Voucher voucher : list){
-            if(voucher.getVoucherCategory().getCategoryCode().equals(type)){
-                return true;
-            }
-        }
-        return  false;
-    }
+
     @Override
     public VoucherPickerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater =
@@ -54,7 +40,12 @@ public class VoucherPickerAdapter extends RecyclerView.Adapter<VoucherPickerAdap
         holder.bind(mValues.get(position),position);
         Voucher voucher = mValues.get(position);
         holder.itemBinding.getRoot().setAlpha(voucher.getStatus().equals("Redeemed") ? (float) 0.5 : (float) 1.0);
-
+        if(voucher.isSelected) {
+            holder.itemBinding.getRoot().setBackgroundColor(ContextCompat.getColor(holder.itemBinding.getRoot().getContext(), R.color.green_color));
+        }
+        else {
+            holder.itemBinding.getRoot().setBackground(ContextCompat.getDrawable(holder.itemBinding.getRoot().getContext(), R.drawable.background));
+        }
     }
 
     @Override

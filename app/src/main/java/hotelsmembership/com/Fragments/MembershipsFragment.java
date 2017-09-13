@@ -159,7 +159,7 @@ public class MembershipsFragment extends LifecycleFragment {
 
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(Membership item);
+        void onCardClicked(Membership item);
         void onAddClicked();
         void onCardFullScreenAction(Membership item);
     }

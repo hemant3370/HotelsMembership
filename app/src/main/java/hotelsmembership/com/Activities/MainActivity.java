@@ -30,8 +30,10 @@ import hotelsmembership.com.Fragments.MembershipsFragment;
 import hotelsmembership.com.Fragments.VoucherDetails;
 import hotelsmembership.com.Fragments.VouchersFragment;
 import hotelsmembership.com.Model.AddCardPayload;
+import hotelsmembership.com.Model.AddMembershipResponse;
 import hotelsmembership.com.Model.CardContext;
 import hotelsmembership.com.Model.CardNumberPayload;
+import hotelsmembership.com.Model.Hotel.Hotel;
 import hotelsmembership.com.Model.HotelsDatabase;
 import hotelsmembership.com.Model.HotelsResponse;
 import hotelsmembership.com.Model.Membership;
@@ -135,20 +137,6 @@ VouchersFragment.Listener{
                        new Thread(new Runnable() {
                            public void run() {
                                // a potentially  time consuming task
-//                               hotelsDatabase.daoAccess().insertMultipleListRecord(hotelsResponse.getContent());
-//                               for (Hotel hotel : hotelsResponse.getContent()){
-//                                   if (hotel.getOffers() != null) {
-//                                       for (Offer offer : hotel.getOffers()) {
-//                                           offer.setHotelId(hotel.getHotelId());
-//                                           hotelsDatabase.daoAccess().insertOffer(offer);
-//                                       }
-//                                   }
-//                                   if (hotel.getHotelVenues() != null) {
-//                                       for (HotelVenue hotelVenue : hotel.getHotelVenues()) {
-//                                           hotelVenue.setHotelId(hotel.getHotelId());
-//                                           hotelsDatabase.daoAccess().insertVenue(hotelVenue);
-//                                       }
-//                                   }
                                    hotelsDatabase.daoAccess().insertMultipleListRecord(hotelsResponse.getContent());
                            }
                        }).start();
@@ -165,7 +153,54 @@ VouchersFragment.Listener{
                    }
                });
    }
-   void getVouchers(final AddCardPayload payload, final Membership membership){
+    public void addCard(final Hotel selectedHotel, AddCardPayload payload){
+        progressDialog.setVisibility(View.VISIBLE);
+        if (mRetrofit == null){
+            mRetrofit = RestClient.getClient();
+        }
+        ApiInterface apiInterface = mRetrofit.create(ApiInterface.class);
+        apiInterface.addMembership(payload, selectedHotel.getHotelId())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new io.reactivex.Observer<AddMembershipResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable disposable) {
+                        compositeDisposable.add(disposable);
+                    }
+
+                    @Override
+                    public void onNext(final AddMembershipResponse addMembershipResponse) {
+                        if (addMembershipResponse.getStatusCode() == 200 && addMembershipResponse.getContent() != null ){
+                            new Thread(new Runnable() {
+                                public void run() {
+                                    // a potentially  time consuming task
+                                    Membership membership = addMembershipResponse.getContent();
+                                    membership.setHotel(selectedHotel);
+                                    hotelsDatabase.daoAccess().insertOnlySingleRecord(membership);
+                                }
+                            }).start();
+                            Toast.makeText(MainActivity.this,"Membership Added",Toast.LENGTH_SHORT).show();
+                            onMembershipAdded();
+                        }
+                        else {
+                            Toast.makeText(MainActivity.this,"Error " + addMembershipResponse.getMessage(),Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        progressDialog.setVisibility(View.INVISIBLE);
+                        Toast.makeText(getApplicationContext(),throwable.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        progressDialog.setVisibility(View.INVISIBLE);
+                    }
+                });
+    }
+
+    void getCardDetails(final AddCardPayload payload, final Membership membership){
         progressDialog.setVisibility(View.VISIBLE);
         if (mRetrofit == null){
             mRetrofit = RestClient.getClient();
@@ -203,7 +238,9 @@ VouchersFragment.Listener{
                }
                else{
                    progressDialog.setVisibility(View.INVISIBLE);
-                   Toast.makeText(MainActivity.this, "No Voucher available to redeem",Toast.LENGTH_SHORT).show();
+                   addCard(membership.getHotel(), new AddCardPayload(membership.getCardNumber(), membership.getCardExpiryDate(),
+                           membership.getPhoneNumber()));
+                   Toast.makeText(MainActivity.this, "Unable to load the Card. Please try again!",Toast.LENGTH_SHORT).show();
                }
            }
 
@@ -302,7 +339,6 @@ VouchersFragment.Listener{
 
     }
 
-    @Override
     public void onMembershipAdded() {
         setTitle("My Memberships");
       //  fab.setVisibility(View.VISIBLE);
@@ -314,9 +350,9 @@ VouchersFragment.Listener{
     }
 
     @Override
-    public void onListFragmentInteraction(Membership item) {
+    public void onCardClicked(Membership item) {
         if(new ConnectivityUtil(this).connected()) {
-            getVouchers(new AddCardPayload(item.getCardNumber(), "31/05/2018", item.getPhoneNumber()), item);
+            getCardDetails(new AddCardPayload(item.getCardNumber(), "31/05/2018", item.getPhoneNumber()), item);
         }
         else {
             Toast.makeText(MainActivity.this, "Please connect to Internet first.",Toast.LENGTH_SHORT).show();

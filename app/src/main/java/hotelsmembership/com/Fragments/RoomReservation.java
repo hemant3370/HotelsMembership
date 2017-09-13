@@ -125,19 +125,11 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
         }
         vouchers = sorted;
         roomReservationBinding.setData(roomReservationPayload);
-//        roomReservationBinding.venueName.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if (event.getAction() == MotionEvent.ACTION_UP) {
-//                    chooseVenue();
-//                }
-//                return true;
-//            }
-//        });
         roomReservationBinding.checkinDate.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
+                    roomReservationBinding.checkinDate.setError(null);
                     Calendar myCalendar = Calendar.getInstance();
                     DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                         @Override
@@ -169,6 +161,7 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
+                    roomReservationBinding.checkoutDate.setError(null);
                     Calendar myCalendar = Calendar.getInstance();
                     DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                         @Override
@@ -200,6 +193,7 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP){
+                    roomReservationBinding.occupancy.setError(null);
                     occupancyFragment = new OccupancyFragment();
                     occupancyFragment.setmListener(RoomReservation.this);
                     occupancyFragment.show(getChildFragmentManager(), occupancyFragment.getTag());
@@ -388,8 +382,7 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
     @Override
     public void onOfferPicked(Offer offer) {
         offerPickerFragment.dismiss();
-        roomReservationBinding.discountDetail.setText(offer.getDescription());
-
+            roomReservationBinding.discountDetail.setText(offer != null ? offer.getDescription() : "");
     }
 
     @Override

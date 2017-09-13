@@ -1,7 +1,6 @@
 package hotelsmembership.com.Fragments;
 
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.arch.lifecycle.LifecycleFragment;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
@@ -31,23 +30,12 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import javax.inject.Inject;
-
 import hotelsmembership.com.Applications.Initializer;
 import hotelsmembership.com.Model.AddCardPayload;
-import hotelsmembership.com.Model.AddMembershipResponse;
 import hotelsmembership.com.Model.Hotel.Hotel;
 import hotelsmembership.com.Model.HotelsDatabase;
-import hotelsmembership.com.Model.Membership;
 import hotelsmembership.com.R;
-import hotelsmembership.com.Retrofit.Client.RestClient;
-import hotelsmembership.com.Retrofit.Services.ApiInterface;
 import hotelsmembership.com.databinding.FragmentAddMembershipBinding;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import retrofit2.Retrofit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,8 +50,6 @@ public class AddMembership extends LifecycleFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    @Inject
-    Retrofit mRetrofit;
     HotelsDatabase hotelsDatabase;
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -72,9 +58,6 @@ public class AddMembership extends LifecycleFragment {
     AddCardPayload addCardPayload;
     FragmentAddMembershipBinding fragmentAddCardBinding;
     private OnFragmentInteractionListener mListener;
-    private ProgressDialog progressBar;
-    private CompositeDisposable compositeDisposable =
-            new CompositeDisposable();
     public AddMembership() {
         // Required empty public constructor
     }
@@ -149,6 +132,7 @@ public class AddMembership extends LifecycleFragment {
         fragmentAddCardBinding.acceptTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                fragmentAddCardBinding.checkbox.setError(null);
                 if (selectedHotel != null && selectedHotel.getMembershipTermsAndConditions() != null && selectedHotel.getMembershipTermsAndConditions().size() > 0) {
                     String[] terms = new String[selectedHotel.getMembershipTermsAndConditions().size()];
                     for (int i = 0; i < terms.length; i++) {
@@ -183,6 +167,7 @@ public class AddMembership extends LifecycleFragment {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
+                    fragmentAddCardBinding.cardExpiryDate.setError(null);
                     Calendar myCalendar = Calendar.getInstance();
                     new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                         @Override
@@ -239,12 +224,6 @@ public class AddMembership extends LifecycleFragment {
                     focusView.requestFocus();
                 } else if (fragmentAddCardBinding.getData() != null) {
                     // Show a progress spinner,
-
-                    progressBar=new ProgressDialog(getContext());
-                    progressBar.setMessage("Submitting...");
-                    progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                    progressBar.setIndeterminate(true);
-                    progressBar.show();
                     addCard();
                 }
                 else {
@@ -255,51 +234,9 @@ public class AddMembership extends LifecycleFragment {
         return fragmentAddCardBinding.getRoot();
     }
     void addCard(){
-        if (mRetrofit == null){
-            mRetrofit = RestClient.getClient();
+        if (mListener != null) {
+            mListener.addCard(selectedHotel, fragmentAddCardBinding.getData());
         }
-        ApiInterface apiInterface = mRetrofit.create(ApiInterface.class);
-        apiInterface.addMembership(fragmentAddCardBinding.getData(), selectedHotel.getHotelId())
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new io.reactivex.Observer<AddMembershipResponse>() {
-                    @Override
-                    public void onSubscribe(Disposable disposable) {
-                        compositeDisposable.add(disposable);
-                    }
-
-                    @Override
-                    public void onNext(final AddMembershipResponse addMembershipResponse) {
-                        if (addMembershipResponse.getStatusCode() == 200 && addMembershipResponse.getContent() != null ){
-                            new Thread(new Runnable() {
-                                public void run() {
-                                    // a potentially  time consuming task
-                                    Membership membership = addMembershipResponse.getContent();
-                                    membership.setHotel(selectedHotel);
-                                    hotelsDatabase.daoAccess().insertOnlySingleRecord(membership);
-                                }
-                            }).start();
-                            Toast.makeText(getContext(),"Membership Added",Toast.LENGTH_SHORT).show();
-                            if (mListener != null) {
-                                mListener.onMembershipAdded();
-                            }
-                        }
-                        else {
-                            Toast.makeText(getContext(),"Error " + addMembershipResponse.getMessage(),Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable throwable) {
-                        progressBar.dismiss();
-                        Toast.makeText(getContext(),throwable.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        progressBar.dismiss();
-                    }
-                });
     }
 
 
@@ -318,11 +255,10 @@ public class AddMembership extends LifecycleFragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        compositeDisposable.clear();
     }
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onMembershipAdded();
+        void addCard(final Hotel selectedHotel, AddCardPayload payload);
     }
 }

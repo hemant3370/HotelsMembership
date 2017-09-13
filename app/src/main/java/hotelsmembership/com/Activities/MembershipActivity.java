@@ -6,11 +6,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -43,7 +43,6 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
     Membership membership;
     String cardNumber;
     List<Voucher> vouchers;
-    private CollapsingToolbarLayout collapsingToolbarLayout = null;
     android.support.v4.app.FragmentTransaction fragmentTransaction;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -84,27 +83,29 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_membership);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         membership = ((Initializer) getApplication()).getCardContext().getMembership();
         cardNumber = membership.getCardNumber();
         vouchers = ((Initializer) getApplication()).getCardContext().getVouchers();
-        collapsingToolbarLayout.setTitle(membership.getHotel().getHotelName());
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ImageView imageView = new ImageView(this);
+        toolbar.addView(imageView,
+                new Toolbar.LayoutParams(150, 150, Gravity.RIGHT));
+        Glide.with(this).load(membership.getHotel().getHotelLogoURL()).skipMemoryCache(false)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .crossFade().into(imageView);
+        setSupportActionBar(toolbar);
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         getSupportActionBar().setSubtitle(cardNumber);
+        getSupportActionBar().setTitle(membership.getHotel().getHotelName());
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.content,  VouchersFragment.newInstance(((Initializer) getApplication()).getCardContext().getVouchers(),
                 ((Initializer) getApplication()).getCardContext().getCardNumber(),
                 ((Initializer) getApplication()).getCardContext().getMembership()));
         fragmentTransaction.commit();
-        Glide.with(this).load(membership.getHotel().getHotelLogoURL()).skipMemoryCache(false)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .crossFade().into((ImageView) collapsingToolbarLayout.findViewById(R.id.expandedImage));
+
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import hotelsmembership.com.Adapter.MyOfferRecyclerViewAdapter;
 import hotelsmembership.com.Applications.Initializer;
@@ -56,15 +57,18 @@ public class OfferPickerFragment extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_offer_list, container, false);
-
-        // Set the adapter
-        if (view instanceof RecyclerView) {
+        View view = inflater.inflate(R.layout.fragment_offer_picker, container, false);
+        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        Button noneButton = (Button) view.findViewById(R.id.none_button);
+        noneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onOfferPicked(null);
+            }
+        });
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             recyclerView.setAdapter(new MyOfferRecyclerViewAdapter(((Initializer) getActivity().getApplication()).getCardContext().getOffers(), mListener, mType));
-        }
         return view;
     }
 

@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="hotelsmembership.com.Activities.ReservationActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_icon"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:icon="@mipmap/ic_launcher"
+        android:title=""
+        app:showAsAction="always" />
 </menu>

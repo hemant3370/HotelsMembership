@@ -135,6 +135,7 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
+                    tableReservationBinding.venueName.setError(null);
                     chooseVenue();
                 }
                 return true;
@@ -144,6 +145,7 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
+                    tableReservationBinding.reservationDate.setError(null);
                     Calendar myCalendar = Calendar.getInstance();
                     DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                         @Override
@@ -166,6 +168,7 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
+                    tableReservationBinding.timeSlot.setError(null);
                     final Calendar myCalendar = Calendar.getInstance();
                     new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                         @Override
@@ -396,7 +399,7 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
     @Override
     public void onOfferPicked(Offer offer) {
         offerPickerFragment.dismiss();
-        tableReservationBinding.discountDetail.setText(offer.getDescription());
+        tableReservationBinding.discountDetail.setText(offer != null ? offer.getDescription() : "");
 
     }
     public interface OnFragmentInteractionListener {

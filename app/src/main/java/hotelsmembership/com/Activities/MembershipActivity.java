@@ -90,7 +90,7 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         ImageView imageView = new ImageView(this);
         toolbar.addView(imageView,
-                new Toolbar.LayoutParams(150, 150, Gravity.RIGHT));
+                new Toolbar.LayoutParams(150, 150, Gravity.END));
         Glide.with(this).load(membership.getHotel().getHotelLogoURL()).skipMemoryCache(false)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .crossFade().into(imageView);
@@ -141,10 +141,6 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
         });
         AlertDialog alert = builder.create();
         alert.show();
-    }
-
-    public void mailForBooking(View view) {
-
     }
 
     @Override

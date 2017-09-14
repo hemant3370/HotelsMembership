@@ -130,7 +130,6 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
         }
         vouchers = sorted;
         tableReservationBinding.setData(tableReservationPayload);
-        tableReservationBinding.discountDetail.setText(((Initializer) getActivity().getApplication()).getCardContext().getOffers().get(0).getDescription());
         tableReservationBinding.venueName.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

@@ -26,17 +26,13 @@
             android:foreground="?android:selectableItemBackground"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
+            android:layout_margin="24dp"
             >
         <ImageView
             android:id="@+id/voucher_IV"
             app:image_url="@{data.imageURL}"
-            android:layout_width="fill_parent"
-            android:layout_margin="4dp"
-            android:layout_height="260dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:scaleType="fitXY"
             android:adjustViewBounds="true"
             android:contentDescription="@string/voucher_image" />

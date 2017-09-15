@@ -118,9 +118,6 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
         tableReservationPayload = new TableReservationPayload();
         tableReservationPayload.setCardNumber(((Initializer) getActivity().getApplication()).getCardContext().getCardNumber());
         tableReservationPayload.setPaxCount(1);
-        if (((Initializer) getActivity().getApplication()).getCardContext().getOffers().size() > 0){
-            tableReservationPayload.setDiscountDetail(((Initializer) getActivity().getApplication()).getCardContext().getOffers().get(0).getDescription());
-        }
         List<Voucher> sorted = new ArrayList<>();
         for (Voucher v :
                 ((Initializer) getActivity().getApplication()).getCardContext().getVouchers()) {
@@ -128,7 +125,17 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
                 sorted.add(v);
             }
         }
+        List<Offer> sortedOffers = new ArrayList<>();
+        for (Offer v :
+                ((Initializer) getActivity().getApplication()).getCardContext().getOffers()) {
+            if (v.getOfferCategory().equals("FOOD") && !checkDuplicate(v.getOfferCategory(), sorted)) {
+                sortedOffers.add(v);
+            }
+        }
         vouchers = sorted;
+        if (sortedOffers.size() > 0){
+            tableReservationPayload.setDiscountDetail(sortedOffers.get(0).getDescription());
+        }
         tableReservationBinding.setData(tableReservationPayload);
         tableReservationBinding.venueName.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -380,7 +387,7 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
             String selectedVouchers = "";
             for (Voucher v : vouchers) {
                 if (v.isSelected) {
-                    selectedVouchers = selectedVouchers.concat(v.getVoucherCategory().getCategoryTitle() + "\n");
+                    selectedVouchers = selectedVouchers.concat(v.getVoucherCategory().getCategoryTitle() + ", \n");
                 }
             }
             voucherPickerFragment.resetData();

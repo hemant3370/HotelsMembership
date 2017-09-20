@@ -179,7 +179,6 @@ VouchersFragment.Listener{
                                     hotelsDatabase.daoAccess().insertOnlySingleRecord(membership);
                                 }
                             }).start();
-                            Toast.makeText(MainActivity.this,"Membership Added",Toast.LENGTH_SHORT).show();
                             onMembershipAdded();
                         }
                         else {
@@ -237,7 +236,6 @@ VouchersFragment.Listener{
                    startActivity(i);
                }
                else{
-                   progressDialog.setVisibility(View.INVISIBLE);
                    addCard(membership.getHotel(), new AddCardPayload(membership.getCardNumber(), membership.getCardExpiryDate(),
                            membership.getPhoneNumber()));
                    Toast.makeText(MainActivity.this, "Unable to load the Card. Please try again!",Toast.LENGTH_SHORT).show();
@@ -247,7 +245,8 @@ VouchersFragment.Listener{
                      @Override
                      public void onError(Throwable throwable) {
                          Toast.makeText(MainActivity.this, throwable.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
-                         progressDialog.setVisibility(View.INVISIBLE);
+                         addCard(membership.getHotel(), new AddCardPayload(membership.getCardNumber(), membership.getCardExpiryDate(),
+                                 membership.getPhoneNumber()));
                      }
 
                      @Override

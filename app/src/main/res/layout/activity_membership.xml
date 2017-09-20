@@ -20,7 +20,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay">
             <ImageView
                 android:id="@+id/toolbar_logo"
-                android:layout_margin="2dp"
+                android:layout_margin="8dp"
                 android:layout_width="?attr/actionBarSize"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="end"
@@ -29,7 +29,7 @@
     </android.support.design.widget.AppBarLayout>
     <FrameLayout
         android:id="@+id/content"
-        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginTop="72dp"
         android:layout_marginBottom="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

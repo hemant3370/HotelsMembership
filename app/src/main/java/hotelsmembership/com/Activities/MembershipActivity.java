@@ -10,7 +10,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -88,9 +87,9 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
         cardNumber = membership.getCardNumber();
         vouchers = ((Initializer) getApplication()).getCardContext().getVouchers();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        ImageView imageView = new ImageView(this);
-        toolbar.addView(imageView,
-                new Toolbar.LayoutParams(150, 150, Gravity.END));
+        ImageView imageView = (ImageView) toolbar.findViewById(R.id.toolbar_logo);
+//        toolbar.addView(imageView,
+//                new Toolbar.LayoutParams(150, 150, Gravity.END));
         Glide.with(this).load(membership.getHotel().getHotelLogoURL()).skipMemoryCache(false)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .crossFade().into(imageView);

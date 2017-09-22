@@ -153,6 +153,7 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     tableReservationBinding.reservationDate.setError(null);
                     Calendar myCalendar = Calendar.getInstance();
+                    myCalendar.add(Calendar.HOUR, 6);
                     DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -176,6 +177,8 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     tableReservationBinding.timeSlot.setError(null);
                     final Calendar myCalendar = Calendar.getInstance();
+                    myCalendar.add(Calendar.HOUR_OF_DAY, 6);
+                    myCalendar.add(Calendar.MINUTE, 6);
                     new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {

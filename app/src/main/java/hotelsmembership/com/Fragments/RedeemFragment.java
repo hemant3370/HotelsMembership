@@ -225,7 +225,7 @@ public class RedeemFragment extends BottomSheetDialogFragment {
         SmsBroadcastReceiver.bindListener(new SmsListener() {
             @Override
             public void messageReceived(@NonNull String messageText) {
-                if (!messageText.equals("") && messageText.contains("OTP")) {
+                if (!messageText.equals("") && messageText.contains("OTP") && RedeemFragment.this.isVisible()) {
                     Log.d("Text", messageText);
                     fragmentRedeemBinding.redeemOtp.setText(new OTPFinder().getOTPFrom(messageText));
                     fragmentRedeemBinding.verifyBtn.performClick();

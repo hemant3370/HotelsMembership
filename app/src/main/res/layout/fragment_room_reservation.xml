@@ -145,7 +145,7 @@
                     android:tint="@color/semi_white"
                     android:shadowColor="@android:color/holo_red_dark"
                     app:srcCompat="@drawable/ic_call_black_24dp"
-                    android:onClick="callForTableBooking"
+                    android:onClick="callForRoomBooking"
                     />
             </LinearLayout>
 

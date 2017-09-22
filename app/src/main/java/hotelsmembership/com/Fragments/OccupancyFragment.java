@@ -1,16 +1,21 @@
 package hotelsmembership.com.Fragments;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.NumberPicker;
 
 import hotelsmembership.com.R;
 
-public class OccupancyFragment extends BottomSheetDialogFragment {
+public class OccupancyFragment extends DialogFragment {
     // TODO: Rename parameter arguments, choose names that match
 
 
@@ -28,11 +33,11 @@ public class OccupancyFragment extends BottomSheetDialogFragment {
         this.mListener = mListener;
     }
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_occupancy, container, false);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View root = inflater.inflate(R.layout.fragment_occupancy, null, false);
         singleRoom = (NumberPicker) root.findViewById(R.id.numberPickersingle);
         doubleRoom = (NumberPicker) root.findViewById(R.id.numberPickerdouble);
         extraBed = (NumberPicker) root.findViewById(R.id.numberPickerextra);
@@ -63,7 +68,25 @@ public class OccupancyFragment extends BottomSheetDialogFragment {
                 sendOccupancy();
             }
         });
-        return root;
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
+        Toolbar toolbar = new Toolbar(getContext());
+        toolbar.setTitle("Select Occupancy");
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
+        return new AlertDialog.Builder(getActivity())
+                // set dialog icon
+                .setIcon(android.R.drawable.stat_notify_error)
+                // set Dialog Title
+                .setCustomTitle(toolbar)
+                // Set Dialog Message
+                .setView(root)
+
+                // positive button
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create();
     }
        void sendOccupancy(){
            String occupancy = "";

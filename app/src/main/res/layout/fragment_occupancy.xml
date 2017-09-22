@@ -16,10 +16,12 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Single Bedrooms"/>
+                android:textAlignment="center"
+                android:text="Single \n Bedrooms"/>
             <NumberPicker
                 android:id="@+id/numberPickersingle"
                 android:layout_width="match_parent"
+                android:descendantFocusability="blocksDescendants"
                 android:layout_height="wrap_content"
                 />
         </LinearLayout>
@@ -27,31 +29,34 @@
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:layout_weight="1"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Double Bedroom"/>
-            <NumberPicker
-                android:id="@+id/numberPickerdouble"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
             android:layout_height="wrap_content">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:text="Extra Beds"/>
+                android:text="Double \n Bedroom"/>
+            <NumberPicker
+                android:id="@+id/numberPickerdouble"
+                android:layout_width="match_parent"
+                android:descendantFocusability="blocksDescendants"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="Extra \nBeds"/>
             <NumberPicker
                 android:id="@+id/numberPickerextra"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:descendantFocusability="blocksDescendants"
                 android:layout_weight="1" />
         </LinearLayout>
     </LinearLayout>

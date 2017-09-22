@@ -2,10 +2,12 @@ package hotelsmembership.com.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
@@ -116,20 +118,28 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
 
         String[] tokens = membership.getHotel().getPhoneNumbers().getTableResevation().replace("|",",").split(",");
         if (tokens.length > 1) {
-            calllist.add("For Table Booking :");
             Collections.addAll(calllist, tokens);
         }
-        tokens = membership.getHotel().getPhoneNumbers().getRoomResevation().replace("|",",").split(",");
+        chooseNumberToCall(calllist.toArray(tokens), "Call For Table Reservation");
+    }
+    public void callForRoomBooking(View view) {
+        ArrayList<String> calllist = new ArrayList<>();
+
+        String[] tokens = membership.getHotel().getPhoneNumbers().getRoomResevation().replace("|",",").split(",");
         if (tokens.length > 1) {
-            calllist.add("For Room Booking :");
             Collections.addAll(calllist, tokens);
         }
 
-        chooseNumberToCall(calllist.toArray(tokens));
+        chooseNumberToCall(calllist.toArray(tokens), "Call For Room Reservation");
     }
-    void chooseNumberToCall(final String[] numbers){
+    void chooseNumberToCall(final String[] numbers, String title){
         AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.MyDialogTheme);
-        builder.setTitle("Call to Book");
+        Toolbar toolbar = new Toolbar(this);
+        toolbar.setTitle(title);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimaryDark));
+        builder.setCustomTitle(toolbar);
+//        builder.setTitle(title);
         builder.setItems(numbers, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 // Do something with the selection

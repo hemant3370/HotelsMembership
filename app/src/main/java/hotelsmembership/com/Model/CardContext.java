@@ -57,7 +57,6 @@ public class CardContext {
     public List<Voucher> getVouchers() {
         return vouchers;
     }
-
     public void setVouchers(List<Voucher> vouchers) {
         this.vouchers = vouchers;
     }

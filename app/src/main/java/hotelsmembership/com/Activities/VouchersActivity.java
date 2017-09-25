@@ -140,6 +140,7 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
         if(redeemFragment != null) redeemFragment.dismissAllowingStateLoss();
         if (success){
             vouchers.get(getIntent().getIntExtra(ARG_INDEX,0)).setStatus("R");
+            Voucher.sortedVouchers(((Initializer) getApplication()).getCardContext().getVouchers()).get(getIntent().getIntExtra(ARG_INDEX,0)).setStatus("R");
             mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),vouchers,cardNumber,membership);
             mViewPager.setAdapter(mSectionsPagerAdapter);
             mViewPager.setCurrentItem(getIntent().getIntExtra(ARG_INDEX,0));

@@ -110,6 +110,11 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public void onVoucherClicked(Voucher voucher, String cardNumber, Membership membership) {
 
     }

@@ -7,6 +7,9 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Voucher implements Parcelable {
 
     @SerializedName("voucherNumber")
@@ -45,7 +48,31 @@ public class Voucher implements Parcelable {
     public void setStatus(String status) {
         this.status = status;
     }
+    private static boolean checkDuplicate(String type, List<Voucher> list){
+        for (Voucher voucher : list){
+            if(voucher.getVoucherCategory().getCategoryCode().equals(type)){
+                return true;
+            }
+        }
+        return  false;
+    }
+    public static List<Voucher> sortedVouchers(List<Voucher> toSortList){
+        List<Voucher> sorted = new ArrayList<>();
 
+        for (Voucher v :
+                toSortList) {
+            if (!v.getStatus().equals("Redeemed") && !checkDuplicate(v.getVoucherCategory().getCategoryCode(), sorted)) {
+                sorted.add(v);
+            }
+        }
+        for (Voucher v :
+                toSortList) {
+            if (v.getStatus().equals("Redeemed")) {
+                sorted.add(v);
+            }
+        }
+        return sorted;
+    }
     public VoucherCategory getVoucherCategory() {
         return voucherCategory;
     }

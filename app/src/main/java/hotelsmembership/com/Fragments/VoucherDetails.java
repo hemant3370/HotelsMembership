@@ -3,9 +3,9 @@ package hotelsmembership.com.Fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,7 +65,7 @@ public class VoucherDetails extends Fragment {
         voucherDetailsBinding.setData(voucher);
         if (voucher.getStatus().equals("Redeemed")){
             voucherDetailsBinding.redeemBtn.setText("Redeemed");
-            voucherDetailsBinding.redeemBtn.setBackgroundColor(Color.RED);
+            voucherDetailsBinding.redeemBtn.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.redeemed));
         }
         voucherDetailsBinding.tncBtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -23,6 +23,8 @@ import hotelsmembership.com.Model.Vouchers.Voucher;
 import hotelsmembership.com.R;
 import hotelsmembership.com.databinding.VoucherItemBinding;
 
+import static hotelsmembership.com.Model.Vouchers.Voucher.sortedVouchers;
+
 public class VouchersFragment extends Fragment implements CardVoucherClickListener {
 
     // TODO: Customize parameter argument names
@@ -33,6 +35,7 @@ public class VouchersFragment extends Fragment implements CardVoucherClickListen
     private Listener mListener;
     List<Voucher> vouchers ;
     String cardNumber;
+    RecyclerView recyclerView;
     Membership membership;
     // TODO: Customize parameters
     public static VouchersFragment newInstance(List<Voucher> vouchers, String cardNumber, Membership membership) {
@@ -60,38 +63,27 @@ public class VouchersFragment extends Fragment implements CardVoucherClickListen
         cardNumber = getArguments().getString(ARG_CARD);
         membership = getArguments().getParcelable(ARG_MEMBERSHIP);
         List<Voucher> items = getArguments().getParcelableArrayList(ARG_VOUCHERS);
-        List<Voucher> sorted = new ArrayList<>();
 
-        for (Voucher v :
-                items) {
-            if (!v.getStatus().equals("Redeemed") && !checkDuplicate(v.getVoucherCategory().getCategoryCode(), sorted)) {
-                sorted.add(v);
-            }
-        }
-        for (Voucher v :
-                items) {
-            if (v.getStatus().equals("Redeemed")) {
-                sorted.add(v);
-            }
-        }
-        vouchers = sorted;
+        vouchers = sortedVouchers(items);
         return inflater.inflate(R.layout.voucher_list, container, false);
     }
-    boolean checkDuplicate(String type, List<Voucher> list){
-        for (Voucher voucher : list){
-            if(voucher.getVoucherCategory().getCategoryCode().equals(type)){
-                return true;
-            }
-        }
-        return  false;
-    }
+
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        final RecyclerView recyclerView = (RecyclerView) view;
+        recyclerView = (RecyclerView) view;
         recyclerView.setNestedScrollingEnabled(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(new VoucherGistAdapter(vouchers,this));
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (recyclerView != null) {
+            recyclerView.setAdapter(new VoucherGistAdapter(vouchers,this));
+        }
     }
 
     @Override

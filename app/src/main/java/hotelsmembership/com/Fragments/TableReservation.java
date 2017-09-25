@@ -247,7 +247,7 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
                 // Check for a valid password, if the user entered one.
 
                 if (TextUtils.isEmpty(tableReservationBinding.venueName.getText())) {
-                    tableReservationBinding.venueName.setError(getString(R.string.error_field_nohotel));
+                    tableReservationBinding.venueName.setError(getString(R.string.error_field_novenue));
                     focusView = tableReservationBinding.venueName;
                     cancel = true;
                 }

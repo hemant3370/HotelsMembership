@@ -41,7 +41,7 @@ public class VoucherPickerAdapter extends RecyclerView.Adapter<VoucherPickerAdap
         Voucher voucher = mValues.get(position);
         holder.itemBinding.getRoot().setAlpha(voucher.getStatus().equals("Redeemed") ? (float) 0.5 : (float) 1.0);
         if(voucher.isSelected) {
-            holder.itemBinding.getRoot().setBackgroundColor(ContextCompat.getColor(holder.itemBinding.getRoot().getContext(), R.color.green_color));
+            holder.itemBinding.getRoot().setBackground(ContextCompat.getDrawable(holder.itemBinding.getRoot().getContext(), R.drawable.palewood));
         }
         else {
             holder.itemBinding.getRoot().setBackground(ContextCompat.getDrawable(holder.itemBinding.getRoot().getContext(), R.drawable.background));

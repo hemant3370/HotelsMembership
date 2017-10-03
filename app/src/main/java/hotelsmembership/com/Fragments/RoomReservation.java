@@ -5,13 +5,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -114,20 +111,7 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         roomReservationBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_room_reservation, container, false);
-        roomReservationPayload = new RoomReservationPayload();
-        roomReservationPayload.setCardNumber(((Initializer) getActivity().getApplication()).getCardContext().getCardNumber());
-        if (((Initializer) getActivity().getApplication()).getCardContext().getOffers().size() > 0){
-            roomReservationPayload.setDiscountDetail(((Initializer) getActivity().getApplication()).getCardContext().getOffers().get(0).getDescription());
-        }
-        List<Voucher> sorted = new ArrayList<>();
-        for (Voucher v :
-                ((Initializer) getActivity().getApplication()).getCardContext().getVouchers()) {
-            if (!v.getStatus().equals("Redeemed") && v.getVoucherCategory().getCategoryType().equals("Stay") && !checkDuplicate(v.getVoucherCategory().getCategoryCode(), sorted)) {
-                sorted.add(v);
-            }
-        }
-        vouchers = sorted;
-        roomReservationBinding.setData(roomReservationPayload);
+        setupData();
         roomReservationBinding.checkinDate.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -258,7 +242,7 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
                 if (cancel) {
                     // There was an error; don't attempt login and focus the first
                     // form field with an error.
-                    focusView.requestFocus();
+//                    focusView.requestFocus();
                 } else if (roomReservationBinding.getData() != null) {
                     // Show a progress spinner,
 
@@ -276,7 +260,22 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
         });
         return roomReservationBinding.getRoot();
     }
-
+    private void setupData(){
+        roomReservationPayload = new RoomReservationPayload();
+        roomReservationPayload.setCardNumber(((Initializer) getActivity().getApplication()).getCardContext().getCardNumber());
+        if (((Initializer) getActivity().getApplication()).getCardContext().getOffers().size() > 0){
+            roomReservationPayload.setDiscountDetail(((Initializer) getActivity().getApplication()).getCardContext().getOffers().get(0).getDescription());
+        }
+        List<Voucher> sorted = new ArrayList<>();
+        for (Voucher v :
+                ((Initializer) getActivity().getApplication()).getCardContext().getVouchers()) {
+            if (!v.getStatus().equals("Redeemed") && v.getVoucherCategory().getCategoryType().equals("Stay") && !checkDuplicate(v.getVoucherCategory().getCategoryCode(), sorted)) {
+                sorted.add(v);
+            }
+        }
+        vouchers = sorted;
+        roomReservationBinding.setData(roomReservationPayload);
+    }
     private void book() {
         if (mRetrofit == null){
             mRetrofit = RestClient.getClient();
@@ -295,11 +294,13 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
                     public void onNext(final BasicResponse addMembershipResponse) {
                         progressBar.dismiss();
                         if (addMembershipResponse.getStatusCode() == 200 && addMembershipResponse.getContent() != null ){
+                            setupData();
                             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                             builder.setTitle("Success!!!");
                             builder.setMessage(addMembershipResponse.getContent());
                             // Create the AlertDialog object and return it
                              builder.create().show();
+
                         }
                         else {
                             Toast.makeText(getContext(),"Error " + addMembershipResponse.getMessage(),Toast.LENGTH_SHORT).show();

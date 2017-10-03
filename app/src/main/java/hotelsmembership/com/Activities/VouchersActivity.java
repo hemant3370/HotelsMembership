@@ -11,8 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
@@ -77,8 +81,17 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
         membership = getIntent().getParcelableExtra(ARG_MEMBERSHIP);
         vouchers = getIntent().getParcelableArrayListExtra(ARG_VOUCHERS);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ImageView imageView = (ImageView) toolbar.findViewById(R.id.toolbar_logo);
+//        toolbar.addView(imageView,
+//                new Toolbar.LayoutParams(150, 150, Gravity.END));
+        Glide.with(this).load(membership.getHotel().getHotelLogoURL()).skipMemoryCache(false)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .crossFade().into(imageView);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setSubtitle(cardNumber);
+        getSupportActionBar().setTitle(membership.getHotel().getHotelName());
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -139,8 +152,16 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
     public void onRedemption(Boolean success, String voucherNo) {
         if(redeemFragment != null) redeemFragment.dismissAllowingStateLoss();
         if (success){
-            vouchers.get(getIntent().getIntExtra(ARG_INDEX,0)).setStatus("R");
-            Voucher.sortedVouchers(((Initializer) getApplication()).getCardContext().getVouchers()).get(getIntent().getIntExtra(ARG_INDEX,0)).setStatus("R");
+            for (Voucher voucher : vouchers){
+                if (voucher.getVoucherNumber().equals(voucherNo)){
+                    voucher.setStatus("R");
+                }
+            }
+            for (Voucher voucher : Voucher.sortedVouchers(((Initializer) getApplication()).getCardContext().getVouchers())){
+                if (voucher.getVoucherNumber().equals(voucherNo)){
+                    voucher.setStatus("R");
+                }
+            }
             mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),vouchers,cardNumber,membership);
             mViewPager.setAdapter(mSectionsPagerAdapter);
             mViewPager.setCurrentItem(getIntent().getIntExtra(ARG_INDEX,0));

@@ -129,10 +129,16 @@ public class AddMembership extends LifecycleFragment {
 
             }
         });
-        fragmentAddCardBinding.acceptTV.setOnClickListener(new View.OnClickListener() {
+        fragmentAddCardBinding.checkbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fragmentAddCardBinding.checkbox.setError(null);
+            }
+        });
+        fragmentAddCardBinding.acceptTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
                 if (selectedHotel != null && selectedHotel.getMembershipTermsAndConditions() != null && selectedHotel.getMembershipTermsAndConditions().size() > 0) {
                     String[] terms = new String[selectedHotel.getMembershipTermsAndConditions().size()];
                     for (int i = 0; i < terms.length; i++) {
@@ -207,6 +213,11 @@ public class AddMembership extends LifecycleFragment {
                     focusView = fragmentAddCardBinding.cardNumber;
                     cancel = true;
                 }
+                if (TextUtils.isEmpty(fragmentAddCardBinding.holderName.getText())) {
+                    fragmentAddCardBinding.holderName.setError(getString(R.string.error_field_required));
+                    focusView = fragmentAddCardBinding.holderName;
+                    cancel = true;
+                }
                 if (TextUtils.isEmpty(fragmentAddCardBinding.phoneNumber.getText())) {
                     fragmentAddCardBinding.phoneNumber.setError(getString(R.string.error_field_required));
                     focusView = fragmentAddCardBinding.phoneNumber;
@@ -221,7 +232,7 @@ public class AddMembership extends LifecycleFragment {
                 if (cancel) {
                     // There was an error; don't attempt login and focus the first
                     // form field with an error.
-                    focusView.requestFocus();
+//                    focusView.requestFocus();
                 } else if (fragmentAddCardBinding.getData() != null) {
                     // Show a progress spinner,
                     addCard();

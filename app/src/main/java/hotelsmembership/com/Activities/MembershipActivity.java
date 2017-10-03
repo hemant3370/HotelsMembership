@@ -96,7 +96,8 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .crossFade().into(imageView);
         setSupportActionBar(toolbar);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         getSupportActionBar().setSubtitle(cardNumber);

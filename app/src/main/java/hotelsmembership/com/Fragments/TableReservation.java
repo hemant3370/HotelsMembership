@@ -115,28 +115,7 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
                              Bundle savedInstanceState) {
         tableReservationBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_table_reservation, container, false);
-        tableReservationPayload = new TableReservationPayload();
-        tableReservationPayload.setCardNumber(((Initializer) getActivity().getApplication()).getCardContext().getCardNumber());
-        tableReservationPayload.setPaxCount(1);
-        List<Voucher> sorted = new ArrayList<>();
-        for (Voucher v :
-                ((Initializer) getActivity().getApplication()).getCardContext().getVouchers()) {
-            if (!v.getStatus().equals("Redeemed") && v.getVoucherCategory().getCategoryType().equals("Dine") && !checkDuplicate(v.getVoucherCategory().getCategoryCode(), sorted)) {
-                sorted.add(v);
-            }
-        }
-        List<Offer> sortedOffers = new ArrayList<>();
-        for (Offer v :
-                ((Initializer) getActivity().getApplication()).getCardContext().getOffers()) {
-            if (v.getOfferCategory().equals("FOOD") && !checkDuplicate(v.getOfferCategory(), sorted)) {
-                sortedOffers.add(v);
-            }
-        }
-        vouchers = sorted;
-        if (sortedOffers.size() > 0){
-            tableReservationPayload.setDiscountDetail(sortedOffers.get(0).getDescription());
-        }
-        tableReservationBinding.setData(tableReservationPayload);
+        setupData();
         tableReservationBinding.venueName.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -270,7 +249,7 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
                 if (cancel) {
                     // There was an error; don't attempt login and focus the first
                     // form field with an error.
-                    focusView.requestFocus();
+//                    focusView.requestFocus();
                 } else if (tableReservationBinding.getData() != null) {
                     // Show a progress spinner,
 
@@ -287,6 +266,30 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
             }
         });
         return tableReservationBinding.getRoot();
+    }
+    private void setupData(){
+        tableReservationPayload = new TableReservationPayload();
+        tableReservationPayload.setCardNumber(((Initializer) getActivity().getApplication()).getCardContext().getCardNumber());
+        tableReservationPayload.setPaxCount(1);
+        List<Voucher> sorted = new ArrayList<>();
+        for (Voucher v :
+                ((Initializer) getActivity().getApplication()).getCardContext().getVouchers()) {
+            if (!v.getStatus().equals("Redeemed") && v.getVoucherCategory().getCategoryType().equals("Dine") && !checkDuplicate(v.getVoucherCategory().getCategoryCode(), sorted)) {
+                sorted.add(v);
+            }
+        }
+        List<Offer> sortedOffers = new ArrayList<>();
+        for (Offer v :
+                ((Initializer) getActivity().getApplication()).getCardContext().getOffers()) {
+            if (v.getOfferCategory().equals("FOOD") && !checkDuplicate(v.getOfferCategory(), sorted)) {
+                sortedOffers.add(v);
+            }
+        }
+        vouchers = sorted;
+        if (sortedOffers.size() > 0){
+            tableReservationPayload.setDiscountDetail(sortedOffers.get(0).getDescription());
+        }
+        tableReservationBinding.setData(tableReservationPayload);
     }
     private boolean checkDuplicate(String type, List<Voucher> list){
         for (Voucher voucher : list){
@@ -314,6 +317,7 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
                     public void onNext(final BasicResponse addMembershipResponse) {
                         progressBar.dismiss();
                         if (addMembershipResponse.getStatusCode() == 200 && addMembershipResponse.getContent() != null ){
+                            setupData();
                             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                             builder.setTitle("Success!!!");
                             builder.setMessage(addMembershipResponse.getContent());
@@ -390,7 +394,7 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
             String selectedVouchers = "";
             for (Voucher v : vouchers) {
                 if (v.isSelected) {
-                    selectedVouchers = selectedVouchers.concat(v.getVoucherCategory().getCategoryTitle() + ", \n");
+                    selectedVouchers = selectedVouchers.concat(v.getVoucherCategory().getCategoryTitle() + "\n");
                 }
             }
             voucherPickerFragment.resetData();

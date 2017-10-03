@@ -65,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/card_number"
                         android:text="@={data.cardNumber}"
-                        android:inputType="number"
+                        android:inputType="text"
                         android:imeOptions="actionNext"
                         android:maxLines="1" />
 

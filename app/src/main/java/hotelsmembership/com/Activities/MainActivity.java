@@ -19,6 +19,12 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -179,7 +185,29 @@ VouchersFragment.Listener{
                                     hotelsDatabase.daoAccess().insertOnlySingleRecord(membership);
                                 }
                             }).start();
-                            onMembershipAdded();
+                            String url = "";
+                            if (addMembershipResponse.getContent().getCardType().equals("")) {
+                                url = selectedHotel.getCardsImageURLs().getGold();
+                            } else {
+                                url = addMembershipResponse.getContent().getCardType().equals("G") ?
+                                        selectedHotel.getCardsImageURLs().getGold() :
+                                        selectedHotel.getCardsImageURLs().getSilver();
+                            }
+                            Glide.with(MainActivity.this).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).listener(new RequestListener<String, GlideDrawable>() {
+                                @Override
+                                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                    progressDialog.setVisibility(View.INVISIBLE);
+                                    onMembershipAdded();
+                                    return true;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                    progressDialog.setVisibility(View.INVISIBLE);
+                                    onMembershipAdded();
+                                    return true;
+                                }
+                            }).into(1080,1080);
                         }
                         else {
                             Toast.makeText(MainActivity.this,"Error " + addMembershipResponse.getMessage(),Toast.LENGTH_SHORT).show();
@@ -194,7 +222,7 @@ VouchersFragment.Listener{
 
                     @Override
                     public void onComplete() {
-                        progressDialog.setVisibility(View.INVISIBLE);
+
                     }
                 });
     }

@@ -5,7 +5,7 @@
     <color name="colorAccent">#e91e63</color>
     <color name="screenbg">#E5E4E2</color>
     <color name="lightblue">#f2fcfe</color>
-
+    <color name="trans">#00000000</color>
     <color name="green_continue">#1fc055</color>
     <color name="chip_color">#d4edfa</color>
     <color name="chip_inner_color">#e0e4e4</color>

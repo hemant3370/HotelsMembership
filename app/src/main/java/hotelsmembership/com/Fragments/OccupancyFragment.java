@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -20,7 +21,7 @@ public class OccupancyFragment extends DialogFragment {
 
 
     // TODO: Rename and change types of parameters
-    private int single,two,extra;
+     int single,two,extra;
     NumberPicker singleRoom,doubleRoom,extraBed;
 
     private OnOccupancyInteractionListener mListener;
@@ -34,6 +35,7 @@ public class OccupancyFragment extends DialogFragment {
     }
 
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -47,6 +49,9 @@ public class OccupancyFragment extends DialogFragment {
         doubleRoom.setMaxValue(3);
         extraBed.setMinValue(0);
         extraBed.setMaxValue(3);
+        singleRoom.setValue(single);
+        doubleRoom.setValue(two);
+        extraBed.setValue(extra);
         singleRoom.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
@@ -89,17 +94,8 @@ public class OccupancyFragment extends DialogFragment {
                 }).create();
     }
        void sendOccupancy(){
-           String occupancy = "";
-           if (single > 0){
-               occupancy = "Single Bed: " + String.valueOf(single) + ", ";
-           }
-           if (two > 0){
-               occupancy = occupancy.concat("Double Bedroom: " + String.valueOf(two) + ", ");
-           }
-           if (extra > 0){
-               occupancy = occupancy.concat("Extra Bed: " + String.valueOf(extra));
-           }
-            mListener.onOccupancyChanged(occupancy);
+
+            mListener.onOccupancyChanged(single, two, extra);
         }
     // TODO: Rename method, update argument and hook method into UI event
 
@@ -127,6 +123,6 @@ public class OccupancyFragment extends DialogFragment {
      */
     public interface OnOccupancyInteractionListener {
         // TODO: Update argument type and name
-        void onOccupancyChanged(String occupancy);
+        void onOccupancyChanged(int single, int two, int extra);
     }
 }

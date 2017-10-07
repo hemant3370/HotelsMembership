@@ -62,9 +62,7 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
     private static final String ARG_PARAM2 = "param2";
     private ProgressDialog progressBar;
     List<Voucher> vouchers = new ArrayList<>();
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    int single, two, extra;
     @Inject
     Retrofit mRetrofit;
     private CompositeDisposable compositeDisposable =
@@ -100,10 +98,7 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
@@ -183,8 +178,9 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
                     roomReservationBinding.occupancy.setError(null);
                     occupancyFragment = new OccupancyFragment();
                     occupancyFragment.setmListener(RoomReservation.this);
-//                    occupancyFragment.show(getChildFragmentManager(), occupancyFragment.getTag());
-
+                    occupancyFragment.single = single;
+                    occupancyFragment.two = two;
+                    occupancyFragment.extra = extra;
                     occupancyFragment.show(getChildFragmentManager(), occupancyFragment.getTag());
 
                 }
@@ -393,7 +389,20 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
     }
 
     @Override
-    public void onOccupancyChanged(String occupancy) {
+    public void onOccupancyChanged(int single, int two, int extra) {
+        String occupancy = "";
+        if (single > 0){
+            occupancy = "Single Bed: " + String.valueOf(single) + "\n";
+        }
+        if (two > 0){
+            occupancy = occupancy.concat("Double Bedroom: " + String.valueOf(two) + "\n");
+        }
+        if (extra > 0){
+            occupancy = occupancy.concat("Extra Bed: " + String.valueOf(extra));
+        }
+        this.single = single;
+        this.two = two;
+        this.extra = extra;
         roomReservationBinding.occupancy.setText(occupancy);
     }
 

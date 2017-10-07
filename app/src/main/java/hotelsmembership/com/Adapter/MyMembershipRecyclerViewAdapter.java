@@ -23,7 +23,7 @@ public class MyMembershipRecyclerViewAdapter extends RecyclerView.Adapter<MyMemb
 
     private final List<Membership> mValues;
     private final OnListFragmentInteractionListener mListener;
-    Context context;
+    private Context context;
     public MyMembershipRecyclerViewAdapter(List<Membership> items, OnListFragmentInteractionListener listener, Context context) {
         mValues = items;
         mListener = listener;

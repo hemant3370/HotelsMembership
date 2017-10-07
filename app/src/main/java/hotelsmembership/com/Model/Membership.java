@@ -33,6 +33,9 @@ public class Membership implements Parcelable {
     @SerializedName("email")
     @Expose
     private String email;
+    @SerializedName("memberImageUrl")
+    @Expose
+    private String memberImageUrl;
     @SerializedName("cardValidFromDate")
     @Expose
     private String cardValidFromDate;
@@ -140,6 +143,14 @@ public class Membership implements Parcelable {
         this.tokenExpirydate = tokenExpirydate;
     }
 
+    public String getMemberImageUrl() {
+         return "http://hotelsmembership.com" + memberImageUrl.replace("http://hotelsmembership.com","");
+    }
+
+    public void setMemberImageUrl(String memberImageUrl) {
+        this.memberImageUrl = memberImageUrl;
+    }
+
     public Hotel getHotel() {
         return hotel;
     }
@@ -167,6 +178,7 @@ public class Membership implements Parcelable {
         dest.writeString(this.cardType);
         dest.writeString(this.authToken);
         dest.writeString(this.tokenExpirydate);
+        dest.writeString(this.memberImageUrl);
     }
 
     public Membership() {
@@ -185,6 +197,7 @@ public class Membership implements Parcelable {
         this.cardType = in.readString();
         this.authToken = in.readString();
         this.tokenExpirydate = in.readString();
+        this.memberImageUrl = in.readString();
     }
 
     public static final Creator<Membership> CREATOR = new Creator<Membership>() {

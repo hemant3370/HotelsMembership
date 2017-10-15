@@ -124,6 +124,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
+                android:layout_margin="2dp"
                 android:layout_height="wrap_content">
                 <Button
                     android:id="@+id/submit_Btn"
@@ -138,14 +139,10 @@
                     android:layout_marginStart="30dp"
                     android:layout_marginEnd="30dp"
                     android:textStyle="bold" />
-                <android.support.design.widget.FloatingActionButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:elevation="8dp"
-                    android:layout_margin="8dp"
-                    android:tint="@color/semi_white"
-                    android:shadowColor="@android:color/holo_red_dark"
-                    app:srcCompat="@drawable/ic_call_black_24dp"
+                <Button
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:background="@mipmap/phone"
                     android:onClick="callForTableBooking"
                     />
             </LinearLayout>

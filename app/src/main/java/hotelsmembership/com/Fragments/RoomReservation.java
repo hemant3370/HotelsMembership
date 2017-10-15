@@ -392,7 +392,7 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
     public void onOccupancyChanged(int single, int two, int extra) {
         String occupancy = "";
         if (single > 0){
-            occupancy = "Single Bed: " + String.valueOf(single) + "\n";
+            occupancy = "Single Bedroom: " + String.valueOf(single) + "\n";
         }
         if (two > 0){
             occupancy = occupancy.concat("Double Bedroom: " + String.valueOf(two) + "\n");

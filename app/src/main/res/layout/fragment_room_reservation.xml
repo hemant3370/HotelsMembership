@@ -13,22 +13,11 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:orientation="vertical">
-
-            <!--<android.support.design.widget.TextInputLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content">-->
-
-                <!--<AutoCompleteTextView-->
-                    <!--android:id="@+id/venue_name"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:hint="@string/venue_name"-->
-                    <!--android:text="@={data.venue}"-->
-                    <!--android:inputType="textCapWords"-->
-                    <!--android:imeOptions="actionDone"-->
-                    <!--android:maxLines="1" />-->
-
-            <!--</android.support.design.widget.TextInputLayout>-->
+            <LinearLayout
+                 android:id="@+id/baseView"
+                android:orientation="vertical"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -121,6 +110,7 @@
                      />
 
             </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
@@ -145,7 +135,7 @@
                     android:onClick="callForRoomBooking"
                     />
             </LinearLayout>
-
         </LinearLayout>
+
     </android.support.v4.widget.NestedScrollView>
 </layout>

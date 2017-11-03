@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -252,13 +253,33 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
 //                    focusView.requestFocus();
                 } else if (tableReservationBinding.getData() != null) {
                     // Show a progress spinner,
+                    AlertDialog.Builder builder =  new  AlertDialog.Builder(getActivity())
+                            .setTitle("Please Confirm")
+                            .setPositiveButton("OK",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            // do something...
+                                            progressBar=new ProgressDialog(getContext());
+                                            progressBar.setMessage("Submitting...");
+                                            progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                            progressBar.setIndeterminate(true);
+                                            progressBar.show();
+                                            book();
+                                        }
+                                    }
+                            )
+                            .setNegativeButton("Cancel",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            dialog.dismiss();
+                                        }
+                                    }
+                            );
+                    ImageView imageView = new ImageView(getContext());
+                    imageView.setImageBitmap(RoomReservation.getScreenShot(tableReservationBinding.baseView));
+                    builder.setView(imageView);
+                    builder.create().show();
 
-                    progressBar=new ProgressDialog(getContext());
-                    progressBar.setMessage("Submitting...");
-                    progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                    progressBar.setIndeterminate(true);
-                    progressBar.show();
-                    book();
                 }
                 else {
                     Toast.makeText(getContext(),"Fill All Details",Toast.LENGTH_SHORT).show();

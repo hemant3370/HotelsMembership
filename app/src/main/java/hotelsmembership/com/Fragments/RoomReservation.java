@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.text.DateFormat;
@@ -102,7 +104,7 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         roomReservationBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_room_reservation, container, false);
@@ -241,13 +243,33 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
 //                    focusView.requestFocus();
                 } else if (roomReservationBinding.getData() != null) {
                     // Show a progress spinner,
+                    AlertDialog.Builder builder =  new  AlertDialog.Builder(getActivity())
+                            .setTitle("Please Confirm")
+                            .setPositiveButton("OK",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            // do something...
+                                            progressBar=new ProgressDialog(getContext());
+                                            progressBar.setMessage("Submitting...");
+                                            progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                            progressBar.setIndeterminate(true);
+                                            progressBar.show();
+                                            book();
+                                        }
+                                    }
+                            )
+                            .setNegativeButton("Cancel",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            dialog.dismiss();
+                                        }
+                                    }
+                            );
+                    ImageView imageView = new ImageView(getContext());
+                    imageView.setImageBitmap(getScreenShot(roomReservationBinding.baseView));
+                    builder.setView(imageView);
+                    builder.create().show();
 
-                    progressBar=new ProgressDialog(getContext());
-                    progressBar.setMessage("Submitting...");
-                    progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                    progressBar.setIndeterminate(true);
-                    progressBar.show();
-                    book();
                 }
                 else {
                     Toast.makeText(getContext(),"Fill All Details",Toast.LENGTH_SHORT).show();
@@ -255,6 +277,12 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
             }
         });
         return roomReservationBinding.getRoot();
+    }
+    public static Bitmap getScreenShot(View view) {
+        view.setDrawingCacheEnabled(true);
+        Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
+        view.setDrawingCacheEnabled(false);
+        return bitmap;
     }
     private void setupData(){
         roomReservationPayload = new RoomReservationPayload();
@@ -390,20 +418,20 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
 
     @Override
     public void onOccupancyChanged(int single, int two, int extra) {
-        String occupancy = "";
+        List<String> occupancy = new ArrayList<>();
         if (single > 0){
-            occupancy = "Single Bedroom: " + String.valueOf(single) + "\n";
+            occupancy.add("Single Bedroom: " + String.valueOf(single));
         }
         if (two > 0){
-            occupancy = occupancy.concat("Double Bedroom: " + String.valueOf(two) + "\n");
+            occupancy.add("Double Bedroom: " + String.valueOf(two));
         }
         if (extra > 0){
-            occupancy = occupancy.concat("Extra Bed: " + String.valueOf(extra));
+            occupancy.add("Extra Bed: " + String.valueOf(extra));
         }
         this.single = single;
         this.two = two;
         this.extra = extra;
-        roomReservationBinding.occupancy.setText(occupancy);
+        roomReservationBinding.occupancy.setText(TextUtils.join(", ", occupancy));
     }
 
     public interface OnFragmentInteractionListener {

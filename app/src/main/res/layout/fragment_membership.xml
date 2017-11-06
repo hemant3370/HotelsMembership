@@ -127,6 +127,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:cardCornerRadius="4dp"
+            android:background="@color/trans"
+            app:cardBackgroundColor="@color/trans"
             android:layout_marginTop="12dp"
             android:layout_marginLeft="12dp"
             android:layout_marginStart="12dp"

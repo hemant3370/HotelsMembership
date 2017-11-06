@@ -243,6 +243,7 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
 //                    focusView.requestFocus();
                 } else if (roomReservationBinding.getData() != null) {
                     // Show a progress spinner,
+                    roomReservationBinding.baseView.requestFocus();
                     AlertDialog.Builder builder =  new  AlertDialog.Builder(getActivity())
                             .setTitle("Please Confirm")
                             .setPositiveButton("OK",
@@ -266,6 +267,7 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
                                     }
                             );
                     ImageView imageView = new ImageView(getContext());
+
                     imageView.setImageBitmap(getScreenShot(roomReservationBinding.baseView));
                     builder.setView(imageView);
                     builder.create().show();

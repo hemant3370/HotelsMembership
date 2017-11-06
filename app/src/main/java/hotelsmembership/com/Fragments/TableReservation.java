@@ -253,6 +253,7 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
 //                    focusView.requestFocus();
                 } else if (tableReservationBinding.getData() != null) {
                     // Show a progress spinner,
+                    tableReservationBinding.baseView.requestFocus();
                     AlertDialog.Builder builder =  new  AlertDialog.Builder(getActivity())
                             .setTitle("Please Confirm")
                             .setPositiveButton("OK",

@@ -100,6 +100,7 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
         mViewPager.setCurrentItem(getIntent().getIntExtra(ARG_INDEX,0));
     }
 
@@ -162,9 +163,10 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
                     voucher.setStatus("R");
                 }
             }
+            int index = mViewPager.getCurrentItem();
             mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),vouchers,cardNumber,membership);
             mViewPager.setAdapter(mSectionsPagerAdapter);
-            mViewPager.setCurrentItem(getIntent().getIntExtra(ARG_INDEX,0));
+            mViewPager.setCurrentItem(index);
             AlertDialog.Builder builder = new AlertDialog.Builder(VouchersActivity.this,R.style.MyDialogTheme);
             builder.setTitle("Hey!!");
             builder.setMessage("Voucher Number " + voucherNo + " successfully redeemed.");

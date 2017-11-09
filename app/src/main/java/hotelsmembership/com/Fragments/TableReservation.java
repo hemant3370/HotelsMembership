@@ -133,6 +133,15 @@ public class TableReservation extends Fragment implements VoucherPicker, OfferPi
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     tableReservationBinding.reservationDate.setError(null);
                     Calendar myCalendar = Calendar.getInstance();
+                    DateFormat df = new SimpleDateFormat("dd/MM/yyyy", new Locale("en"));
+                    if(tableReservationBinding.getData().getReservationDate() != null) {
+                        try {
+                            Date selectedDate = df.parse(tableReservationBinding.getData().getReservationDate());
+                            myCalendar.setTime(selectedDate);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     myCalendar.add(Calendar.HOUR, 6);
                     DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                         @Override

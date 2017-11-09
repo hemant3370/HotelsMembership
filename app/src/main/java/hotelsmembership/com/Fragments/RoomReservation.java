@@ -75,6 +75,7 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
     private OfferPickerFragment offerPickerFragment;
     private VoucherPickerFragment voucherPickerFragment;
     private OccupancyFragment occupancyFragment;
+    DateFormat df = new SimpleDateFormat("dd/MM/yyyy", new Locale("en"));
     public RoomReservation() {
         // Required empty public constructor
     }
@@ -115,11 +116,19 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     roomReservationBinding.checkinDate.setError(null);
                     Calendar myCalendar = Calendar.getInstance();
+                    if(roomReservationBinding.getData().getCheckInDate() != null) {
+                        try {
+                            Date selectedDate = df.parse(roomReservationBinding.getData().getCheckInDate());
+                            myCalendar.setTime(selectedDate);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                             Date date = new GregorianCalendar(year, month, dayOfMonth).getTime();
-                            DateFormat df = new SimpleDateFormat("dd/MM/yyyy", new Locale("en"));
+
                             try {
                                 if (roomReservationBinding.getData().getCheckOutDate() != null && date.after(df.parse(roomReservationBinding.getData().getCheckOutDate()))){
                                     Toast.makeText(getActivity().getApplicationContext(),"Invalid Date",Toast.LENGTH_LONG).show();
@@ -147,6 +156,14 @@ public class RoomReservation extends Fragment implements VoucherPicker, OfferPic
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     roomReservationBinding.checkoutDate.setError(null);
                     Calendar myCalendar = Calendar.getInstance();
+                    if(roomReservationBinding.getData().getCheckOutDate() != null) {
+                        try {
+                            Date selectedDate = df.parse(roomReservationBinding.getData().getCheckOutDate());
+                            myCalendar.setTime(selectedDate);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {

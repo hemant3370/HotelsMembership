@@ -12,12 +12,20 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
+       <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="wrap_content"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:textSize="18sp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:text="My Memberships    "-->
+            <!--android:textAlignment="center"-->
+             <!--/>-->
+        </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
     <ProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
@@ -29,19 +37,5 @@
         android:foregroundGravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:elevation="8dp"
-        android:visibility="gone"
-        android:clickable="true"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="onHomeItemClick"
-        android:focusable="true"
-        app:pressedTranslationZ="8dp"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_input_add" />
+
 </android.support.design.widget.CoordinatorLayout>

@@ -4,15 +4,12 @@ import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -31,7 +28,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import hotelsmembership.com.Applications.Initializer;
 import hotelsmembership.com.Fragments.AddMembership;
-import hotelsmembership.com.Fragments.HomeFragment;
 import hotelsmembership.com.Fragments.MembershipsFragment;
 import hotelsmembership.com.Fragments.VoucherDetails;
 import hotelsmembership.com.Fragments.VouchersFragment;
@@ -67,7 +63,7 @@ VouchersFragment.Listener{
     android.support.v4.app.FragmentTransaction fragmentTransaction;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
-    @BindView(R.id.nav_view) NavigationView navigationView;
+//    @BindView(R.id.nav_view) NavigationView navigationView;
     HotelsDatabase hotelsDatabase;
     @Inject
     Retrofit mRetrofit;
@@ -75,8 +71,6 @@ VouchersFragment.Listener{
     ProgressBar progressDialog;
     @BindView(R.id.frame)
      FrameLayout frameLayout;
-    @BindView(R.id.fabAdd)
-    FloatingActionButton fab;
 
     private CompositeDisposable compositeDisposable =
             new CompositeDisposable();
@@ -91,23 +85,23 @@ VouchersFragment.Listener{
         setSupportActionBar(toolbar);
         ((Initializer) getApplication()).getNetComponent().inject(this);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        View header = navigationView.getHeaderView(0);
-        navigationView.setNavigationItemSelectedListener(this);
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.addDrawerListener(toggle);
+//        toggle.syncState();
+//        View header = navigationView.getHeaderView(0);
+//        navigationView.setNavigationItemSelectedListener(this);
         invalidateOptionsMenu();
-        setTitle("Home");
+        setTitle("My Memberships");
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frame, HomeFragment.newInstance("",""));
+        fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
                 android.R.anim.fade_in, android.R.anim.fade_out);
         fragmentTransaction.commit();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(this);
         getHotels();
 
     }
@@ -284,27 +278,27 @@ VouchersFragment.Listener{
                  });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -315,7 +309,7 @@ VouchersFragment.Listener{
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if (id == R.id.nav_home) {
             setTitle("Home");
-            fragmentTransaction.replace(R.id.frame, HomeFragment.newInstance("",""));
+            fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
         } else if (id == R.id.nav_mymembership) {
             setTitle("My Memberships");
             fragmentTransaction.replace(R.id.frame, MembershipsFragment.newInstance(1));
@@ -341,6 +335,7 @@ VouchersFragment.Listener{
 
         switch (view.getId()){
             case R.id.mymemberships:
+            case R.id.mymembership:
                 setTitle("My Memberships");
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
@@ -349,7 +344,6 @@ VouchersFragment.Listener{
                 fragmentTransaction.commit();
                 break;
             case R.id.addmembership:
-            case R.id.fabAdd:
                 onAddClicked();
                 break;
 //            case R.id.myprofile:
@@ -393,7 +387,7 @@ VouchersFragment.Listener{
             fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
                     android.R.anim.fade_in, android.R.anim.fade_out);
-            fragmentTransaction.replace(R.id.frame, AddMembership.newInstance("", "")).addToBackStack(null);
+            fragmentTransaction.replace(R.id.frame, AddMembership.newInstance("", ""));
             fragmentTransaction.commit();
         }
         else{

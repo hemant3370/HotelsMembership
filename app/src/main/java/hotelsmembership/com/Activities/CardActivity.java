@@ -73,9 +73,6 @@ public class CardActivity extends AppCompatActivity implements RoomReservation.O
 
     }
 
-
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();

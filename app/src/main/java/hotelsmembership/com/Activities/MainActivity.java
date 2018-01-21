@@ -204,6 +204,7 @@ VouchersFragment.Listener{
                             }).into(1080,1080);
                         }
                         else {
+                            progressDialog.setVisibility(View.INVISIBLE);
                             Toast.makeText(MainActivity.this,"Error " + addMembershipResponse.getMessage(),Toast.LENGTH_SHORT).show();
                         }
                     }

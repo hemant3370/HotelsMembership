@@ -24,6 +24,7 @@ import android.widget.DatePicker;
 import android.widget.Toast;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -55,6 +56,7 @@ public class AddMembership extends LifecycleFragment {
     private String mParam1;
     private String mParam2;
     private Hotel selectedHotel;
+    DateFormat df = new SimpleDateFormat("dd/MM/yyyy", new Locale("en"));
     AddCardPayload addCardPayload;
     FragmentAddMembershipBinding fragmentAddCardBinding;
     private OnFragmentInteractionListener mListener;
@@ -175,6 +177,14 @@ public class AddMembership extends LifecycleFragment {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     fragmentAddCardBinding.cardExpiryDate.setError(null);
                     Calendar myCalendar = Calendar.getInstance();
+                    if(fragmentAddCardBinding.getData().getCardExpiryDate() != null) {
+                        try {
+                            Date selectedDate = df.parse(fragmentAddCardBinding.getData().getCardExpiryDate());
+                            myCalendar.setTime(selectedDate);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {

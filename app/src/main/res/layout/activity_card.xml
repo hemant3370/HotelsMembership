@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     >
     <data class="MembershipDetailBinding">
-        <variable name="data" type="hotelsmembership.com.Model.Membership"/>
+        <variable name="data" type="loyaltywallet.com.Model.Membership"/>
         <variable
             name="imageUrl"
             type="String"/>
@@ -12,7 +12,7 @@
 <android.support.design.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="hotelsmembership.com.Activities.CardActivity">
+    tools:context="loyaltywallet.com.Activities.CardActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

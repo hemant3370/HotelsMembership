@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data class="VoucherPickerItemBinding">
-        <variable name="data" type="hotelsmembership.com.Model.Vouchers.Voucher"/>
+        <variable name="data" type="loyaltywallet.com.Model.Vouchers.Voucher"/>
         <variable
             name="index"
             type="int"/>
         <variable
             name="mlistener"
-            type="hotelsmembership.com.Interfaces.VoucherPicker"/>
+            type="loyaltywallet.com.Interfaces.VoucherPicker"/>
     </data>
 
 

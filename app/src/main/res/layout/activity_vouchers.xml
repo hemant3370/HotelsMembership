@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/screenbg"
     android:fitsSystemWindows="true"
-    tools:context="hotelsmembership.com.Activities.VouchersActivity">
+    tools:context="loyaltywallet.com.Activities.VouchersActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"

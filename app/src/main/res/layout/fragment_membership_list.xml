@@ -13,7 +13,7 @@
         android:layout_height="0dp"
         android:background="@color/screenbg"
         app:layoutManager="LinearLayoutManager"
-        tools:context="hotelsmembership.com.Fragments.MembershipsFragment"
+        tools:context="loyaltywallet.com.Fragments.MembershipsFragment"
         tools:listitem="@layout/fragment_membership"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"

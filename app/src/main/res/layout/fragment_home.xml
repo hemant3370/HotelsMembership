@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@color/screenbg"
     android:weightSum="2"
-    tools:context="hotelsmembership.com.Fragments.HomeFragment">
+    tools:context="loyaltywallet.com.Fragments.HomeFragment">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"

@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <data class="VoucherItemBinding">
-        <variable name="data" type="hotelsmembership.com.Model.Vouchers.Voucher"/>
+        <variable name="data" type="loyaltywallet.com.Model.Vouchers.Voucher"/>
         <variable
             name="mlistener"
-            type="hotelsmembership.com.Fragments.VouchersFragment.Listener"/>
+            type="loyaltywallet.com.Fragments.VouchersFragment.Listener"/>
     </data>
     <android.support.v7.widget.CardView
         android:layout_width="240dp"

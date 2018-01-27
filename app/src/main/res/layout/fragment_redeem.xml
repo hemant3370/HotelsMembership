@@ -2,10 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     >
     <data >
-        <variable name="data" type="hotelsmembership.com.Model.VerifyOTPPayload"/>
+        <variable name="data" type="loyaltywallet.com.Model.VerifyOTPPayload"/>
         <variable
             name="voucher"
-            type="hotelsmembership.com.Model.Vouchers.Voucher"/>
+            type="loyaltywallet.com.Model.Vouchers.Voucher"/>
     </data>
         <LinearLayout
             android:layout_width="match_parent"

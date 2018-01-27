@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data class="OfferItemBinding">
-        <variable name="data" type="hotelsmembership.com.Model.Hotel.Offer"/>
+        <variable name="data" type="loyaltywallet.com.Model.Hotel.Offer"/>
         <variable
             name="index"
             type="int"/>
         <variable
             name="mlistener"
-            type="hotelsmembership.com.Fragments.OfferPickerFragment.OfferPicker"/>
+            type="loyaltywallet.com.Fragments.OfferPickerFragment.OfferPicker"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data >
-        <variable name="data" type="hotelsmembership.com.Model.RoomReservationPayload"/>
+        <variable name="data" type="loyaltywallet.com.Model.RoomReservationPayload"/>
     </data>
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"

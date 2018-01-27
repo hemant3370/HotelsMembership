@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <data class="CardBinding">
-        <variable name="data" type="hotelsmembership.com.Model.Membership"/>
+        <variable name="data" type="loyaltywallet.com.Model.Membership"/>
         <variable
             name="imageUrl"
             type="String"/>
@@ -13,7 +13,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/screenbg"
-    tools:context="hotelsmembership.com.Activities.CardFullscreenActivity">
+    tools:context="loyaltywallet.com.Activities.CardFullscreenActivity">
 
 
         <android.support.constraint.ConstraintLayout

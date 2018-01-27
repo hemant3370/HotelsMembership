@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
     <data class="CardDetail">
-        <variable name="data" type="hotelsmembership.com.Model.Membership"/>
+        <variable name="data" type="loyaltywallet.com.Model.Membership"/>
         <variable
             name="imageUrl"
             type="String"/>

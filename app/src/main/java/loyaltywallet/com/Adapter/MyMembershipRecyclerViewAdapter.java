@@ -78,10 +78,10 @@ public class MyMembershipRecyclerViewAdapter extends RecyclerView.Adapter<MyMemb
             } else {
                 itemBinding.setImageUrl(item.getCardType().equals("G") ? item.getHotel().getCardsImageURLs().getGold() : item.getHotel().getCardsImageURLs().getSilver());
             }
-            if (new Date().before( Utils.stringToDate(item.getCardExpiryDate()))){
-                itemBinding.getRoot().setAlpha((float) 0.5);
+            if (new Date().after( Utils.stringToDate(item.getCardExpiryDate()))){
+                itemBinding.cardIfexpired.setVisibility(View.VISIBLE);
             }
-            else { itemBinding.getRoot().setAlpha((float) 1.0); }
+            else { itemBinding.cardIfexpired.setVisibility(View.INVISIBLE); }
             itemBinding.setData(item);
             itemBinding.setMlistener(mListener);
             itemBinding.executePendingBindings();

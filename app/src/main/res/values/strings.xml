@@ -45,7 +45,7 @@
     <string name="book_room">Book Room</string>
     <string name="vouchers">Vouchers</string>
     <string name="title_activity_card">CardActivity</string>
-    <string name="i_accept_terms_and_conditions">I accept the terms and conditions.</string>
+    <string name="i_accept_terms_and_conditions">I accept the <u>Terms and Conditions</u>.</string>
     <string name="valid_through">Valid through</string>
     <string name="venue_name">Venue Name</string>
     <string name="number_of_persons">Number of persons</string>

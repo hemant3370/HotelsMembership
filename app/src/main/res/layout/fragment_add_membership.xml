@@ -104,6 +104,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/darkScreenBG"
                     android:orientation="horizontal">
                     <CheckBox
                         android:layout_width="wrap_content"
@@ -114,6 +115,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="#000000"
                         android:id="@+id/acceptTV"
                         android:text="@string/i_accept_terms_and_conditions"/>
                 </LinearLayout>

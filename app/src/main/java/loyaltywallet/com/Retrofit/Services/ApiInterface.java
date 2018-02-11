@@ -28,7 +28,10 @@ public interface ApiInterface {
 //    //Hotels
     @GET("hotels")
     Observable<HotelsResponse> getHotels();
-    //Add Card
+    //Enroll
+    @POST("enrollMember/{hotelid}")
+    Observable<AddMembershipResponse> enrollMember(@Body AddCardPayload payload, @Path("hotelid") String hotelid);
+
     @POST("memberDetail/{hotelid}")
     Observable<AddMembershipResponse> addMembership(@Body AddCardPayload payload, @Path("hotelid") String hotelid);
 

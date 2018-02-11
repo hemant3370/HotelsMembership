@@ -154,6 +154,74 @@ VouchersFragment.Listener{
                    }
                });
    }
+    public void reloadCard(final Hotel selectedHotel, AddCardPayload payload){
+        progressDialog.setVisibility(View.VISIBLE);
+        if (mRetrofit == null){
+            mRetrofit = RestClient.getClient();
+        }
+        ApiInterface apiInterface = mRetrofit.create(ApiInterface.class);
+        apiInterface.addMembership(payload, selectedHotel.getHotelId())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new io.reactivex.Observer<AddMembershipResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable disposable) {
+                        compositeDisposable.add(disposable);
+                    }
+
+                    @Override
+                    public void onNext(final AddMembershipResponse addMembershipResponse) {
+                        if (addMembershipResponse.getStatusCode() == 200 && addMembershipResponse.getContent() != null ){
+                            new Thread(new Runnable() {
+                                public void run() {
+                                    // a potentially  time consuming task
+                                    Membership membership = addMembershipResponse.getContent();
+                                    membership.setHotel(selectedHotel);
+                                    hotelsDatabase.daoAccess().insertOnlySingleRecord(membership);
+                                }
+                            }).start();
+                            String url = "";
+                            if (addMembershipResponse.getContent().getCardType().equals("")) {
+                                url = selectedHotel.getCardsImageURLs().getGold();
+                            } else {
+                                url = addMembershipResponse.getContent().getCardType().equals("G") ?
+                                        selectedHotel.getCardsImageURLs().getGold() :
+                                        selectedHotel.getCardsImageURLs().getSilver();
+                            }
+                            Glide.with(MainActivity.this).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).listener(new RequestListener<String, GlideDrawable>() {
+                                @Override
+                                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                    progressDialog.setVisibility(View.INVISIBLE);
+                                    onMembershipAdded();
+                                    return true;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                    progressDialog.setVisibility(View.INVISIBLE);
+                                    onMembershipAdded();
+                                    return true;
+                                }
+                            }).into(1080,1080);
+                        }
+                        else {
+                            progressDialog.setVisibility(View.INVISIBLE);
+                            Toast.makeText(MainActivity.this,"Error " + addMembershipResponse.getMessage(),Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        progressDialog.setVisibility(View.INVISIBLE);
+                        Toast.makeText(getApplicationContext(),throwable.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
     public void addCard(final Hotel selectedHotel, AddCardPayload payload){
         progressDialog.setVisibility(View.VISIBLE);
         if (mRetrofit == null){
@@ -260,7 +328,7 @@ VouchersFragment.Listener{
                    startActivity(i);
                }
                else{
-                   addCard(membership.getHotel(), new AddCardPayload(membership.getCardNumber(), membership.getCardExpiryDate(),
+                   reloadCard(membership.getHotel(), new AddCardPayload(membership.getCardNumber(), membership.getCardExpiryDate(),
                            membership.getPhoneNumber()));
                    Toast.makeText(MainActivity.this, "Unable to load the Card. Please try again!",Toast.LENGTH_SHORT).show();
                }
@@ -269,7 +337,7 @@ VouchersFragment.Listener{
                      @Override
                      public void onError(Throwable throwable) {
                          Toast.makeText(MainActivity.this, throwable.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
-                         addCard(membership.getHotel(), new AddCardPayload(membership.getCardNumber(), membership.getCardExpiryDate(),
+                         reloadCard(membership.getHotel(), new AddCardPayload(membership.getCardNumber(), membership.getCardExpiryDate(),
                                  membership.getPhoneNumber()));
                      }
 

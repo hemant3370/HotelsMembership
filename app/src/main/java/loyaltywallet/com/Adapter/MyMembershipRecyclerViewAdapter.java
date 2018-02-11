@@ -7,11 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Date;
 import java.util.List;
 
 import loyaltywallet.com.Fragments.MembershipsFragment.OnListFragmentInteractionListener;
 import loyaltywallet.com.Model.Membership;
 import loyaltywallet.com.R;
+import loyaltywallet.com.Utils.Utils;
 import loyaltywallet.com.databinding.MembershipItemBinding;
 
 /**
@@ -76,6 +78,10 @@ public class MyMembershipRecyclerViewAdapter extends RecyclerView.Adapter<MyMemb
             } else {
                 itemBinding.setImageUrl(item.getCardType().equals("G") ? item.getHotel().getCardsImageURLs().getGold() : item.getHotel().getCardsImageURLs().getSilver());
             }
+            if (new Date().before( Utils.stringToDate(item.getCardExpiryDate()))){
+                itemBinding.getRoot().setAlpha((float) 0.5);
+            }
+            else { itemBinding.getRoot().setAlpha((float) 1.0); }
             itemBinding.setData(item);
             itemBinding.setMlistener(mListener);
             itemBinding.executePendingBindings();

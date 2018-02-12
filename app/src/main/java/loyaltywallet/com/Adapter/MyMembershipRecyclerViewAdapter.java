@@ -61,7 +61,7 @@ public class MyMembershipRecyclerViewAdapter extends RecyclerView.Adapter<MyMemb
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private final MembershipItemBinding itemBinding;
-        public ViewHolder(MembershipItemBinding binding) {
+        ViewHolder(MembershipItemBinding binding) {
             super(binding.getRoot());
             this.itemBinding = binding;
         }
@@ -78,10 +78,12 @@ public class MyMembershipRecyclerViewAdapter extends RecyclerView.Adapter<MyMemb
             } else {
                 itemBinding.setImageUrl(item.getCardType().equals("G") ? item.getHotel().getCardsImageURLs().getGold() : item.getHotel().getCardsImageURLs().getSilver());
             }
-            if (new Date().after( Utils.stringToDate(item.getCardExpiryDate()))){
+            if (new Date().after(Utils.stringToDate(item.getCardExpiryDate()))) {
                 itemBinding.cardIfexpired.setVisibility(View.VISIBLE);
             }
-            else { itemBinding.cardIfexpired.setVisibility(View.INVISIBLE); }
+            else {
+                itemBinding.cardIfexpired.setVisibility(View.VISIBLE);
+            }
             itemBinding.setData(item);
             itemBinding.setMlistener(mListener);
             itemBinding.executePendingBindings();

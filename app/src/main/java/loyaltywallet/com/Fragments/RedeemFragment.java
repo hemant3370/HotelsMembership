@@ -3,16 +3,13 @@ package loyaltywallet.com.Fragments;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +18,11 @@ import android.widget.Toast;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import loyaltywallet.com.Applications.Initializer;
 import loyaltywallet.com.Interfaces.SmsListener;
 import loyaltywallet.com.Model.BasicResponse;
@@ -33,11 +35,6 @@ import loyaltywallet.com.Retrofit.Client.RestClient;
 import loyaltywallet.com.Retrofit.Services.ApiInterface;
 import loyaltywallet.com.Utils.OTPFinder;
 import loyaltywallet.com.databinding.FragmentRedeemBinding;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
 /**
@@ -53,7 +50,7 @@ public class RedeemFragment extends BottomSheetDialogFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_MEMBERSHIP = "membership";
     private static final String ARG_VOUCHER = "voucher";
-    final int GET_MY_PERMISSION = 3370;
+
     @Inject
     Retrofit mRetrofit;
     // TODO: Rename and change types of parameters
@@ -110,39 +107,9 @@ public class RedeemFragment extends BottomSheetDialogFragment {
                 }
             }
         });
-        bindSMSListener();
-        if (ContextCompat.checkSelfPermission(getActivity(),
+        if (ContextCompat.checkSelfPermission(getContext(),
                 Manifest.permission.RECEIVE_SMS)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.RECEIVE_SMS)) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage(R.string.sms_permission);
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        ActivityCompat.requestPermissions(getActivity(),
-                                new String[]{Manifest.permission.RECEIVE_SMS,Manifest.permission.READ_SMS},
-                                GET_MY_PERMISSION);
-                    }
-                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-
-                            }});
-                builder.create().show();
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.RECEIVE_SMS,Manifest.permission.READ_SMS},
-                        GET_MY_PERMISSION);
-
-            }
-        }
-        else{
+                == PackageManager.PERMISSION_GRANTED) {
             bindSMSListener();
         }
         return fragmentRedeemBinding.getRoot();
@@ -233,13 +200,5 @@ public class RedeemFragment extends BottomSheetDialogFragment {
             }
         });
     }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        if (requestCode == GET_MY_PERMISSION && grantResults.length > 0
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            bindSMSListener();
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
 }

@@ -1,10 +1,16 @@
 package loyaltywallet.com.Activities;
 
+import android.Manifest;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +30,11 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import loyaltywallet.com.Applications.Initializer;
 import loyaltywallet.com.Fragments.RedeemFragment;
 import loyaltywallet.com.Fragments.VoucherDetails;
@@ -34,11 +45,6 @@ import loyaltywallet.com.Model.Vouchers.Voucher;
 import loyaltywallet.com.R;
 import loyaltywallet.com.Retrofit.Client.RestClient;
 import loyaltywallet.com.Retrofit.Services.ApiInterface;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
 public class VouchersActivity extends AppCompatActivity implements VoucherDetails.OnFragmentInteractionListener,
@@ -59,6 +65,7 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    final int GET_MY_PERMISSION = 3370;
     private static final String ARG_VOUCHERS = "vouchers";
     private static final String ARG_CARD = "cardNumber";
     private static final String ARG_MEMBERSHIP = "membership";
@@ -71,6 +78,7 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
     @BindView(R.id.progressBar)
     ProgressBar progressDialog;
     RedeemFragment redeemFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,10 +110,44 @@ public class VouchersActivity extends AppCompatActivity implements VoucherDetail
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         mViewPager.setCurrentItem(getIntent().getIntExtra(ARG_INDEX,0));
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECEIVE_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.RECEIVE_SMS)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(R.string.sms_permission);
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            VouchersActivity.this.requestPermissions(new String[]{Manifest.permission.RECEIVE_SMS,Manifest.permission.READ_SMS},
+                                    GET_MY_PERMISSION);
+                        }
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }});
+                builder.create().show();
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    this.requestPermissions(new String[]{Manifest.permission.RECEIVE_SMS,Manifest.permission.READ_SMS},
+                            GET_MY_PERMISSION);
+                }
+
+            }
+        }
     }
 
     @Override
     public void onRedeemClick(Voucher voucher, String cardNumber, Membership membership) {
+
         requestOTP(voucher,cardNumber, membership);
     }
 

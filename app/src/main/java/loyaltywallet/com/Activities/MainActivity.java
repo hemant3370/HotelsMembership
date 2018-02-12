@@ -54,6 +54,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function3;
 import io.reactivex.schedulers.Schedulers;
+import loyaltywallet.com.Utils.Utils;
 import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity
@@ -470,6 +471,16 @@ VouchersFragment.Listener{
         Intent fullCard = new Intent(this, CardFullscreenActivity.class);
         fullCard.putExtra("membership", item);
         startActivity(fullCard);
+    }
+
+    @Override
+    public void onDelete(Membership item) {
+
+    }
+
+    @Override
+    public void onInfoClick(Membership item) {
+        Utils.showTerms(item.getHotel(), this);
     }
 
     @Override

@@ -162,5 +162,7 @@ public class MembershipsFragment extends LifecycleFragment {
         void onCardClicked(Membership item);
         void onAddClicked();
         void onCardFullScreenAction(Membership item);
+        void onDelete(Membership item);
+        void onInfoClick(Membership item);
     }
 }

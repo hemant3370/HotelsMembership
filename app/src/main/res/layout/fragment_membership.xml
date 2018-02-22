@@ -37,7 +37,6 @@
             android:id="@+id/card_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="50dp"
             android:background="@android:color/transparent"
             android:onClick="@{() -> mlistener.onCardClicked(data)}"
             android:scaleType="fitXY"
@@ -48,16 +47,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            tools:src="@drawable/ic_hotel_black_24dp"
-            android:layout_marginRight="50dp" />
+            tools:src="@drawable/ic_hotel_black_24dp" />
 
         <TextView
             android:id="@+id/front_card_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
+            android:layout_marginBottom="44dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:hint="@string/card_placeholder"
             android:shadowColor="@color/text_shadow"
             android:shadowDx="1"
@@ -67,19 +65,17 @@
             android:textAlignment="center"
             android:textColor="@android:color/black"
             android:textColorHint="@color/blue_color"
-            app:layout_constraintBottom_toTopOf="@+id/front_card_expiry"
-            app:layout_constraintEnd_toStartOf="@+id/linearLayout"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginRight="8dp" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/front_card_expiry"
+            app:layout_constraintStart_toStartOf="@+id/front_card_holder_name" />
 
 
         <TextView
             android:id="@+id/front_card_holder_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="76dp"
             android:hint="@string/card_holder_name_sample"
             android:maxWidth="150dp"
             android:minWidth="150dp"
@@ -94,20 +90,17 @@
             android:textColor="@android:color/black"
             android:textColorHint="@color/blue_color"
             app:layout_constraintBottom_toTopOf="@+id/front_card_name"
-            app:layout_constraintEnd_toStartOf="@+id/linearLayout"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="16dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
 
 
         <TextView
             android:id="@+id/front_card_expiry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="44dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginStart="16dp"
-            android:gravity="end"
+            android:gravity="left"
             android:hint="@string/mm_yy"
             android:maxWidth="150dp"
             android:minWidth="150dp"
@@ -118,14 +111,11 @@
             android:shadowDy="1"
             android:shadowRadius="2"
             android:text="@={data.cardExpiryDate}"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
             android:textColor="@android:color/black"
             android:textColorHint="@color/blue_color"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/card_image"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="16dp" />
+            app:layout_constraintEnd_toEndOf="parent" />
         <android.support.v7.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -165,47 +155,7 @@
             app:layout_constraintVertical_bias="0.0"
             android:layout_marginRight="8dp" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/button"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginRight="8dp">
-            <ImageButton
-                android:id="@+id/full_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:tint="@color/colorAccent"
-                android:layout_marginTop="16dp"
-                android:onClick="@{() -> mlistener.onCardFullScreenAction(data)}"
-                android:background="@color/trans"
-                app:srcCompat="@drawable/ic_fullscreen_black_24dp"/>
-            <ImageButton
-                android:id="@+id/info_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> mlistener.onInfoClick(data)}"
-                android:layout_marginTop="16dp"
-                android:tint="@color/colorAccent"
-                android:background="@color/trans"
-                app:srcCompat="@drawable/ic_info_black_24dp"/>
-            <!--<ImageButton-->
-                <!--android:id="@+id/delete_button"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:tint="@color/colorAccent"-->
-                <!--android:onClick="@{() -> mlistener.onDelete(data)}"-->
-                <!--android:layout_marginTop="16dp"-->
-                <!--android:background="@color/trans"-->
-                <!--app:srcCompat="@drawable/ic_delete_black_24dp"/>-->
-        </LinearLayout>
+
     </android.support.constraint.ConstraintLayout>
 
         <!--</android.support.v7.widget.CardView>-->

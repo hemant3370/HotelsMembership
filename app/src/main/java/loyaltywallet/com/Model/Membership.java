@@ -6,6 +6,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -17,6 +18,7 @@ public class Membership implements Parcelable {
 
     @PrimaryKey
     @SerializedName("cardNumber")
+    @NonNull
     @Expose
     private String cardNumber;
     @Embedded
@@ -45,6 +47,9 @@ public class Membership implements Parcelable {
     @SerializedName("status")
     @Expose
     private String status;
+    @SerializedName("cardImageUrl")
+    @Expose
+    private String cardImageUrl;
     @SerializedName("cardType")
     @Expose
     private String cardType;
@@ -101,6 +106,14 @@ public class Membership implements Parcelable {
 
     public void setCardValidFromDate(String cardValidFromDate) {
         this.cardValidFromDate = cardValidFromDate;
+    }
+
+    public String getCardImageUrl() {
+        return "http://hotelsmembership.com" + cardImageUrl.replace("http://hotelsmembership.com","");
+    }
+
+    public void setCardImageUrl(String cardImageUrl) {
+        this.cardImageUrl = cardImageUrl;
     }
 
     public String getCardExpiryDate() {
@@ -179,6 +192,7 @@ public class Membership implements Parcelable {
         dest.writeString(this.authToken);
         dest.writeString(this.tokenExpirydate);
         dest.writeString(this.memberImageUrl);
+        dest.writeString(this.cardImageUrl);
     }
 
     public Membership() {
@@ -198,6 +212,7 @@ public class Membership implements Parcelable {
         this.authToken = in.readString();
         this.tokenExpirydate = in.readString();
         this.memberImageUrl = in.readString();
+        this.cardImageUrl = in.readString();
     }
 
     public static final Creator<Membership> CREATOR = new Creator<Membership>() {

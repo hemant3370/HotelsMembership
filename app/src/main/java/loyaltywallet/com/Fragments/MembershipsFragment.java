@@ -1,6 +1,5 @@
 package loyaltywallet.com.Fragments;
 
-import android.arch.lifecycle.LifecycleFragment;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.persistence.room.Room;
@@ -8,6 +7,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,7 +33,7 @@ import loyaltywallet.com.R;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class MembershipsFragment extends LifecycleFragment {
+public class MembershipsFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -126,7 +126,7 @@ public class MembershipsFragment extends LifecycleFragment {
             }
 
              hotelsDatabase = Room.databaseBuilder(getContext(),
-                    HotelsDatabase.class, "hotel-db").build();
+                    HotelsDatabase.class, "hotel-db").fallbackToDestructiveMigration().build();
             memberships = hotelsDatabase.daoAccess().fetchAllMemberships();
             memberships.observe(this, new Observer<List<Membership>>() {
                 @Override

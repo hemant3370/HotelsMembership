@@ -1,7 +1,6 @@
 package loyaltywallet.com.Fragments;
 
 import android.app.DatePickerDialog;
-import android.arch.lifecycle.LifecycleFragment;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.persistence.room.Room;
@@ -46,7 +45,7 @@ import loyaltywallet.com.databinding.FragmentAddMembershipBinding;
  * Use the {@link AddMembership#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddMembership extends LifecycleFragment {
+public class AddMembership extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -101,7 +100,7 @@ public class AddMembership extends LifecycleFragment {
         addCardPayload = new AddCardPayload();
         fragmentAddCardBinding.setData(addCardPayload);
          hotelsDatabase = Room.databaseBuilder(getContext(),
-                HotelsDatabase.class, "hotel-db").build();
+                HotelsDatabase.class, "hotel-db").fallbackToDestructiveMigration().build();
         LiveData<String[]> hotelnames = hotelsDatabase.daoAccess().fetchAllNames();
         hotelnames.observe(this, new Observer<String[]>() {
             @Override
@@ -239,6 +238,11 @@ public class AddMembership extends LifecycleFragment {
                     cancel = true;
                 }
 
+//                for (Membership membership : memberships){
+//                    if (membership.getCardNumber().equals(fragmentAddCardBinding.getData().getCardNumber()) && membership.getHotel().getHotelId().equals(selectedHotel.getHotelId())){
+//                        cancel = true;
+//                    }
+//                }
                 if (cancel) {
                     // There was an error; don't attempt login and focus the first
                     // form field with an error.

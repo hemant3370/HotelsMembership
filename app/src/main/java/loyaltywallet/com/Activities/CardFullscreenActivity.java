@@ -48,12 +48,8 @@ public class CardFullscreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         CardBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_card_fullscreen);
         membership = getIntent().getParcelableExtra("membership");
+        binding.setImageUrl(membership.getCardImageUrl());
         binding.setData(membership);
-        if (membership.getCardType().equals("")) {
-            binding.setImageUrl(membership.getHotel().getCardsImageURLs().getGold());
-        } else {
-            binding.setImageUrl(membership.getCardType().equals("G") ? membership.getHotel().getCardsImageURLs().getGold() : membership.getHotel().getCardsImageURLs().getSilver());
-        }
         setTitle(membership.getHotel().getHotelName());
 //        setContentView(R.layout.activity_card_fullscreen);
 //            ActionBar actionBar = getSupportActionBar();

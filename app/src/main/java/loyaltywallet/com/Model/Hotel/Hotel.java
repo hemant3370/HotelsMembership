@@ -7,6 +7,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -17,6 +18,7 @@ import java.util.List;
 public class Hotel implements Parcelable  {
     @PrimaryKey
     @SerializedName("hotelId")
+    @NonNull
     @Expose
     private String hotelId;
     @SerializedName("hotelName")

@@ -21,11 +21,21 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.github.javiersantos.appupdater.AppUpdater;
+import com.github.javiersantos.appupdater.enums.Display;
+import com.github.javiersantos.appupdater.enums.UpdateFrom;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function3;
+import io.reactivex.schedulers.Schedulers;
 import loyaltywallet.com.Applications.Initializer;
 import loyaltywallet.com.Fragments.AddMembership;
 import loyaltywallet.com.Fragments.MembershipsFragment;
@@ -47,13 +57,6 @@ import loyaltywallet.com.R;
 import loyaltywallet.com.Retrofit.Client.RestClient;
 import loyaltywallet.com.Retrofit.Services.ApiInterface;
 import loyaltywallet.com.Utils.ConnectivityUtil;
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function3;
-import io.reactivex.schedulers.Schedulers;
 import loyaltywallet.com.Utils.Utils;
 import retrofit2.Retrofit;
 
@@ -104,9 +107,12 @@ VouchersFragment.Listener{
 //        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 //        navigationView.setNavigationItemSelectedListener(this);
         hotelsDatabase = Room.databaseBuilder(getApplicationContext(),
-                HotelsDatabase.class, "hotel-db").build();
+                HotelsDatabase.class, "hotel-db").fallbackToDestructiveMigration().build();
         getHotels();
-
+        AppUpdater appUpdater = new AppUpdater(this)
+                .setDisplay(Display.SNACKBAR)
+                .setUpdateFrom(UpdateFrom.GOOGLE_PLAY);
+        appUpdater.start();
     }
 
     @Override
@@ -229,7 +235,7 @@ VouchersFragment.Listener{
             mRetrofit = RestClient.getClient();
         }
         ApiInterface apiInterface = mRetrofit.create(ApiInterface.class);
-        apiInterface.addMembership(payload, selectedHotel.getHotelId())
+        apiInterface.enrollMember(payload, selectedHotel.getHotelId())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new io.reactivex.Observer<AddMembershipResponse>() {

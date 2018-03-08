@@ -1,7 +1,6 @@
 package loyaltywallet.com.Adapter;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import java.util.List;
 
 import loyaltywallet.com.Fragments.MembershipsFragment.OnListFragmentInteractionListener;
 import loyaltywallet.com.Model.Membership;
-import loyaltywallet.com.R;
 import loyaltywallet.com.Utils.Utils;
 import loyaltywallet.com.databinding.MembershipItemBinding;
 
@@ -44,7 +42,7 @@ public class MyMembershipRecyclerViewAdapter extends RecyclerView.Adapter<MyMemb
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.bind(mValues.get(position));
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.itemBinding.cardImage.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 mListener.onCardFullScreenAction(mValues.get(holder.getAdapterPosition()));
@@ -67,17 +65,7 @@ public class MyMembershipRecyclerViewAdapter extends RecyclerView.Adapter<MyMemb
         }
 
         public void bind(Membership item) {
-            if(item.getCardType().equals("Gold")){
-                itemBinding.frontCardContainer.setBackgroundColor(ContextCompat.getColor(context, R.color.gold));
-            }
-            else if(item.getCardType().equals("Silver")){
-                itemBinding.frontCardContainer.setBackgroundColor(ContextCompat.getColor(context, R.color.silver));
-            }
-            if (item.getCardType().equals("")) {
-                itemBinding.setImageUrl(item.getHotel().getCardsImageURLs().getGold());
-            } else {
-                itemBinding.setImageUrl(item.getCardType().equals("Gold") ? item.getHotel().getCardsImageURLs().getGold() : item.getHotel().getCardsImageURLs().getSilver());
-            }
+            itemBinding.setImageUrl(item.getCardImageUrl());
             if (new Date().after(Utils.stringToDate(item.getCardExpiryDate()))) {
                 itemBinding.cardIfexpired.setVisibility(View.VISIBLE);
             }

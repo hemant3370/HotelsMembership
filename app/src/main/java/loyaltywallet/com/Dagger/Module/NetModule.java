@@ -61,6 +61,7 @@ public class NetModule {
 //        .addNetworkInterceptor(new CachingControlInterceptor())
 //                .cache(cache);
                 OkHttpClient client = httpClient.build();
+
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:sssZ").create();
         Retrofit retrofit;

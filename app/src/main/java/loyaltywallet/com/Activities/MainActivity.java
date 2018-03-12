@@ -152,7 +152,7 @@ VouchersFragment.Listener{
 
                    @Override
                    public void onError(Throwable throwable) {
-                       Toast.makeText(MainActivity.this, throwable.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+                       Toast.makeText(MainActivity.this, "Error Connecting.",Toast.LENGTH_SHORT).show();
                    }
 
                    @Override
@@ -288,7 +288,7 @@ VouchersFragment.Listener{
                     @Override
                     public void onError(Throwable throwable) {
                         progressDialog.setVisibility(View.INVISIBLE);
-                        Toast.makeText(getApplicationContext(),throwable.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Error Connecting.",Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

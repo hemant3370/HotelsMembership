@@ -23,7 +23,7 @@
     <string name="next">NEXT</string>
     <string name="previous">PREVIOUS</string>
     <string name="done">DONE</string>
-    <string name="card_holder_name_sample">JOHN MATTHEW</string>
+    <string name="card_holder_name_sample">JOHN MATTHEW </string>
     <string name="card_holder">CARD HOLDER</string>
     <string name="expiry">EXPIRY</string>
     <string name="mm_yy">MM/YY</string>

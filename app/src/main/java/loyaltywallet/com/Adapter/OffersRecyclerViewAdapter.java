@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import loyaltywallet.com.Fragments.OfferPickerFragment;
 import loyaltywallet.com.Model.Hotel.Offer;
 import loyaltywallet.com.databinding.OfferItemBinding;
 
@@ -13,9 +14,11 @@ import loyaltywallet.com.databinding.OfferItemBinding;
 public class OffersRecyclerViewAdapter extends RecyclerView.Adapter<OffersRecyclerViewAdapter.ViewHolder> {
 
     private final List<Offer> mValues;
+    private OfferPickerFragment.OfferPicker mListener;
 
-    public OffersRecyclerViewAdapter(List<Offer> items) {
+    public OffersRecyclerViewAdapter(List<Offer> items, OfferPickerFragment.OfferPicker listener) {
         mValues = items;
+        mListener = listener;
     }
 
     @Override
@@ -23,7 +26,7 @@ public class OffersRecyclerViewAdapter extends RecyclerView.Adapter<OffersRecycl
         LayoutInflater layoutInflater =
                 LayoutInflater.from(parent.getContext());
         OfferItemBinding offerItemBinding = OfferItemBinding.inflate(layoutInflater, parent, false);
-
+        offerItemBinding.setMlistener(mListener);
         return new ViewHolder(offerItemBinding);
     }
 

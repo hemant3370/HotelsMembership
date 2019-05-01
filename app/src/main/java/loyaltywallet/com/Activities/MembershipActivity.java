@@ -37,7 +37,7 @@ import loyaltywallet.com.Model.Vouchers.Voucher;
 import loyaltywallet.com.R;
 
 public class MembershipActivity extends AppCompatActivity implements VouchersFragment.Listener, CardFragment.OnFragmentInteractionListener,
-        RoomReservation.OnFragmentInteractionListener, TableReservation.OnFragmentInteractionListener, VenuesFragment.Listener{
+        RoomReservation.OnFragmentInteractionListener, TableReservation.OnFragmentInteractionListener{
 
     @BindView(R.id.frame)
     FrameLayout frameLayout;
@@ -126,7 +126,7 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
         if (tokens.length > 1) {
             Collections.addAll(calllist, tokens);
         }
-        chooseNumberToCall(calllist.toArray(tokens), "Call For Table Reservation");
+        chooseNumberToCall(tokens, "Call For Table Reservation");
     }
     public void callForRoomBooking(View view) {
         ArrayList<String> calllist = new ArrayList<>();
@@ -136,7 +136,7 @@ public class MembershipActivity extends AppCompatActivity implements VouchersFra
             Collections.addAll(calllist, tokens);
         }
 
-        chooseNumberToCall(calllist.toArray(tokens), "Call For Room Reservation");
+        chooseNumberToCall(tokens, "Call For Room Reservation");
     }
     void chooseNumberToCall(final String[] numbers, String title){
         AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.MyDialogTheme);

@@ -42,6 +42,8 @@ public class NetModule {
         long SIZE_OF_CACHE = 10 * 1024 * 1024; // 10 MiB
         Cache cache = new Cache(new File(context.getCacheDir(), "http"), SIZE_OF_CACHE);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+//        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+//        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         httpClient.addInterceptor(new Interceptor() {
                                       @Override
                                       public Response intercept(Chain chain) throws IOException {
@@ -57,7 +59,7 @@ public class NetModule {
                                   })
                 .addNetworkInterceptor(new CachingControlInterceptor())
                 .cache(cache);
-//                .addInterceptor(logging);
+//                .addInterceptor();
 //        .addNetworkInterceptor(new CachingControlInterceptor())
 //                .cache(cache);
                 OkHttpClient client = httpClient.build();

@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import loyaltywallet.com.Interfaces.CardVoucherClickListener;
+import loyaltywallet.com.Interfaces.VenueClicksListener;
 import loyaltywallet.com.Model.Hotel.HotelVenue;
 import loyaltywallet.com.databinding.VenuegistItemBinding;
 
@@ -17,9 +17,9 @@ import loyaltywallet.com.databinding.VenuegistItemBinding;
 public class VenueGistAdapter extends RecyclerView.Adapter<VenueGistAdapter.ViewHolder> {
 
     private final List<HotelVenue> mValues;
-    private final CardVoucherClickListener mListener;
+    private final VenueClicksListener mListener;
 
-    public VenueGistAdapter(List<HotelVenue> items, CardVoucherClickListener listener) {
+    public VenueGistAdapter(List<HotelVenue> items, VenueClicksListener listener) {
         mValues = items;
         mListener = listener;
     }

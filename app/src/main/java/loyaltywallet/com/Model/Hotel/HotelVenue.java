@@ -1,5 +1,8 @@
 package loyaltywallet.com.Model.Hotel;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by hemantsingh on 02/07/17.
  */
 
-public class HotelVenue {
+public class HotelVenue implements Parcelable {
 
     @SerializedName("venueId")
     @Expose
@@ -87,4 +90,45 @@ public class HotelVenue {
     public void setOpenHours(String openHours) {
         this.openHours = openHours;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.venueId);
+        dest.writeString(this.venueName);
+        dest.writeString(this.venueCategory);
+        dest.writeString(this.venueImageUrl);
+        dest.writeString(this.venueDescription);
+        dest.writeString(this.venuePhone);
+        dest.writeString(this.openHours);
+    }
+
+    public HotelVenue() {
+    }
+
+    protected HotelVenue(Parcel in) {
+        this.venueId = in.readString();
+        this.venueName = in.readString();
+        this.venueCategory = in.readString();
+        this.venueImageUrl = in.readString();
+        this.venueDescription = in.readString();
+        this.venuePhone = in.readString();
+        this.openHours = in.readString();
+    }
+
+    public static final Parcelable.Creator<HotelVenue> CREATOR = new Parcelable.Creator<HotelVenue>() {
+        @Override
+        public HotelVenue createFromParcel(Parcel source) {
+            return new HotelVenue(source);
+        }
+
+        @Override
+        public HotelVenue[] newArray(int size) {
+            return new HotelVenue[size];
+        }
+    };
 }

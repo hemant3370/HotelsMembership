@@ -11,10 +11,11 @@ import android.view.ViewGroup;
 
 import loyaltywallet.com.Adapter.OffersRecyclerViewAdapter;
 import loyaltywallet.com.Applications.Initializer;
+import loyaltywallet.com.Model.Hotel.Offer;
 import loyaltywallet.com.R;
 
 
-public class OffersFragment extends BottomSheetDialogFragment {
+public class OffersFragment extends BottomSheetDialogFragment implements OfferPickerFragment.OfferPicker {
 
     // TODO: Customize parameter argument names
     private static final String ARG_TYPE = "column-count";
@@ -54,7 +55,7 @@ public class OffersFragment extends BottomSheetDialogFragment {
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setNestedScrollingEnabled(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new OffersRecyclerViewAdapter(((Initializer) getActivity().getApplication()).getCardContext().getOffers()));
+            recyclerView.setAdapter(new OffersRecyclerViewAdapter(((Initializer) getActivity().getApplication()).getCardContext().getOffers(), this));
         }
         return view;
     }
@@ -72,4 +73,9 @@ public class OffersFragment extends BottomSheetDialogFragment {
 
     }
 
+    @Override
+    public void onOfferPicked(Offer offer) {
+        OfferFragment offerFragment = OfferFragment.newInstance(offer);
+        offerFragment.show(getChildFragmentManager(), offerFragment.getTag());
+    }
 }

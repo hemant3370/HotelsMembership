@@ -6,12 +6,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 
-import com.crashlytics.android.Crashlytics;
 import loyaltywallet.com.Dagger.Component.DaggerNetComponent;
 import loyaltywallet.com.Dagger.Component.NetComponent;
 import loyaltywallet.com.Dagger.Module.NetModule;
 import loyaltywallet.com.Model.CardContext;
-import io.fabric.sdk.android.Fabric;
 
 
 /**
@@ -75,7 +73,7 @@ public class Initializer extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
+//        Fabric.with(this, new Crashlytics());
         //Dagger
         mNetComponent = DaggerNetComponent.builder()
                 .netModule(new NetModule(getApplicationContext()))

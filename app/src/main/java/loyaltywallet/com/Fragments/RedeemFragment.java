@@ -1,16 +1,11 @@
 package loyaltywallet.com.Fragments;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,16 +19,13 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import loyaltywallet.com.Applications.Initializer;
-import loyaltywallet.com.Interfaces.SmsListener;
 import loyaltywallet.com.Model.BasicResponse;
 import loyaltywallet.com.Model.Membership;
 import loyaltywallet.com.Model.VerifyOTPPayload;
 import loyaltywallet.com.Model.Vouchers.Voucher;
 import loyaltywallet.com.R;
-import loyaltywallet.com.Receiver.SmsBroadcastReceiver;
 import loyaltywallet.com.Retrofit.Client.RestClient;
 import loyaltywallet.com.Retrofit.Services.ApiInterface;
-import loyaltywallet.com.Utils.OTPFinder;
 import loyaltywallet.com.databinding.FragmentRedeemBinding;
 import retrofit2.Retrofit;
 
@@ -107,11 +99,7 @@ public class RedeemFragment extends BottomSheetDialogFragment {
                 }
             }
         });
-        if (ContextCompat.checkSelfPermission(getContext(),
-                Manifest.permission.RECEIVE_SMS)
-                == PackageManager.PERMISSION_GRANTED) {
-            bindSMSListener();
-        }
+        
         return fragmentRedeemBinding.getRoot();
     }
     void redeemVoucher(){
@@ -188,17 +176,6 @@ public class RedeemFragment extends BottomSheetDialogFragment {
         // TODO: Update argument type and name
         void onRedemption(Boolean success,String voucherNo);
     }
-    void bindSMSListener(){
-        SmsBroadcastReceiver.bindListener(new SmsListener() {
-            @Override
-            public void messageReceived(@NonNull String messageText) {
-                if (!messageText.equals("") && messageText.contains("OTP") && RedeemFragment.this.isVisible()) {
-                    Log.d("Text", messageText);
-                    fragmentRedeemBinding.redeemOtp.setText(new OTPFinder().getOTPFrom(messageText));
-                    fragmentRedeemBinding.verifyBtn.performClick();
-                }
-            }
-        });
-    }
+    
 
 }

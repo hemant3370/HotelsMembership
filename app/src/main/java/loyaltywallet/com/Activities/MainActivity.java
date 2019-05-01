@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -303,6 +304,7 @@ VouchersFragment.Listener{
         if (mRetrofit == null){
             mRetrofit = RestClient.getClient();
         }
+        Log.d("Token", membership.getAuthToken());
         ApiInterface apiInterface = mRetrofit.create(ApiInterface.class);
 
         Observable<VouchersResponse> vouchersResponseObservable =  apiInterface.getVouchers(payload,membership.getHotel().getHotelId(), membership.getAuthToken())
@@ -450,7 +452,7 @@ VouchersFragment.Listener{
     @Override
     public void onCardClicked(Membership item) {
         if(new ConnectivityUtil(this).connected()) {
-            getCardDetails(new AddCardPayload(item.getCardNumber(), "31/05/2018", item.getPhoneNumber()), item);
+            getCardDetails(new AddCardPayload(item.getCardNumber(), item.getCardExpiryDate(), item.getPhoneNumber()), item);
         }
         else {
             Toast.makeText(MainActivity.this, "Please connect to Internet first.",Toast.LENGTH_SHORT).show();

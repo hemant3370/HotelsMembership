@@ -16,25 +16,14 @@ import java.util.List;
 
 import loyaltywallet.com.Adapter.VenueGistAdapter;
 import loyaltywallet.com.Applications.Initializer;
-import loyaltywallet.com.Interfaces.CardVoucherClickListener;
+import loyaltywallet.com.Interfaces.VenueClicksListener;
 import loyaltywallet.com.Model.Hotel.HotelVenue;
-import loyaltywallet.com.Model.Membership;
-import loyaltywallet.com.Model.Vouchers.Voucher;
 import loyaltywallet.com.R;
 
-public class VenuesFragment extends Fragment implements CardVoucherClickListener {
+public class VenuesFragment extends Fragment implements VenueClicksListener {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_VENUES = "venues";
-    private Listener mListener;
     List<HotelVenue> venues ;
 
-    // TODO: Customize parameters
-
-    @Override
-    public void onVoucherGistClick(int item) {
-        startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", venues.get(item).getVenuePhone(), null)));
-    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -55,23 +44,25 @@ public class VenuesFragment extends Fragment implements CardVoucherClickListener
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        final Fragment parent = getParentFragment();
-        if (parent != null) {
-            mListener = (Listener) parent;
-        } else {
-            mListener = (Listener) context;
-        }
+
     }
 
     @Override
     public void onDetach() {
-        mListener = null;
         super.onDetach();
     }
 
-    public interface Listener {
-        void onVoucherClicked(Voucher voucher, String cardNumber, Membership membership);
+    @Override
+    public void onCallClick(int item) {
+        startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", venues.get(item).getVenuePhone(), null)));
     }
+
+    @Override
+    public void onVenueGistClick(int item) {
+        VenueDetailsFragment details = VenueDetailsFragment.newInstance(venues.get(item));
+        details.show(getChildFragmentManager(), details.getTag());
+    }
+
 
 
 }

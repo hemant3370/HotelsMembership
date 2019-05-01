@@ -15,65 +15,72 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/voucher_card_container"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="100dp"
         android:background="@drawable/background"
         android:onClick="@{() -> mlistener.onOfferPicked(data)}"
         android:orientation="vertical">
+
         <android.support.v7.widget.CardView
+            android:id="@+id/voucher_card"
             android:layout_width="72dp"
             android:layout_height="0dp"
-            android:id="@+id/voucher_card"
-            android:foreground="?android:selectableItemBackground"
-            app:cardCornerRadius="8dp"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="4dp"
             android:layout_marginStart="4dp"
             android:layout_marginLeft="4dp"
-            app:layout_constraintLeft_toLeftOf="parent">
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:foreground="?android:selectableItemBackground"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
             <ImageView
                 android:id="@+id/voucherLogo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 app:image_url="@{data.offerImageUrl}"
-                app:srcCompat="@drawable/ic_card_giftcard_black_24dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/ic_card_giftcard_black_24dp" />
         </android.support.v7.widget.CardView>
+
         <TextView
             android:id="@+id/offerName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:hint="@string/offers"
             android:shadowColor="@color/text_shadow"
-            android:hint="@string/vouchers"
             android:shadowDx="1"
             android:shadowDy="1"
             android:shadowRadius="2"
+            android:text="@={data.title}"
+            android:textAlignment="center"
             android:textColor="@android:color/black"
             android:textColorHint="@color/blue_color"
             android:textSize="@dimen/text_size_small"
-            android:text="@={data.description}"
-            android:textAlignment="center"
-            android:layout_marginRight="8dp"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintLeft_toRightOf="@+id/voucher_card"
-            android:layout_marginLeft="8dp"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="8dp" />
+            app:layout_constraintLeft_toRightOf="@+id/voucher_card"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/validity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
             android:hint="@string/vouchers"
             android:shadowColor="@color/text_shadow"
             android:shadowDx="1"
@@ -84,20 +91,19 @@
             android:textColor="@color/text_shadow"
             android:textColorHint="@color/blue_color"
             android:textSize="14sp"
-            android:layout_marginTop="9dp"
-            app:layout_constraintTop_toBottomOf="@+id/offerName"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintVertical_bias="0.631"
             app:layout_constraintLeft_toRightOf="@+id/textView2"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            app:layout_constraintRight_toRightOf="@+id/offerName" />
+            app:layout_constraintRight_toRightOf="@+id/offerName"
+            app:layout_constraintTop_toBottomOf="@+id/offerName"
+            app:layout_constraintVertical_bias="0.631" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:shadowColor="@color/text_shadow"
             android:shadowDx="1"
             android:shadowDy="1"
@@ -107,13 +113,25 @@
             android:textColor="@color/text_shadow"
             android:textColorHint="@color/blue_color"
             android:textSize="14sp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/offerName"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintVertical_bias="0.6"
             app:layout_constraintLeft_toRightOf="@+id/voucher_card"
-            android:layout_marginLeft="40dp" />
+            app:layout_constraintTop_toBottomOf="@+id/offerName"
+            app:layout_constraintVertical_bias="0.6" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:maxLines="1"
+            android:text="@={data.description}"
+            app:layout_constraintBottom_toTopOf="@+id/textView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/voucher_card"
+            app:layout_constraintTop_toBottomOf="@+id/offerName" />
 
     </android.support.constraint.ConstraintLayout>
     <!--</android.support.v7.widget.CardView>-->
